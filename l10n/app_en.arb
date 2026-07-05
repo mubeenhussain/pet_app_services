@@ -1,0 +1,63 @@
+{
+  "@@locale": "en",
+  "appTitle": "Pet Services",
+  "loginTitle": "Welcome back",
+  "loginSubtitle": "Sign in to continue",
+  "phoneHint": "Phone number",
+  "passwordHint": "Password",
+  "signIn": "Sign In",
+  "signInWithGoogle": "Sign in with Google",
+  "signUp": "Sign Up",
+  "forgotPassword": "Forgot Password?",
+  "skipForNow": "Skip for now",
+  "registerTitle": "Create account",
+  "usernameHint": "Username",
+  "cityHint": "City",
+  "submit": "Submit",
+  "otpTitle": "Verify phone",
+  "otpSubtitle": "Enter the code sent to {phone}",
+  "@otpSubtitle": {
+    "placeholders": {
+      "phone": {"type": "String"}
+    }
+  },
+  "confirm": "Confirm",
+  "resendOtp": "Resend code",
+  "homeGreeting": "Hello, {name}!",
+  "@homeGreeting": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "yourPets": "Your Pets",
+  "orders": "Orders",
+  "accountType": "Account Type",
+  "userSettings": "User Settings",
+  "addPet": "Add Pet",
+  "noPetsYet": "No pets yet — add one",
+  "petName": "Pet name",
+  "species": "Species",
+  "breed": "Breed",
+  "age": "Age",
+  "save": "Save",
+  "delete": "Delete",
+  "edit": "Edit",
+  "cancel": "Cancel",
+  "continueLabel": "Continue",
+  "requestRide": "Request Pet Delivery",
+  "pickup": "Pickup location",
+  "destination": "Destination",
+  "selectPet": "Select pet",
+  "checkout": "Checkout",
+  "confirmAndPay": "Confirm & Pay",
+  "paymentSuccess": "Payment successful",
+  "paymentFailed": "Payment failed",
+  "tryAgain": "Try again",
+  "loading": "Loading...",
+  "errorGeneric": "Something went wrong. Please try again.",
+  "verificationPending": "Verification pending",
+  "documentUpload": "Upload documents",
+  "searchingForDriver": "Searching for a driver...",
+  "driverAllocated": "Driver allocated",
+  "deliveryConfirmed": "Delivery confirmed"
+}
