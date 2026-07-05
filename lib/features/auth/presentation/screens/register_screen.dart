@@ -9,7 +9,7 @@ import 'package:pet_app/shared/widgets/app_button.dart';
 import 'package:pet_app/shared/widgets/app_text_field.dart';
 import 'package:pet_app/shared/widgets/auth_shell.dart';
 
-/// BRD 6.4 — Register Page
+/// BRD 6.4 — Register Page (phone + password, then OTP verify)
 class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});
 
@@ -20,7 +20,6 @@ class RegisterScreen extends ConsumerStatefulWidget {
 class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
-  final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
   final _cityController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -28,7 +27,6 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   @override
   void dispose() {
     _usernameController.dispose();
-    _emailController.dispose();
     _phoneController.dispose();
     _cityController.dispose();
     _passwordController.dispose();
@@ -38,23 +36,38 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
 
-    await ref.read(authControllerProvider.notifier).register(
-          email: _emailController.text.trim(),
-          password: _passwordController.text,
-          username: _usernameController.text.trim(),
-          phone: _phoneController.text.trim(),
-          city: _cityController.text.trim(),
-        );
+    final phone = _phoneController.text.trim();
+    final controller = ref.read(authControllerProvider.notifier);
+
+    await controller.registerWithPhone(
+      phone: phone,
+      password: _passwordController.text,
+      username: _usernameController.text.trim(),
+      city: _cityController.text.trim(),
+    );
 
     if (!mounted) return;
-    final state = ref.read(authControllerProvider);
+    var state = ref.read(authControllerProvider);
+    if (state.hasError) {
+      context.showAppSnackBar(
+        controller.mapError(state.error!) ?? context.l10n.errorGeneric,
+        isError: true,
+      );
+      return;
+    }
+
+    await controller.sendRegisterOtp(phone);
+
+    if (!mounted) return;
+    state = ref.read(authControllerProvider);
     state.whenOrNull(
       error: (error, _) => context.showAppSnackBar(
-        ref.read(authControllerProvider.notifier).mapError(error) ??
-            context.l10n.errorGeneric,
+        controller.mapError(error) ?? context.l10n.errorGeneric,
         isError: true,
       ),
-      data: (_) => context.go(RouteNames.home),
+      data: (_) => context.push(
+        '${RouteNames.otp}?phone=${Uri.encodeComponent(phone)}&flow=register',
+      ),
     );
   }
 
@@ -76,15 +89,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
             ),
             const SizedBox(height: 16),
             AppTextField(
-              controller: _emailController,
-              label: 'Email',
-              keyboardType: TextInputType.emailAddress,
-              validator: (v) => Validators.requiredField(v, field: 'Email'),
-            ),
-            const SizedBox(height: 16),
-            AppTextField(
               controller: _phoneController,
               label: l10n.phoneHint,
+              hint: '+966501234567',
               keyboardType: TextInputType.phone,
               validator: Validators.phone,
             ),

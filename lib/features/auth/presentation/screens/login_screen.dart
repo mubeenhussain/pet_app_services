@@ -9,7 +9,7 @@ import 'package:pet_app/shared/widgets/app_button.dart';
 import 'package:pet_app/shared/widgets/app_text_field.dart';
 import 'package:pet_app/shared/widgets/auth_shell.dart';
 
-/// BRD 6.1 — Login Page
+/// BRD 6.1 — Login (phone + password per BRD)
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
@@ -19,12 +19,12 @@ class LoginScreen extends ConsumerStatefulWidget {
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
+  final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
 
   @override
   void dispose() {
-    _emailController.dispose();
+    _phoneController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -33,11 +33,25 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     if (!_formKey.currentState!.validate()) return;
 
     final controller = ref.read(authControllerProvider.notifier);
-    await controller.signIn(
-      email: _emailController.text.trim(),
+    await controller.signInWithPhone(
+      phone: _phoneController.text.trim(),
       password: _passwordController.text,
     );
 
+    if (!mounted) return;
+    final state = ref.read(authControllerProvider);
+    state.whenOrNull(
+      error: (error, _) => context.showAppSnackBar(
+        controller.mapError(error) ?? context.l10n.errorGeneric,
+        isError: true,
+      ),
+      data: (_) => context.go(RouteNames.home),
+    );
+  }
+
+  Future<void> _googleSignIn() async {
+    final controller = ref.read(authControllerProvider.notifier);
+    await controller.signInWithGoogle();
     if (!mounted) return;
     final state = ref.read(authControllerProvider);
     state.whenOrNull(
@@ -63,11 +77,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             AppTextField(
-              controller: _emailController,
-              label: 'Email',
-              hint: 'you@example.com',
-              keyboardType: TextInputType.emailAddress,
-              validator: (v) => Validators.requiredField(v, field: 'Email'),
+              controller: _phoneController,
+              label: l10n.phoneHint,
+              hint: '+966501234567',
+              keyboardType: TextInputType.phone,
+              validator: Validators.phone,
             ),
             const SizedBox(height: 16),
             AppTextField(
@@ -93,21 +107,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             AppButton(
               label: l10n.signInWithGoogle,
               variant: AppButtonVariant.outlined,
-              onPressed: isLoading
-                  ? null
-                  : () => context.showAppSnackBar(
-                        'Configure Google Sign-In in Firebase console.',
-                      ),
+              isLoading: isLoading,
+              onPressed: _googleSignIn,
             ),
             const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TextButton(
-                  onPressed: () => context.push(RouteNames.register),
-                  child: Text(l10n.signUp),
-                ),
-              ],
+            TextButton(
+              onPressed: () => context.push(RouteNames.register),
+              child: Text(l10n.signUp),
             ),
             TextButton(
               onPressed: isLoading

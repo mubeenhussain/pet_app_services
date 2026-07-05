@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pet_app/core/extensions/context_extensions.dart';
 import 'package:pet_app/core/router/route_names.dart';
 import 'package:pet_app/core/utils/validators.dart';
 import 'package:pet_app/features/pets/presentation/providers/pets_controller.dart';
 import 'package:pet_app/features/rides/presentation/providers/ride_controller.dart';
-import 'package:pet_app/shared/models/ride_model.dart';
-import 'package:pet_app/shared/providers/app_providers.dart';
+import 'package:pet_app/shared/services/location_service.dart';
 import 'package:pet_app/shared/widgets/app_button.dart';
+import 'package:pet_app/shared/widgets/app_map_view.dart';
 import 'package:pet_app/shared/widgets/app_text_field.dart';
 
-/// BRD 6.34 — Ride Request Page
+/// BRD 6.34 — Ride Request Page (with map pin selection)
 class RideRequestScreen extends ConsumerStatefulWidget {
   const RideRequestScreen({super.key});
 
@@ -24,6 +25,34 @@ class _RideRequestScreenState extends ConsumerState<RideRequestScreen> {
   final _destinationController = TextEditingController();
   String? _selectedPetId;
   String _carType = 'any';
+  LatLng? _pickupLatLng;
+  LatLng? _destinationLatLng;
+  LatLng _mapCenter = LocationService.defaultLocation;
+  bool _selectingDestination = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initLocation();
+  }
+
+  Future<void> _initLocation() async {
+    final current = await LocationService.getCurrentLatLng();
+    if (current != null && mounted) {
+      setState(() {
+        _mapCenter = current;
+        _pickupLatLng = current;
+        _destinationLatLng = LocationService.offsetDemo(current);
+        _pickupController.text = 'Current location';
+        _destinationController.text = 'Selected destination';
+      });
+    } else {
+      setState(() {
+        _pickupLatLng = LocationService.defaultLocation;
+        _destinationLatLng = LocationService.offsetDemo(_pickupLatLng!);
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -32,24 +61,75 @@ class _RideRequestScreenState extends ConsumerState<RideRequestScreen> {
     super.dispose();
   }
 
-  void _continue() {
+  Future<void> _continue() async {
     if (_selectedPetId == null ||
+        _pickupLatLng == null ||
+        _destinationLatLng == null ||
         Validators.requiredField(_pickupController.text, field: 'Pickup') !=
-            null ||
-        Validators.requiredField(_destinationController.text, field: 'Destination') !=
             null) {
-      context.showAppSnackBar('Please fill all fields and select a pet.', isError: true);
+      context.showAppSnackBar(
+        'Select pickup, destination, and a pet.',
+        isError: true,
+      );
       return;
     }
+
+    final distanceKm = await LocationService.distanceKm(
+      _pickupLatLng!,
+      _destinationLatLng!,
+    );
 
     ref.read(rideDraftProvider.notifier).state = RideDraft(
       petId: _selectedPetId,
       pickup: _pickupController.text.trim(),
       destination: _destinationController.text.trim(),
       carType: _carType,
-      fareAmount: 45.0,
+      pickupLat: _pickupLatLng!.latitude,
+      pickupLng: _pickupLatLng!.longitude,
+      destinationLat: _destinationLatLng!.latitude,
+      destinationLng: _destinationLatLng!.longitude,
+      distanceKm: distanceKm,
     );
     context.push(RouteNames.rideReview);
+  }
+
+  void _onMapTap(LatLng latLng) {
+    setState(() {
+      if (_selectingDestination) {
+        _destinationLatLng = latLng;
+        _destinationController.text =
+            '${latLng.latitude.toStringAsFixed(4)}, ${latLng.longitude.toStringAsFixed(4)}';
+      } else {
+        _pickupLatLng = latLng;
+        _pickupController.text =
+            '${latLng.latitude.toStringAsFixed(4)}, ${latLng.longitude.toStringAsFixed(4)}';
+      }
+    });
+  }
+
+  Set<Marker> get _markers {
+    final markers = <Marker>{};
+    if (_pickupLatLng != null) {
+      markers.add(
+        Marker(
+          markerId: const MarkerId('pickup'),
+          position: _pickupLatLng!,
+          infoWindow: const InfoWindow(title: 'Pickup'),
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+        ),
+      );
+    }
+    if (_destinationLatLng != null) {
+      markers.add(
+        Marker(
+          markerId: const MarkerId('destination'),
+          position: _destinationLatLng!,
+          infoWindow: const InfoWindow(title: 'Destination'),
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+        ),
+      );
+    }
+    return markers;
   }
 
   @override
@@ -63,16 +143,31 @@ class _RideRequestScreenState extends ConsumerState<RideRequestScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            SegmentedButton<bool>(
+              segments: const [
+                ButtonSegment(value: false, label: Text('Set pickup')),
+                ButtonSegment(value: true, label: Text('Set destination')),
+              ],
+              selected: {_selectingDestination},
+              onSelectionChanged: (v) =>
+                  setState(() => _selectingDestination = v.first),
+            ),
+            const SizedBox(height: 12),
+            AppMapView(
+              markers: _markers,
+              initialTarget: _mapCenter,
+              onTap: _onMapTap,
+              height: 240,
+            ),
+            const SizedBox(height: 16),
             AppTextField(
               controller: _pickupController,
               label: context.l10n.pickup,
-              validator: (v) => Validators.requiredField(v, field: 'Pickup'),
             ),
             const SizedBox(height: 16),
             AppTextField(
               controller: _destinationController,
               label: context.l10n.destination,
-              validator: (v) => Validators.requiredField(v, field: 'Destination'),
             ),
             const SizedBox(height: 16),
             Text(context.l10n.selectPet),

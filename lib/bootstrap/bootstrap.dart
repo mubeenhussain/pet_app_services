@@ -6,6 +6,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pet_app/core/config/app_config.dart';
 import 'package:pet_app/firebase_options.dart';
+import 'package:pet_app/shared/services/firebase_service.dart';
 import 'package:pet_app/shared/services/notification_service.dart';
 
 class Bootstrap {
@@ -20,17 +21,22 @@ class Bootstrap {
       await _connectEmulators();
     }
 
-    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
-    PlatformDispatcher.instance.onError = (error, stack) {
-      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-      return true;
-    };
+    if (kDebugMode) {
+      // Crashlytics disabled in debug to avoid noise before Firebase is configured.
+    } else {
+      FlutterError.onError =
+          FirebaseCrashlytics.instance.recordFlutterFatalError;
+      PlatformDispatcher.instance.onError = (error, stack) {
+        FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+        return true;
+      };
+    }
 
     await NotificationService.init();
   }
 
   static Future<void> _connectEmulators() async {
-    const host = 'localhost';
+    final host = firebaseEmulatorHost;
     await FirebaseAuth.instance.useAuthEmulator(host, 9099);
     FirebaseFirestore.instance.useFirestoreEmulator(host, 8080);
     FirebaseFunctions.instance.useFunctionsEmulator(host, 5001);

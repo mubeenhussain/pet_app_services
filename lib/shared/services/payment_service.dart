@@ -1,5 +1,3 @@
-import 'package:pet_app/core/config/app_config.dart';
-
 class PaymentResult {
   const PaymentResult({
     required this.success,
@@ -40,8 +38,7 @@ class MockPaymentService implements PaymentService {
 
 class PaymentServiceFactory {
   static PaymentService create() {
-    final gateway = AppConfig.instance.paymentGateway;
-    // Replace MockPaymentService with MoyasarPaymentService / TapPaymentService.
+    // Gateway: AppConfig.instance.paymentGateway (moyasar | tap)
     return MockPaymentService();
   }
 }

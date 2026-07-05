@@ -30,6 +30,7 @@ import 'package:pet_app/features/rides/presentation/screens/ride_wait_driver_scr
 import 'package:pet_app/features/verification/presentation/screens/account_type_screen.dart';
 import 'package:pet_app/features/verification/presentation/screens/document_upload_screen.dart';
 import 'package:pet_app/features/verification/presentation/screens/verification_status_screen.dart';
+import 'package:pet_app/shared/providers/app_providers.dart';
 import 'package:pet_app/shared/providers/guest_mode_provider.dart';
 
 class RouteGuards {

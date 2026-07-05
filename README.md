@@ -34,11 +34,58 @@ l10n/                      # English + Arabic strings
 
 ## Prerequisites
 
-1. [Flutter SDK](https://docs.flutter.dev/get-started/install) (3.16+)
+1. **Flutter SDK** — installed at `C:\Users\Mubeen\flutter` (or add your own to PATH)
 2. [Firebase CLI](https://firebase.google.com/docs/cli)
-3. Android Studio / Xcode (for emulators)
+3. Android Studio (Android SDK + emulator) or a physical device
 
-## First-time setup
+## Quick setup (Windows)
+
+```powershell
+cd "c:\Users\Mubeen\Desktop\pets project"
+.\scripts\setup.ps1
+
+# Configure Firebase (interactive — login required)
+dart pub global activate flutterfire_cli
+flutterfire configure
+
+# Start emulators
+firebase emulators:start
+
+# Run app (Windows desktop or connected device)
+$env:Path = "C:\Users\Mubeen\flutter\bin;$env:Path"
+flutter run -t lib/main.dart -d windows
+# Or Android with Maps key:
+flutter run -t lib/main.dart --dart-define=GOOGLE_MAPS_API_KEY=your_key
+```
+
+## What's new in this setup
+
+| Feature | Status |
+|---------|--------|
+| Flutter SDK cloned | `C:\Users\Mubeen\flutter` |
+| android/ ios/ generated | `flutter create` done |
+| Phone + password login | BRD 6.1 |
+| Phone OTP on register | Firebase Phone Auth |
+| Google Sign-In | `google_sign_in` wired |
+| Google Maps on ride flow | Pickup/destination pins + route preview |
+| Server fare | `calculateFare` Cloud Function |
+| Admin driver allocation | `allocateDriver` + pending rides list |
+| Firebase emulators | Auth, Firestore, Functions |
+
+## Google Maps setup
+
+1. Enable **Maps SDK for Android/iOS** in Google Cloud Console
+2. Android: replace `YOUR_GOOGLE_MAPS_API_KEY` in `android/app/src/main/AndroidManifest.xml`
+3. iOS: add key in `AppDelegate.swift` (see [google_maps_flutter](https://pub.dev/packages/google_maps_flutter))
+4. Or pass at run time: `--dart-define=GOOGLE_MAPS_API_KEY=your_key`
+
+## Firebase Phone Auth setup
+
+1. Firebase Console → Authentication → Sign-in method → **Phone** → Enable
+2. For emulator testing: use Firebase Auth emulator (test numbers auto-verify)
+3. Register flow: create account → OTP sent → link phone credential
+
+## First-time setup (full)
 
 ```powershell
 cd "c:\Users\Mubeen\Desktop\pets project"
