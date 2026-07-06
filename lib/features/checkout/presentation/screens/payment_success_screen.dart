@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:pet_app/core/extensions/context_extensions.dart';
 import 'package:pet_app/core/router/route_names.dart';
 import 'package:pet_app/shared/widgets/app_button.dart';
+import 'package:pet_app/shared/widgets/app_top_bar.dart';
 
 /// BRD 6.25 — Payment Success
 class PaymentSuccessScreen extends ConsumerWidget {
@@ -12,6 +13,7 @@ class PaymentSuccessScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
+      appBar: AppTopBar(title: Text(context.l10n.paymentSuccess)),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(

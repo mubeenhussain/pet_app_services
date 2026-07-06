@@ -7,6 +7,7 @@ import 'package:pet_app/shared/providers/app_providers.dart';
 import 'package:pet_app/shared/services/firebase_service.dart';
 import 'package:pet_app/shared/widgets/app_button.dart';
 import 'package:pet_app/shared/widgets/app_loading.dart';
+import 'package:pet_app/shared/widgets/app_top_bar.dart';
 
 /// BRD 7.1 — Pending Driver Requests (allocateDriver Cloud Function)
 class PendingDriverRequestsScreen extends ConsumerWidget {
@@ -17,7 +18,7 @@ class PendingDriverRequestsScreen extends ConsumerWidget {
     final ridesAsync = ref.watch(_pendingRidesProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Pending driver requests')),
+      appBar: AppTopBar(title: const Text('Pending driver requests')),
       body: ridesAsync.when(
         loading: () => const AppLoadingView(),
         error: (e, _) => Center(child: Text(e.toString())),

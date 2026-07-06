@@ -73,6 +73,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
     final l10n = context.l10n;
 
     return AuthShell(
+      showBack: true,
       title: l10n.otpTitle,
       subtitle: l10n.otpSubtitle(widget.phone),
       child: Column(

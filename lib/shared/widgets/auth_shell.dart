@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pet_app/core/constants/app_constants.dart';
+import 'package:pet_app/shared/widgets/app_top_bar.dart';
 
 class AuthShell extends StatelessWidget {
   const AuthShell({
@@ -7,15 +9,23 @@ class AuthShell extends StatelessWidget {
     required this.child,
     this.title,
     this.subtitle,
+    this.showBack = false,
   });
 
   final Widget child;
   final String? title;
   final String? subtitle;
+  final bool showBack;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: showBack && context.canPop()
+          ? AppTopBar(
+              title: const SizedBox.shrink(),
+              showBack: true,
+            )
+          : null,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(

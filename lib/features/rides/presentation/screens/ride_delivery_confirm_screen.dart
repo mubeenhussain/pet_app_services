@@ -7,6 +7,7 @@ import 'package:pet_app/features/rides/presentation/providers/ride_controller.da
 import 'package:pet_app/shared/enums/ride_status.dart';
 import 'package:pet_app/shared/providers/app_providers.dart';
 import 'package:pet_app/shared/widgets/app_button.dart';
+import 'package:pet_app/shared/widgets/app_top_bar.dart';
 
 /// BRD 6.40 — Delivery Confirmation
 class RideDeliveryConfirmScreen extends ConsumerWidget {
@@ -17,7 +18,7 @@ class RideDeliveryConfirmScreen extends ConsumerWidget {
     final rideId = ref.watch(rideDraftProvider).rideId;
 
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.deliveryConfirmed)),
+      appBar: AppTopBar(title: Text(context.l10n.deliveryConfirmed)),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(

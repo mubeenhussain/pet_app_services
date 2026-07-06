@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pet_app/shared/widgets/app_top_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pet_app/core/router/route_names.dart';
@@ -10,7 +11,7 @@ class AdminDashboardScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Admin Dashboard')),
+      appBar: AppTopBar(title: const Text('Admin Dashboard')),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [

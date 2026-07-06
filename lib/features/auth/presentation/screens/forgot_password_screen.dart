@@ -42,6 +42,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
     final isLoading = ref.watch(authControllerProvider).isLoading;
 
     return AuthShell(
+      showBack: true,
       title: context.l10n.forgotPassword,
       child: Column(
         children: [

@@ -6,6 +6,7 @@ import 'package:pet_app/core/extensions/context_extensions.dart';
 import 'package:pet_app/core/router/route_names.dart';
 import 'package:pet_app/features/rides/presentation/providers/ride_controller.dart';
 import 'package:pet_app/shared/widgets/app_button.dart';
+import 'package:pet_app/shared/widgets/app_top_bar.dart';
 import 'package:pet_app/shared/widgets/app_loading.dart';
 import 'package:pet_app/shared/widgets/app_map_view.dart';
 
@@ -69,7 +70,7 @@ class _RideReviewScreenState extends ConsumerState<RideReviewScreen> {
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Route & fare')),
+      appBar: AppTopBar(title: const Text('Route & fare')),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(

@@ -30,6 +30,7 @@ class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return AuthShell(
+      showBack: true,
       title: context.l10n.passwordHint,
       child: Column(
         children: [

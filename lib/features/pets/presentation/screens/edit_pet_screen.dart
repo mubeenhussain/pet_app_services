@@ -6,6 +6,7 @@ import 'package:pet_app/core/utils/validators.dart';
 import 'package:pet_app/features/pets/presentation/providers/pets_controller.dart';
 import 'package:pet_app/shared/providers/app_providers.dart';
 import 'package:pet_app/shared/widgets/app_button.dart';
+import 'package:pet_app/shared/widgets/app_top_bar.dart';
 import 'package:pet_app/shared/widgets/app_loading.dart';
 import 'package:pet_app/shared/widgets/app_text_field.dart';
 
@@ -70,13 +71,13 @@ class _EditPetScreenState extends ConsumerState<EditPetScreen> {
   Widget build(BuildContext context) {
     if (!_loaded) {
       return Scaffold(
-        appBar: AppBar(title: Text(context.l10n.edit)),
+        appBar: AppTopBar(title: Text(context.l10n.edit)),
         body: AppLoadingView(message: context.l10n.loading),
       );
     }
 
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.edit)),
+      appBar: AppTopBar(title: Text(context.l10n.edit)),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Form(

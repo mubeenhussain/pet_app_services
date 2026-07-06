@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:pet_app/core/extensions/context_extensions.dart';
 import 'package:pet_app/core/router/route_names.dart';
 import 'package:pet_app/shared/widgets/app_button.dart';
+import 'package:pet_app/shared/widgets/app_top_bar.dart';
 
 /// BRD 6.53 — Document Upload
 class DocumentUploadScreen extends ConsumerWidget {
@@ -12,7 +13,7 @@ class DocumentUploadScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.documentUpload)),
+      appBar: AppTopBar(title: Text(context.l10n.documentUpload)),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(

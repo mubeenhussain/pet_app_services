@@ -5,6 +5,7 @@ import 'package:pet_app/core/extensions/context_extensions.dart';
 import 'package:pet_app/core/router/route_names.dart';
 import 'package:pet_app/features/rides/presentation/providers/ride_controller.dart';
 import 'package:pet_app/shared/widgets/app_button.dart';
+import 'package:pet_app/shared/widgets/app_top_bar.dart';
 
 /// BRD 6.38 — Wait For Driver
 class RideWaitDriverScreen extends ConsumerWidget {
@@ -15,7 +16,7 @@ class RideWaitDriverScreen extends ConsumerWidget {
     final draft = ref.watch(rideDraftProvider);
 
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.driverAllocated)),
+      appBar: AppTopBar(title: Text(context.l10n.driverAllocated)),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(

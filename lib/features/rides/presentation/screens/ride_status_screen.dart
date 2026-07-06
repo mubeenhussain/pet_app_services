@@ -6,6 +6,7 @@ import 'package:pet_app/core/router/route_names.dart';
 import 'package:pet_app/shared/enums/ride_status.dart';
 import 'package:pet_app/shared/providers/app_providers.dart';
 import 'package:pet_app/shared/widgets/app_button.dart';
+import 'package:pet_app/shared/widgets/app_top_bar.dart';
 import 'package:pet_app/shared/widgets/app_loading.dart';
 
 /// BRD 6.39 — Ride Status
@@ -19,7 +20,7 @@ class RideStatusScreen extends ConsumerWidget {
     final rideAsync = ref.watch(_rideProvider(rideId));
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Ride status')),
+      appBar: AppTopBar(title: const Text('Ride status')),
       body: rideAsync.when(
         loading: () => AppLoadingView(message: context.l10n.loading),
         error: (e, _) => Center(child: Text(e.toString())),

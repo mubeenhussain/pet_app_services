@@ -7,6 +7,7 @@ import 'package:pet_app/features/pets/presentation/providers/pets_controller.dar
 import 'package:pet_app/shared/models/pet_model.dart';
 import 'package:pet_app/shared/providers/app_providers.dart';
 import 'package:pet_app/shared/widgets/app_button.dart';
+import 'package:pet_app/shared/widgets/app_top_bar.dart';
 import 'package:pet_app/shared/widgets/app_text_field.dart';
 
 /// BRD 6.10 — Add Pet
@@ -60,7 +61,7 @@ class _AddPetScreenState extends ConsumerState<AddPetScreen> {
     final isLoading = ref.watch(petsControllerProvider).isLoading;
 
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.addPet)),
+      appBar: AppTopBar(title: Text(context.l10n.addPet)),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Form(

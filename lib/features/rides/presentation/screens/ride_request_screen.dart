@@ -9,6 +9,7 @@ import 'package:pet_app/features/pets/presentation/providers/pets_controller.dar
 import 'package:pet_app/features/rides/presentation/providers/ride_controller.dart';
 import 'package:pet_app/shared/services/location_service.dart';
 import 'package:pet_app/shared/widgets/app_button.dart';
+import 'package:pet_app/shared/widgets/app_top_bar.dart';
 import 'package:pet_app/shared/widgets/app_map_view.dart';
 import 'package:pet_app/shared/widgets/app_text_field.dart';
 
@@ -137,7 +138,7 @@ class _RideRequestScreenState extends ConsumerState<RideRequestScreen> {
     final petsAsync = ref.watch(petsListProvider);
 
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.requestRide)),
+      appBar: AppTopBar(title: Text(context.l10n.requestRide)),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(

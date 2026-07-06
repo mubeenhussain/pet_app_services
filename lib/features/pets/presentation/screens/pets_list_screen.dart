@@ -6,6 +6,7 @@ import 'package:pet_app/core/router/route_names.dart';
 import 'package:pet_app/features/pets/presentation/providers/pets_controller.dart';
 import 'package:pet_app/shared/providers/app_providers.dart';
 import 'package:pet_app/shared/widgets/app_empty_state.dart';
+import 'package:pet_app/shared/widgets/app_top_bar.dart';
 import 'package:pet_app/shared/widgets/app_error_view.dart';
 import 'package:pet_app/shared/widgets/app_loading.dart';
 
@@ -18,7 +19,7 @@ class PetsListScreen extends ConsumerWidget {
     final petsAsync = ref.watch(petsListProvider);
 
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.yourPets)),
+      appBar: AppTopBar(title: Text(context.l10n.yourPets)),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => context.push(RouteNames.addPet),
         icon: const Icon(Icons.add),

@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:pet_app/core/extensions/context_extensions.dart';
 import 'package:pet_app/core/router/route_names.dart';
 import 'package:pet_app/shared/enums/user_role.dart';
-import 'package:pet_app/shared/widgets/app_button.dart';
+import 'package:pet_app/shared/widgets/app_top_bar.dart';
 
 /// BRD 6.52 — Account Type Selection
 class AccountTypeScreen extends ConsumerWidget {
@@ -13,7 +13,7 @@ class AccountTypeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.accountType)),
+      appBar: AppTopBar(title: Text(context.l10n.accountType)),
       body: ListView(
         children: [
           for (final role in [

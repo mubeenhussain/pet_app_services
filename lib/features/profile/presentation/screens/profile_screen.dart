@@ -6,6 +6,7 @@ import 'package:pet_app/core/router/route_names.dart';
 import 'package:pet_app/features/auth/presentation/providers/auth_controller.dart';
 import 'package:pet_app/shared/providers/app_providers.dart';
 import 'package:pet_app/shared/widgets/app_button.dart';
+import 'package:pet_app/shared/widgets/app_top_bar.dart';
 
 /// BRD 6.7 — Display User Info
 class ProfileScreen extends ConsumerWidget {
@@ -26,7 +27,7 @@ class ProfileScreen extends ConsumerWidget {
 
     if (isGuest) {
       return Scaffold(
-        appBar: AppBar(title: Text(context.l10n.userSettings)),
+        appBar: AppTopBar(title: Text(context.l10n.userSettings)),
         body: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
@@ -59,7 +60,7 @@ class ProfileScreen extends ConsumerWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.userSettings)),
+      appBar: AppTopBar(title: Text(context.l10n.userSettings)),
       body: user == null
           ? Center(child: Text(context.l10n.errorGeneric))
           : Padding(

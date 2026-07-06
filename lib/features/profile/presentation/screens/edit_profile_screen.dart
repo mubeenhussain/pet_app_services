@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:pet_app/core/extensions/context_extensions.dart';
 import 'package:pet_app/shared/providers/app_providers.dart';
 import 'package:pet_app/shared/widgets/app_button.dart';
+import 'package:pet_app/shared/widgets/app_top_bar.dart';
 import 'package:pet_app/shared/widgets/app_text_field.dart';
 
 /// BRD 6.8 — Edit User Info
@@ -52,7 +53,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.edit)),
+      appBar: AppTopBar(title: Text(context.l10n.edit)),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(

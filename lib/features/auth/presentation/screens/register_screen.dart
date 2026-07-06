@@ -77,6 +77,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     final l10n = context.l10n;
 
     return AuthShell(
+      showBack: true,
       title: l10n.registerTitle,
       child: Form(
         key: _formKey,

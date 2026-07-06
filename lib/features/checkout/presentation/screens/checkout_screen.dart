@@ -5,6 +5,7 @@ import 'package:pet_app/core/extensions/context_extensions.dart';
 import 'package:pet_app/core/router/route_names.dart';
 import 'package:pet_app/shared/services/payment_service.dart';
 import 'package:pet_app/shared/widgets/app_button.dart';
+import 'package:pet_app/shared/widgets/app_top_bar.dart';
 
 /// BRD 6.24 — Checkout
 class CheckoutScreen extends ConsumerWidget {
@@ -13,7 +14,7 @@ class CheckoutScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.checkout)),
+      appBar: AppTopBar(title: Text(context.l10n.checkout)),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(

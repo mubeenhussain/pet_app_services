@@ -7,6 +7,7 @@ import 'package:pet_app/features/rides/presentation/providers/ride_controller.da
 import 'package:pet_app/shared/models/ride_model.dart';
 import 'package:pet_app/shared/providers/app_providers.dart';
 import 'package:pet_app/shared/widgets/app_button.dart';
+import 'package:pet_app/shared/widgets/app_top_bar.dart';
 
 /// BRD 6.36 — Setup Payment (Ride)
 class RidePaymentScreen extends ConsumerWidget {
@@ -37,7 +38,7 @@ class RidePaymentScreen extends ConsumerWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.checkout)),
+      appBar: AppTopBar(title: Text(context.l10n.checkout)),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
