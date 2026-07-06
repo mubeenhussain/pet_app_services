@@ -1,31 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:pet_app/core/theme/app_colors.dart';
+import 'package:pet_app/core/theme/app_semantic_colors.dart';
+import 'package:pet_app/core/theme/app_text_theme.dart';
 
-class AppTheme {
+abstract final class AppTheme {
   AppTheme._();
 
-  static ThemeData get light {
-    const colorScheme = ColorScheme.light(
+  static ThemeData get light => _build(Brightness.light);
+
+  static ThemeData _build(Brightness brightness) {
+    final colorScheme = ColorScheme.light(
       primary: AppColors.primary,
-      onPrimary: Colors.white,
+      onPrimary: AppColors.onPrimary,
+      primaryContainer: AppColors.primaryDark,
       secondary: AppColors.secondary,
+      onSecondary: AppColors.onPrimary,
       surface: AppColors.surface,
+      onSurface: AppColors.textPrimary,
       error: AppColors.error,
+      onError: AppColors.onPrimary,
+      outline: AppColors.border,
     );
 
     return ThemeData(
       useMaterial3: true,
+      brightness: brightness,
       colorScheme: colorScheme,
       scaffoldBackgroundColor: AppColors.background,
-      appBarTheme: const AppBarTheme(
+      extensions: const [AppSemanticColors.light],
+      textTheme: AppTextTheme.light(colorScheme),
+      appBarTheme: AppBarTheme(
         backgroundColor: AppColors.surface,
         foregroundColor: AppColors.textPrimary,
         elevation: 0,
         centerTitle: true,
+        titleTextStyle: AppTextTheme.light(colorScheme).titleLarge,
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppColors.surface,
+        labelStyle: TextStyle(color: AppColors.textSecondary),
+        hintStyle: TextStyle(color: AppColors.textSecondary.withValues(alpha: 0.7)),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: AppColors.border),
@@ -46,7 +61,7 @@ class AppTheme {
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
-          foregroundColor: Colors.white,
+          foregroundColor: AppColors.onPrimary,
           minimumSize: const Size.fromHeight(52),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
@@ -59,6 +74,8 @@ class AppTheme {
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
+          foregroundColor: AppColors.primary,
+          side: const BorderSide(color: AppColors.primary),
           minimumSize: const Size.fromHeight(52),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),

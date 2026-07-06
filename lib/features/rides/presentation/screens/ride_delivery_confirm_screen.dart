@@ -23,7 +23,7 @@ class RideDeliveryConfirmScreen extends ConsumerWidget {
         padding: const EdgeInsets.all(24),
         child: Column(
           children: [
-            const Icon(Icons.check_circle, color: Colors.green, size: 72),
+            Icon(Icons.check_circle, color: context.colors.success, size: 72),
             const SizedBox(height: 16),
             Text(context.l10n.deliveryConfirmed),
             const Spacer(),

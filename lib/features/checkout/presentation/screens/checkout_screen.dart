@@ -22,9 +22,9 @@ class CheckoutScreen extends ConsumerWidget {
           children: [
             const TextField(decoration: InputDecoration(labelText: 'Delivery address')),
             const SizedBox(height: 16),
-            const ListTile(
-              title: Text('Mada'),
-              trailing: Icon(Icons.check_circle, color: Colors.green),
+            ListTile(
+              title: const Text('Mada'),
+              trailing: Icon(Icons.check_circle, color: context.colors.success),
             ),
             const Spacer(),
             AppButton(

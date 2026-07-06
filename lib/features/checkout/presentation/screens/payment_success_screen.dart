@@ -19,7 +19,7 @@ class PaymentSuccessScreen extends ConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.check_circle, color: Colors.green, size: 80),
+            Icon(Icons.check_circle, color: context.colors.success, size: 80),
             const SizedBox(height: 16),
             Text(
               context.l10n.paymentSuccess,

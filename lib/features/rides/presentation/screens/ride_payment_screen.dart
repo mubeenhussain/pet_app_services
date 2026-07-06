@@ -44,11 +44,11 @@ class RidePaymentScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const ListTile(
-              leading: Icon(Icons.credit_card),
-              title: Text('Mada / Card'),
-              subtitle: Text('Default payment method'),
-              trailing: Icon(Icons.check_circle, color: Colors.green),
+            ListTile(
+              leading: const Icon(Icons.credit_card),
+              title: const Text('Mada / Card'),
+              subtitle: const Text('Default payment method'),
+              trailing: Icon(Icons.check_circle, color: context.colors.success),
             ),
             const Spacer(),
             AppButton(

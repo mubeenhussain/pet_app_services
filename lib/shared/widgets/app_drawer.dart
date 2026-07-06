@@ -70,10 +70,10 @@ class AppDrawer extends ConsumerWidget {
           ),
           const Divider(height: 1),
           ListTile(
-            leading: const Icon(Icons.logout, color: Colors.red),
+            leading: Icon(Icons.logout, color: context.colorScheme.error),
             title: Text(
               context.l10n.logout,
-              style: const TextStyle(color: Colors.red),
+              style: TextStyle(color: context.colorScheme.error),
             ),
             onTap: () => _logout(context, ref),
           ),

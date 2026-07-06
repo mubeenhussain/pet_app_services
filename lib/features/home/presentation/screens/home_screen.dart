@@ -3,8 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pet_app/core/extensions/context_extensions.dart';
 import 'package:pet_app/core/router/route_names.dart';
-import 'package:pet_app/core/theme/app_colors.dart';
-import 'package:pet_app/features/rides/presentation/providers/ride_controller.dart';
 import 'package:pet_app/shared/providers/app_providers.dart';
 import 'package:pet_app/shared/providers/locale_provider.dart';
 import 'package:pet_app/shared/widgets/app_drawer.dart';
@@ -57,14 +55,14 @@ class HomeScreen extends ConsumerWidget {
           _ServiceTile(
             icon: Icons.local_shipping,
             label: l10n.requestRide,
-            color: AppColors.primary,
+            color: context.colorScheme.primary,
             onTap: () => context.push(RouteNames.rideRequest),
           ),
           const SizedBox(height: 16),
           Card(
-            color: AppColors.emergency.withValues(alpha: 0.08),
+            color: context.colors.emergency.withValues(alpha: 0.08),
             child: ListTile(
-              leading: const Icon(Icons.emergency, color: AppColors.emergency),
+              leading: Icon(Icons.emergency, color: context.colors.emergency),
               title: const Text('Emergency vet clinics'),
               subtitle: const Text('Coming in Phase 3'),
               onTap: () {},
