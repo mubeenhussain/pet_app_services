@@ -397,6 +397,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delivery confirmed'**
   String get deliveryConfirmed;
+
+  /// No description provided for @logout.
+  ///
+  /// In en, this message translates to:
+  /// **'Log out'**
+  String get logout;
+
+  /// No description provided for @guestUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Guest'**
+  String get guestUser;
+
+  /// No description provided for @guestProfileMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You are browsing as a guest. Sign in to save your profile and pets.'**
+  String get guestProfileMessage;
 }
 
 class _AppLocalizationsDelegate

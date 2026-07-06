@@ -161,4 +161,14 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get deliveryConfirmed => 'تم تأكيد التسليم';
+
+  @override
+  String get logout => 'تسجيل الخروج';
+
+  @override
+  String get guestUser => 'زائر';
+
+  @override
+  String get guestProfileMessage =>
+      'أنت تتصفح كزائر. سجّل الدخول لحفظ ملفك وحيواناتك.';
 }

@@ -161,4 +161,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deliveryConfirmed => 'Delivery confirmed';
+
+  @override
+  String get logout => 'Log out';
+
+  @override
+  String get guestUser => 'Guest';
+
+  @override
+  String get guestProfileMessage =>
+      'You are browsing as a guest. Sign in to save your profile and pets.';
 }

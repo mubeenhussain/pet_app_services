@@ -152,7 +152,10 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
 
   Future<void> signOut() async {
     state = const AsyncLoading();
-    state = await AsyncValue.guard(_repository.signOut);
+    state = await AsyncValue.guard(() async {
+      await _repository.signOut();
+      _ref.read(guestModeProvider.notifier).state = false;
+    });
   }
 
   Future<void> resetPassword(String email) async {

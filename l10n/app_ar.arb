@@ -49,5 +49,8 @@
   "documentUpload": "رفع المستندات",
   "searchingForDriver": "جاري البحث عن سائق...",
   "driverAllocated": "تم تعيين السائق",
-  "deliveryConfirmed": "تم تأكيد التسليم"
+  "deliveryConfirmed": "تم تأكيد التسليم",
+  "logout": "تسجيل الخروج",
+  "guestUser": "زائر",
+  "guestProfileMessage": "أنت تتصفح كزائر. سجّل الدخول لحفظ ملفك وحيواناتك."
 }

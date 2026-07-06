@@ -16,8 +16,8 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(currentUserProvider);
-    final name = user?.username ?? 'Guest';
     final l10n = context.l10n;
+    final name = user?.username ?? l10n.guestUser;
 
     return Scaffold(
       appBar: AppBar(

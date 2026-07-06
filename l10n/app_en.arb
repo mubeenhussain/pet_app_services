@@ -59,5 +59,8 @@
   "documentUpload": "Upload documents",
   "searchingForDriver": "Searching for a driver...",
   "driverAllocated": "Driver allocated",
-  "deliveryConfirmed": "Delivery confirmed"
+  "deliveryConfirmed": "Delivery confirmed",
+  "logout": "Log out",
+  "guestUser": "Guest",
+  "guestProfileMessage": "You are browsing as a guest. Sign in to save your profile and pets."
 }
