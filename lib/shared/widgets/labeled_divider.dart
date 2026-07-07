@@ -10,20 +10,34 @@ class LabeledDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final style = context.textTheme.bodySmall?.copyWith(
-      color: context.colors.textSecondary,
-      fontWeight: FontWeight.w600,
-      letterSpacing: 0.5,
+      color: context.colors.textMuted,
+      fontSize: 11,
+      fontWeight: FontWeight.w500,
+      letterSpacing: 1.2,
+      height: 1,
     );
 
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const Expanded(child: Divider()),
+        Expanded(child: _Line(color: context.colors.divider)),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(label.toUpperCase(), style: style),
         ),
-        const Expanded(child: Divider()),
+        Expanded(child: _Line(color: context.colors.divider)),
       ],
     );
+  }
+}
+
+class _Line extends StatelessWidget {
+  const _Line({required this.color});
+
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(height: 1, color: color);
   }
 }

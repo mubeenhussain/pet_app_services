@@ -102,7 +102,7 @@ abstract final class AppTheme {
           side: const BorderSide(color: AppColors.border),
         ),
       ),
-      dividerTheme: const DividerThemeData(color: AppColors.border),
+      dividerTheme: const DividerThemeData(color: AppColors.divider),
     );
   }
 }

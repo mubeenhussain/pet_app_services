@@ -99,6 +99,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               validator: Validators.password,
               onSubmitted: (_) => _submit(),
             ),
+            const SizedBox(height: 12),
             Align(
               alignment: AlignmentDirectional.centerEnd,
               child: TextButton(
@@ -108,10 +109,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
                 onPressed: () => context.push(RouteNames.forgotPassword),
-                child: Text(l10n.forgotPassword),
+                child: Text(
+                  l10n.forgotPassword,
+                  style: TextStyle(
+                    color: context.colors.link,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 28),
             AppButton(
               label: l10n.signIn,
               isLoading: isLoading,
@@ -143,6 +150,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 l10n.skipForNow,
                 style: TextStyle(
                   color: context.colors.textMuted,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w400,
+                  height: 1.5,
                   decoration: TextDecoration.underline,
                   decorationColor: context.colors.textMuted,
                 ),
