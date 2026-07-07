@@ -48,7 +48,46 @@ class AppLocalizationsEn extends AppLocalizations {
   String get registerTitle => 'Create account';
 
   @override
+  String get registerSubtitle => 'Join PawBuddy and start your pet\'s journey';
+
+  @override
   String get usernameHint => 'Username';
+
+  @override
+  String get usernameExample => 'e.g. sara_khan';
+
+  @override
+  String get phoneExample => '300 1234567';
+
+  @override
+  String get passwordMinHint => 'Min. 8 characters';
+
+  @override
+  String get passwordHelper => 'Minimum 8 characters';
+
+  @override
+  String get cityAddressLabel => 'City / Address';
+
+  @override
+  String get selectCity => 'Select your city';
+
+  @override
+  String get optional => 'optional';
+
+  @override
+  String get agreeToTerms => 'I agree to';
+
+  @override
+  String get termsAndPrivacy => 'Terms & Privacy Policy';
+
+  @override
+  String get createAccount => 'Create Account';
+
+  @override
+  String get alreadyHaveAccount => 'Already have an account?';
+
+  @override
+  String get mustAcceptTerms => 'Please accept the terms to continue';
 
   @override
   String get cityHint => 'City';

@@ -48,7 +48,46 @@ class AppLocalizationsAr extends AppLocalizations {
   String get registerTitle => 'إنشاء حساب';
 
   @override
+  String get registerSubtitle => 'انضم إلى PawBuddy وابدأ رحلة حيوانك الأليف';
+
+  @override
   String get usernameHint => 'اسم المستخدم';
+
+  @override
+  String get usernameExample => 'مثال: sara_khan';
+
+  @override
+  String get phoneExample => '300 1234567';
+
+  @override
+  String get passwordMinHint => '8 أحرف على الأقل';
+
+  @override
+  String get passwordHelper => '8 أحرف كحد أدنى';
+
+  @override
+  String get cityAddressLabel => 'المدينة / العنوان';
+
+  @override
+  String get selectCity => 'اختر مدينتك';
+
+  @override
+  String get optional => 'اختياري';
+
+  @override
+  String get agreeToTerms => 'أوافق على';
+
+  @override
+  String get termsAndPrivacy => 'الشروط وسياسة الخصوصية';
+
+  @override
+  String get createAccount => 'إنشاء حساب';
+
+  @override
+  String get alreadyHaveAccount => 'لديك حساب بالفعل؟';
+
+  @override
+  String get mustAcceptTerms => 'يرجى قبول الشروط للمتابعة';
 
   @override
   String get cityHint => 'المدينة';

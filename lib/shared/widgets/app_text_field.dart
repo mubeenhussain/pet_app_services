@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pet_app/core/extensions/context_extensions.dart';
+import 'package:pet_app/shared/widgets/field_label.dart';
 
 /// Themed text field used across the app.
 ///
@@ -12,7 +13,9 @@ class AppTextField extends StatefulWidget {
     super.key,
     required this.controller,
     this.label,
+    this.optionalLabel = false,
     this.hint,
+    this.helperText,
     this.validator,
     this.obscureText = false,
     this.keyboardType,
@@ -26,7 +29,9 @@ class AppTextField extends StatefulWidget {
 
   final TextEditingController controller;
   final String? label;
+  final bool optionalLabel;
   final String? hint;
+  final String? helperText;
   final String? Function(String?)? validator;
   final bool obscureText;
   final TextInputType? keyboardType;
@@ -73,21 +78,25 @@ class _AppTextFieldState extends State<AppTextField> {
       ),
     );
 
-    if (widget.label == null) return field;
+    if (widget.label == null && widget.helperText == null) return field;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          widget.label!,
-          style: context.textTheme.titleMedium?.copyWith(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: context.colorScheme.onSurface,
-          ),
-        ),
-        const SizedBox(height: 8),
+        if (widget.label != null) ...[
+          FieldLabel(label: widget.label!, optional: widget.optionalLabel),
+          const SizedBox(height: 8),
+        ],
         field,
+        if (widget.helperText != null) ...[
+          const SizedBox(height: 6),
+          Text(
+            widget.helperText!,
+            style: context.textTheme.bodySmall?.copyWith(
+              color: context.colors.textMuted,
+            ),
+          ),
+        ],
       ],
     );
   }

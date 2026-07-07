@@ -19,6 +19,7 @@ class AuthShell extends StatelessWidget {
     this.subtitle,
     this.subtitleWidget,
     this.header,
+    this.showBrand = true,
     this.showBack = false,
     this.circleBack = false,
     this.alignTop = false,
@@ -29,23 +30,24 @@ class AuthShell extends StatelessWidget {
   final String? subtitle;
   final Widget? subtitleWidget;
   final Widget? header;
+  final bool showBrand;
   final bool showBack;
   final bool circleBack;
   final bool alignTop;
 
   Widget _buildContent(BuildContext context) {
+    final headerWidget = header ?? (showBrand ? const AppBrandMark() : null);
+
     return ConstrainedBox(
       constraints:
           const BoxConstraints(maxWidth: AppConstants.authContentWidth),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Align(
-            alignment: Alignment.center,
-            child: header ?? const AppBrandMark(),
-          ),
+          if (headerWidget != null)
+            Align(alignment: Alignment.center, child: headerWidget),
           if (title != null) ...[
-            const SizedBox(height: 20),
+            SizedBox(height: headerWidget != null ? 20 : 0),
             Text(
               title!,
               style: context.textTheme.headlineSmall?.copyWith(

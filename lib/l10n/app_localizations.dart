@@ -176,11 +176,89 @@ abstract class AppLocalizations {
   /// **'Create account'**
   String get registerTitle;
 
+  /// No description provided for @registerSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Join PawBuddy and start your pet\'s journey'**
+  String get registerSubtitle;
+
   /// No description provided for @usernameHint.
   ///
   /// In en, this message translates to:
   /// **'Username'**
   String get usernameHint;
+
+  /// No description provided for @usernameExample.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. sara_khan'**
+  String get usernameExample;
+
+  /// No description provided for @phoneExample.
+  ///
+  /// In en, this message translates to:
+  /// **'300 1234567'**
+  String get phoneExample;
+
+  /// No description provided for @passwordMinHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Min. 8 characters'**
+  String get passwordMinHint;
+
+  /// No description provided for @passwordHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum 8 characters'**
+  String get passwordHelper;
+
+  /// No description provided for @cityAddressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'City / Address'**
+  String get cityAddressLabel;
+
+  /// No description provided for @selectCity.
+  ///
+  /// In en, this message translates to:
+  /// **'Select your city'**
+  String get selectCity;
+
+  /// No description provided for @optional.
+  ///
+  /// In en, this message translates to:
+  /// **'optional'**
+  String get optional;
+
+  /// No description provided for @agreeToTerms.
+  ///
+  /// In en, this message translates to:
+  /// **'I agree to'**
+  String get agreeToTerms;
+
+  /// No description provided for @termsAndPrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms & Privacy Policy'**
+  String get termsAndPrivacy;
+
+  /// No description provided for @createAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Account'**
+  String get createAccount;
+
+  /// No description provided for @alreadyHaveAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account?'**
+  String get alreadyHaveAccount;
+
+  /// No description provided for @mustAcceptTerms.
+  ///
+  /// In en, this message translates to:
+  /// **'Please accept the terms to continue'**
+  String get mustAcceptTerms;
 
   /// No description provided for @cityHint.
   ///
