@@ -200,6 +200,60 @@ abstract class AppLocalizations {
   /// **'Skip for now'**
   String get skipForNow;
 
+  /// No description provided for @setPasswordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Set new password'**
+  String get setPasswordTitle;
+
+  /// No description provided for @setPasswordSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a strong password to secure your account'**
+  String get setPasswordSubtitle;
+
+  /// No description provided for @newPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'New Password'**
+  String get newPassword;
+
+  /// No description provided for @confirmPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Password'**
+  String get confirmPassword;
+
+  /// No description provided for @changePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Password'**
+  String get changePassword;
+
+  /// No description provided for @strengthWeak.
+  ///
+  /// In en, this message translates to:
+  /// **'Weak'**
+  String get strengthWeak;
+
+  /// No description provided for @strengthFair.
+  ///
+  /// In en, this message translates to:
+  /// **'Fair'**
+  String get strengthFair;
+
+  /// No description provided for @strengthGood.
+  ///
+  /// In en, this message translates to:
+  /// **'Good'**
+  String get strengthGood;
+
+  /// No description provided for @strengthStrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Strong'**
+  String get strengthStrong;
+
   /// No description provided for @registerTitle.
   ///
   /// In en, this message translates to:

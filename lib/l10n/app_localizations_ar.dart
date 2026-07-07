@@ -61,6 +61,33 @@ class AppLocalizationsAr extends AppLocalizations {
   String get skipForNow => 'تخطي الآن';
 
   @override
+  String get setPasswordTitle => 'تعيين كلمة مرور جديدة';
+
+  @override
+  String get setPasswordSubtitle => 'أنشئ كلمة مرور قوية لتأمين حسابك';
+
+  @override
+  String get newPassword => 'كلمة المرور الجديدة';
+
+  @override
+  String get confirmPassword => 'تأكيد كلمة المرور';
+
+  @override
+  String get changePassword => 'تغيير كلمة المرور';
+
+  @override
+  String get strengthWeak => 'ضعيفة';
+
+  @override
+  String get strengthFair => 'متوسطة';
+
+  @override
+  String get strengthGood => 'جيدة';
+
+  @override
+  String get strengthStrong => 'قوية';
+
+  @override
   String get registerTitle => 'إنشاء حساب';
 
   @override

@@ -61,6 +61,34 @@ class AppLocalizationsEn extends AppLocalizations {
   String get skipForNow => 'Skip for now';
 
   @override
+  String get setPasswordTitle => 'Set new password';
+
+  @override
+  String get setPasswordSubtitle =>
+      'Create a strong password to secure your account';
+
+  @override
+  String get newPassword => 'New Password';
+
+  @override
+  String get confirmPassword => 'Confirm Password';
+
+  @override
+  String get changePassword => 'Change Password';
+
+  @override
+  String get strengthWeak => 'Weak';
+
+  @override
+  String get strengthFair => 'Fair';
+
+  @override
+  String get strengthGood => 'Good';
+
+  @override
+  String get strengthStrong => 'Strong';
+
+  @override
   String get registerTitle => 'Create account';
 
   @override
