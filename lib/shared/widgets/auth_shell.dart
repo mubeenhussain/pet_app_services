@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pet_app/core/constants/app_constants.dart';
+import 'package:pet_app/shared/widgets/app_brand_mark.dart';
 import 'package:pet_app/shared/widgets/app_top_bar.dart';
 
 class AuthShell extends StatelessWidget {
@@ -35,10 +36,9 @@ class AuthShell extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Icon(
-                    Icons.pets,
-                    size: 56,
-                    color: Theme.of(context).colorScheme.primary,
+                  const Align(
+                    alignment: Alignment.center,
+                    child: AppBrandMark(),
                   ),
                   if (title != null) ...[
                     const SizedBox(height: 24),

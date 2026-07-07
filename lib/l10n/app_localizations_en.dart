@@ -15,7 +15,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loginTitle => 'Welcome back';
 
   @override
-  String get loginSubtitle => 'Sign in to continue';
+  String get loginSubtitle => 'Sign in to keep caring for your pets';
+
+  @override
+  String get orContinueWith => 'Or continue with';
+
+  @override
+  String get noAccountPrompt => 'Don\'t have an account?';
 
   @override
   String get phoneHint => 'Phone number';

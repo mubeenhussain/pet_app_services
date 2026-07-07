@@ -15,7 +15,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get loginTitle => 'مرحباً بعودتك';
 
   @override
-  String get loginSubtitle => 'سجّل الدخول للمتابعة';
+  String get loginSubtitle => 'سجّل الدخول لمواصلة العناية بحيواناتك';
+
+  @override
+  String get orContinueWith => 'أو تابع باستخدام';
+
+  @override
+  String get noAccountPrompt => 'ليس لديك حساب؟';
 
   @override
   String get phoneHint => 'رقم الهاتف';

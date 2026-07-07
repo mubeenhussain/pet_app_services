@@ -7,7 +7,12 @@ import 'package:pet_app/core/utils/validators.dart';
 import 'package:pet_app/features/auth/presentation/providers/auth_controller.dart';
 import 'package:pet_app/shared/widgets/app_button.dart';
 import 'package:pet_app/shared/widgets/app_text_field.dart';
+import 'package:pet_app/shared/widgets/auth_redirect_prompt.dart';
 import 'package:pet_app/shared/widgets/auth_shell.dart';
+import 'package:pet_app/shared/widgets/google_glyph.dart';
+import 'package:pet_app/shared/widgets/labeled_divider.dart';
+import 'package:pet_app/shared/widgets/phone_field.dart';
+import 'package:pet_app/shared/widgets/social_auth_button.dart';
 
 /// BRD 6.1 — Login (phone + password per BRD)
 class LoginScreen extends ConsumerStatefulWidget {
@@ -29,38 +34,40 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     super.dispose();
   }
 
-  Future<void> _submit() async {
-    if (!_formKey.currentState!.validate()) return;
-
+  /// Runs an auth action then routes home on success or surfaces the error.
+  Future<void> _runAuthAction(Future<void> Function() action) async {
     final controller = ref.read(authControllerProvider.notifier);
-    await controller.signInWithPhone(
-      phone: _phoneController.text.trim(),
-      password: _passwordController.text,
-    );
+    await action();
 
     if (!mounted) return;
-    final state = ref.read(authControllerProvider);
-    state.whenOrNull(
-      error: (error, _) => context.showAppSnackBar(
-        controller.mapError(error) ?? context.l10n.errorGeneric,
-        isError: true,
-      ),
-      data: (_) => context.go(RouteNames.home),
+    ref.read(authControllerProvider).whenOrNull(
+          error: (error, _) => context.showAppSnackBar(
+            controller.mapError(error) ?? context.l10n.errorGeneric,
+            isError: true,
+          ),
+          data: (_) => context.go(RouteNames.home),
+        );
+  }
+
+  Future<void> _submit() async {
+    if (!_formKey.currentState!.validate()) return;
+    await _runAuthAction(
+      () => ref.read(authControllerProvider.notifier).signInWithPhone(
+            phone: _phoneController.text.trim(),
+            password: _passwordController.text,
+          ),
     );
   }
 
-  Future<void> _googleSignIn() async {
-    final controller = ref.read(authControllerProvider.notifier);
-    await controller.signInWithGoogle();
-    if (!mounted) return;
-    final state = ref.read(authControllerProvider);
-    state.whenOrNull(
-      error: (error, _) => context.showAppSnackBar(
-        controller.mapError(error) ?? context.l10n.errorGeneric,
-        isError: true,
-      ),
-      data: (_) => context.go(RouteNames.home),
+  Future<void> _googleSignIn() {
+    return _runAuthAction(
+      ref.read(authControllerProvider.notifier).signInWithGoogle,
     );
+  }
+
+  Future<void> _continueAsGuest() async {
+    await ref.read(authControllerProvider.notifier).skipAsGuest();
+    if (mounted) context.go(RouteNames.home);
   }
 
   @override
@@ -76,20 +83,23 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            AppTextField(
+            PhoneField(
               controller: _phoneController,
               label: l10n.phoneHint,
-              hint: '+966501234567',
-              keyboardType: TextInputType.phone,
+              hint: '5X XXX XXXX',
               validator: Validators.phone,
+              textInputAction: TextInputAction.next,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
             AppTextField(
               controller: _passwordController,
               label: l10n.passwordHint,
               obscureText: true,
+              textInputAction: TextInputAction.done,
               validator: Validators.password,
+              onSubmitted: (_) => _submit(),
             ),
+            const SizedBox(height: 4),
             Align(
               alignment: AlignmentDirectional.centerEnd,
               child: TextButton(
@@ -97,32 +107,33 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 child: Text(l10n.forgotPassword),
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 16),
             AppButton(
               label: l10n.signIn,
               isLoading: isLoading,
               onPressed: _submit,
             ),
-            const SizedBox(height: 12),
-            AppButton(
+            const SizedBox(height: 28),
+            LabeledDivider(label: l10n.orContinueWith),
+            const SizedBox(height: 20),
+            SocialAuthButton(
               label: l10n.signInWithGoogle,
-              variant: AppButtonVariant.outlined,
+              leading: const GoogleGlyph(),
               isLoading: isLoading,
               onPressed: _googleSignIn,
             ),
-            const SizedBox(height: 16),
-            TextButton(
-              onPressed: () => context.push(RouteNames.register),
-              child: Text(l10n.signUp),
+            const SizedBox(height: 20),
+            AuthRedirectPrompt(
+              prompt: l10n.noAccountPrompt,
+              actionLabel: l10n.signUp,
+              onAction: () => context.push(RouteNames.register),
             ),
             TextButton(
-              onPressed: isLoading
-                  ? null
-                  : () async {
-                      await ref.read(authControllerProvider.notifier).skipAsGuest();
-                      if (context.mounted) context.go(RouteNames.home);
-                    },
-              child: Text(l10n.skipForNow),
+              onPressed: isLoading ? null : _continueAsGuest,
+              child: Text(
+                l10n.skipForNow,
+                style: const TextStyle(decoration: TextDecoration.underline),
+              ),
             ),
           ],
         ),

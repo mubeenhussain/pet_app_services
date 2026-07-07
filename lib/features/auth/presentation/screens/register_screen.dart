@@ -8,6 +8,7 @@ import 'package:pet_app/features/auth/presentation/providers/auth_controller.dar
 import 'package:pet_app/shared/widgets/app_button.dart';
 import 'package:pet_app/shared/widgets/app_text_field.dart';
 import 'package:pet_app/shared/widgets/auth_shell.dart';
+import 'package:pet_app/shared/widgets/phone_field.dart';
 
 /// BRD 6.4 — Register Page (phone + password, then OTP verify)
 class RegisterScreen extends ConsumerStatefulWidget {
@@ -89,11 +90,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
               validator: Validators.username,
             ),
             const SizedBox(height: 16),
-            AppTextField(
+            PhoneField(
               controller: _phoneController,
               label: l10n.phoneHint,
-              hint: '+966501234567',
-              keyboardType: TextInputType.phone,
+              hint: '5X XXX XXXX',
               validator: Validators.phone,
             ),
             const SizedBox(height: 16),
