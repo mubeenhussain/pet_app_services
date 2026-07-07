@@ -5,7 +5,7 @@ abstract final class PhoneFormatter {
   /// Masks a phone number for OTP screens, e.g. `+966 501 ••• 4567`.
   static String mask(String raw) {
     final phone = raw.replaceAll(RegExp(r'\s+'), '');
-    if (phone.length < 8) return phone;
+    if (phone.length < 7) return phone;
 
     final last4 = phone.substring(phone.length - 4);
 
@@ -26,6 +26,7 @@ abstract final class PhoneFormatter {
       return '$prefix $middle ••• $last4';
     }
 
-    return phone;
+    final head = phone.substring(0, (phone.length - 4).clamp(1, 3));
+    return '$head ••• $last4';
   }
 }

@@ -72,13 +72,16 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
 
     return AuthShell(
       circleBack: true,
+      alignTop: true,
       header: const AppIconBadge(child: MailboxGlyph()),
       title: l10n.otpTitle,
       subtitleWidget: Column(
         children: [
           Text(
             l10n.otpInstruction(AppConstants.otpLength),
-            style: context.textTheme.bodyMedium,
+            style: context.textTheme.bodyMedium?.copyWith(
+              color: context.colors.textMuted,
+            ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 4),
@@ -100,13 +103,13 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
             onChanged: (value) => setState(() => _otp = value),
             onCompleted: (_) => _confirm(),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 20),
           ResendCountdown(
             duration: const Duration(seconds: 47),
             enabled: !isLoading,
             onResend: _resend,
           ),
-          const SizedBox(height: 32),
+          const SizedBox(height: 28),
           AppButton(
             label: l10n.confirm,
             isLoading: isLoading,

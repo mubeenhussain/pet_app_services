@@ -7,7 +7,7 @@ abstract final class AppTextTheme {
   static TextTheme light(ColorScheme colorScheme) {
     return TextTheme(
       headlineSmall: TextStyle(
-        color: colorScheme.onSurface,
+        color: AppColors.heading,
         fontWeight: FontWeight.bold,
         fontSize: 24,
       ),

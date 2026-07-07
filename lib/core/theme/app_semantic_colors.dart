@@ -10,6 +10,7 @@ class AppSemanticColors extends ThemeExtension<AppSemanticColors> {
     required this.border,
     required this.divider,
     required this.link,
+    required this.heading,
     required this.textSecondary,
     required this.textMuted,
     required this.primaryDark,
@@ -20,6 +21,7 @@ class AppSemanticColors extends ThemeExtension<AppSemanticColors> {
   final Color border;
   final Color divider;
   final Color link;
+  final Color heading;
   final Color textSecondary;
   final Color textMuted;
   final Color primaryDark;
@@ -30,6 +32,7 @@ class AppSemanticColors extends ThemeExtension<AppSemanticColors> {
     border: AppColors.border,
     divider: AppColors.divider,
     link: AppColors.link,
+    heading: AppColors.heading,
     textSecondary: AppColors.textSecondary,
     textMuted: AppColors.textMuted,
     primaryDark: AppColors.primaryDark,
@@ -42,6 +45,7 @@ class AppSemanticColors extends ThemeExtension<AppSemanticColors> {
     Color? border,
     Color? divider,
     Color? link,
+    Color? heading,
     Color? textSecondary,
     Color? textMuted,
     Color? primaryDark,
@@ -52,6 +56,7 @@ class AppSemanticColors extends ThemeExtension<AppSemanticColors> {
       border: border ?? this.border,
       divider: divider ?? this.divider,
       link: link ?? this.link,
+      heading: heading ?? this.heading,
       textSecondary: textSecondary ?? this.textSecondary,
       textMuted: textMuted ?? this.textMuted,
       primaryDark: primaryDark ?? this.primaryDark,
@@ -67,6 +72,7 @@ class AppSemanticColors extends ThemeExtension<AppSemanticColors> {
       border: Color.lerp(border, other.border, t)!,
       divider: Color.lerp(divider, other.divider, t)!,
       link: Color.lerp(link, other.link, t)!,
+      heading: Color.lerp(heading, other.heading, t)!,
       textSecondary: Color.lerp(textSecondary, other.textSecondary, t)!,
       textMuted: Color.lerp(textMuted, other.textMuted, t)!,
       primaryDark: Color.lerp(primaryDark, other.primaryDark, t)!,

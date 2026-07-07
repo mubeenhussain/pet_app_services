@@ -7,6 +7,7 @@ import 'package:pet_app/core/utils/validators.dart';
 import 'package:pet_app/features/auth/presentation/providers/auth_controller.dart';
 import 'package:pet_app/shared/widgets/app_button.dart';
 import 'package:pet_app/shared/widgets/app_text_field.dart';
+import 'package:pet_app/shared/services/phone_auth_service.dart';
 import 'package:pet_app/shared/widgets/auth_shell.dart';
 import 'package:pet_app/shared/widgets/phone_field.dart';
 
@@ -35,8 +36,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   }
 
   void _goToOtp(String phone) {
+    final normalized = PhoneAuthService.normalizePhone(phone);
     context.push(
-      '${RouteNames.otp}?phone=${Uri.encodeComponent(phone)}&flow=register',
+      '${RouteNames.otp}?phone=${Uri.encodeComponent(normalized)}&flow=register',
     );
   }
 
