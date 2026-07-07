@@ -5,11 +5,14 @@ import 'package:pet_app/core/extensions/context_extensions.dart';
 import 'package:pet_app/core/router/route_names.dart';
 import 'package:pet_app/core/utils/validators.dart';
 import 'package:pet_app/features/auth/presentation/providers/auth_controller.dart';
+import 'package:pet_app/shared/services/phone_auth_service.dart';
 import 'package:pet_app/shared/widgets/app_button.dart';
-import 'package:pet_app/shared/widgets/app_text_field.dart';
+import 'package:pet_app/shared/widgets/app_icon_badge.dart';
 import 'package:pet_app/shared/widgets/auth_shell.dart';
+import 'package:pet_app/shared/widgets/auth_text_link.dart';
+import 'package:pet_app/shared/widgets/phone_field.dart';
 
-/// BRD 6.6 — Forgot Password
+/// BRD 6.6 — Forgot Password (phone → OTP reset flow)
 class ForgotPasswordScreen extends ConsumerStatefulWidget {
   const ForgotPasswordScreen({super.key});
 
@@ -19,46 +22,81 @@ class ForgotPasswordScreen extends ConsumerStatefulWidget {
 }
 
 class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
-  final _emailController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  final _phoneController = TextEditingController();
 
   @override
   void dispose() {
-    _emailController.dispose();
+    _phoneController.dispose();
     super.dispose();
   }
 
+  void _goToOtp(String phone) {
+    final normalized = PhoneAuthService.normalizePhone(phone);
+    context.push(
+      '${RouteNames.otp}?phone=${Uri.encodeComponent(normalized)}&flow=reset',
+    );
+  }
+
   Future<void> _submit() async {
-    await ref
-        .read(authControllerProvider.notifier)
-        .resetPassword(_emailController.text.trim());
+    if (!_formKey.currentState!.validate()) return;
+
+    final phone = _phoneController.text.trim();
+    final controller = ref.read(authControllerProvider.notifier);
+
+    await controller.sendResetOtp(phone);
 
     if (!mounted) return;
-    context.showAppSnackBar('Password reset email sent.');
-    context.pop();
+    ref.read(authControllerProvider).whenOrNull(
+          error: (error, _) {
+            context.showAppSnackBar(
+              controller.mapError(error) ?? context.l10n.errorGeneric,
+              isError: true,
+            );
+            _goToOtp(phone);
+          },
+          data: (_) {
+            context.showAppSnackBar(context.l10n.resetCodeSent);
+            _goToOtp(phone);
+          },
+        );
   }
 
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(authControllerProvider).isLoading;
+    final l10n = context.l10n;
 
     return AuthShell(
-      showBack: true,
-      title: context.l10n.forgotPassword,
-      child: Column(
-        children: [
-          AppTextField(
-            controller: _emailController,
-            label: 'Email',
-            keyboardType: TextInputType.emailAddress,
-            validator: (v) => Validators.requiredField(v, field: 'Email'),
-          ),
-          const SizedBox(height: 24),
-          AppButton(
-            label: context.l10n.submit,
-            isLoading: isLoading,
-            onPressed: _submit,
-          ),
-        ],
+      circleBack: true,
+      header: const AppIconBadge(child: Icon(Icons.vpn_key_outlined, size: 28)),
+      title: l10n.forgotPasswordTitle,
+      subtitle: l10n.forgotPasswordSubtitle,
+      footer: AuthTextLink(
+        label: l10n.backToLogin,
+        icon: Icons.chevron_left,
+        onTap: () => context.go(RouteNames.login),
+      ),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            PhoneField(
+              controller: _phoneController,
+              label: l10n.phoneHint,
+              hint: l10n.phoneExample,
+              validator: Validators.phone,
+              onSubmitted: (_) => _submit(),
+            ),
+            const SizedBox(height: 28),
+            AppButton(
+              label: l10n.sendOtp,
+              isLoading: isLoading,
+              onPressed: _submit,
+            ),
+          ],
+        ),
       ),
     );
   }

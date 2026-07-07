@@ -19,6 +19,7 @@ class AuthShell extends StatelessWidget {
     this.subtitle,
     this.subtitleWidget,
     this.header,
+    this.footer,
     this.showBrand = true,
     this.showBack = false,
     this.circleBack = false,
@@ -30,6 +31,7 @@ class AuthShell extends StatelessWidget {
   final String? subtitle;
   final Widget? subtitleWidget;
   final Widget? header;
+  final Widget? footer;
   final bool showBrand;
   final bool showBack;
   final bool circleBack;
@@ -88,45 +90,59 @@ class AuthShell extends StatelessWidget {
             )
           : null,
       body: SafeArea(
-        child: circleBack
-            ? Stack(
-                children: [
-                  SingleChildScrollView(
-                    padding: EdgeInsets.fromLTRB(horizontal, 64, horizontal, 24),
-                    child: Align(
-                      alignment: Alignment.topCenter,
-                      child: _buildContent(context),
-                    ),
-                  ),
-                  if (context.canPop())
-                    Positioned(
-                      top: 8,
-                      left: horizontal,
-                      child: const AuthCircleBackButton(),
-                    ),
-                ],
-              )
-            : alignTop
-                ? SingleChildScrollView(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: horizontal,
-                      vertical: 24,
-                    ),
-                    child: Align(
-                      alignment: Alignment.topCenter,
-                      child: _buildContent(context),
-                    ),
-                  )
-                : Center(
-                    child: SingleChildScrollView(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: horizontal,
-                        vertical: 24,
-                      ),
-                      child: _buildContent(context),
-                    ),
-                  ),
+        child: Stack(
+          children: [
+            _body(context, horizontal),
+            if (circleBack && context.canPop())
+              Positioned(
+                top: 8,
+                left: horizontal,
+                child: const AuthCircleBackButton(),
+              ),
+          ],
+        ),
       ),
     );
+  }
+
+  Widget _body(BuildContext context, double horizontal) {
+    const bottomPadding = 24.0;
+    final topPadding = circleBack ? 72.0 : 24.0;
+    // Screens flagged [alignTop] (OTP, register) start from the top; others
+    // (login, forgot-password) are vertically centered in the available space.
+    final alignment = alignTop ? Alignment.topCenter : Alignment.center;
+
+    final scroll = LayoutBuilder(
+      builder: (context, constraints) {
+        return SingleChildScrollView(
+          padding:
+              EdgeInsets.fromLTRB(horizontal, topPadding, horizontal, bottomPadding),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: constraints.maxHeight - topPadding - bottomPadding,
+            ),
+            child: Align(
+              alignment: alignment,
+              child: _buildContent(context),
+            ),
+          ),
+        );
+      },
+    );
+
+    // Footer pinned to the bottom, content fills/centres above it.
+    if (footer != null) {
+      return Column(
+        children: [
+          Expanded(child: scroll),
+          Padding(
+            padding: EdgeInsets.fromLTRB(horizontal, 0, horizontal, 16),
+            child: footer,
+          ),
+        ],
+      );
+    }
+
+    return scroll;
   }
 }

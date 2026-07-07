@@ -42,6 +42,22 @@ class AppLocalizationsAr extends AppLocalizations {
   String get forgotPassword => 'نسيت كلمة المرور؟';
 
   @override
+  String get forgotPasswordTitle => 'نسيت كلمة المرور؟';
+
+  @override
+  String get forgotPasswordSubtitle =>
+      'أدخل رقم هاتفك وسنرسل لك رمزاً لإعادة التعيين';
+
+  @override
+  String get sendOtp => 'إرسال الرمز';
+
+  @override
+  String get backToLogin => 'العودة لتسجيل الدخول';
+
+  @override
+  String get resetCodeSent => 'تم إرسال رمز إعادة التعيين';
+
+  @override
   String get skipForNow => 'تخطي الآن';
 
   @override

@@ -164,6 +164,36 @@ abstract class AppLocalizations {
   /// **'Forgot Password?'**
   String get forgotPassword;
 
+  /// No description provided for @forgotPasswordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot password?'**
+  String get forgotPasswordTitle;
+
+  /// No description provided for @forgotPasswordSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your phone number and we\'ll send you a code to reset it'**
+  String get forgotPasswordSubtitle;
+
+  /// No description provided for @sendOtp.
+  ///
+  /// In en, this message translates to:
+  /// **'Send OTP'**
+  String get sendOtp;
+
+  /// No description provided for @backToLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Login'**
+  String get backToLogin;
+
+  /// No description provided for @resetCodeSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset code sent'**
+  String get resetCodeSent;
+
   /// No description provided for @skipForNow.
   ///
   /// In en, this message translates to:
