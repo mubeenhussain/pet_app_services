@@ -30,9 +30,12 @@ class AuthShell extends StatelessWidget {
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppConstants.authHorizontalPadding,
+              vertical: 24,
+            ),
             child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: AppConstants.maxContentWidth),
+              constraints: const BoxConstraints(maxWidth: AppConstants.authContentWidth),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -54,9 +57,7 @@ class AuthShell extends StatelessWidget {
                     const SizedBox(height: 8),
                     Text(
                       subtitle!,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).hintColor,
-                          ),
+                      style: Theme.of(context).textTheme.bodyMedium,
                       textAlign: TextAlign.center,
                     ),
                   ],

@@ -99,23 +99,27 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               validator: Validators.password,
               onSubmitted: (_) => _submit(),
             ),
-            const SizedBox(height: 4),
             Align(
               alignment: AlignmentDirectional.centerEnd,
               child: TextButton(
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  minimumSize: Size.zero,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
                 onPressed: () => context.push(RouteNames.forgotPassword),
                 child: Text(l10n.forgotPassword),
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 24),
             AppButton(
               label: l10n.signIn,
               isLoading: isLoading,
               onPressed: _submit,
             ),
-            const SizedBox(height: 28),
+            const SizedBox(height: 24),
             LabeledDivider(label: l10n.orContinueWith),
-            const SizedBox(height: 20),
+            const SizedBox(height: 24),
             SocialAuthButton(
               label: l10n.signInWithGoogle,
               leading: const GoogleGlyph(),
@@ -129,10 +133,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               onAction: () => context.push(RouteNames.register),
             ),
             TextButton(
+              style: TextButton.styleFrom(
+                padding: EdgeInsets.zero,
+                minimumSize: Size.zero,
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              ),
               onPressed: isLoading ? null : _continueAsGuest,
               child: Text(
                 l10n.skipForNow,
-                style: const TextStyle(decoration: TextDecoration.underline),
+                style: TextStyle(
+                  color: context.colors.textMuted,
+                  decoration: TextDecoration.underline,
+                  decorationColor: context.colors.textMuted,
+                ),
               ),
             ),
           ],

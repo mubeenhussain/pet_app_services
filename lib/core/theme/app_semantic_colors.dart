@@ -9,6 +9,7 @@ class AppSemanticColors extends ThemeExtension<AppSemanticColors> {
     required this.emergency,
     required this.border,
     required this.textSecondary,
+    required this.textMuted,
     required this.primaryDark,
   });
 
@@ -16,6 +17,7 @@ class AppSemanticColors extends ThemeExtension<AppSemanticColors> {
   final Color emergency;
   final Color border;
   final Color textSecondary;
+  final Color textMuted;
   final Color primaryDark;
 
   static const light = AppSemanticColors(
@@ -23,6 +25,7 @@ class AppSemanticColors extends ThemeExtension<AppSemanticColors> {
     emergency: AppColors.emergency,
     border: AppColors.border,
     textSecondary: AppColors.textSecondary,
+    textMuted: AppColors.textMuted,
     primaryDark: AppColors.primaryDark,
   );
 
@@ -32,6 +35,7 @@ class AppSemanticColors extends ThemeExtension<AppSemanticColors> {
     Color? emergency,
     Color? border,
     Color? textSecondary,
+    Color? textMuted,
     Color? primaryDark,
   }) {
     return AppSemanticColors(
@@ -39,6 +43,7 @@ class AppSemanticColors extends ThemeExtension<AppSemanticColors> {
       emergency: emergency ?? this.emergency,
       border: border ?? this.border,
       textSecondary: textSecondary ?? this.textSecondary,
+      textMuted: textMuted ?? this.textMuted,
       primaryDark: primaryDark ?? this.primaryDark,
     );
   }
@@ -51,6 +56,7 @@ class AppSemanticColors extends ThemeExtension<AppSemanticColors> {
       emergency: Color.lerp(emergency, other.emergency, t)!,
       border: Color.lerp(border, other.border, t)!,
       textSecondary: Color.lerp(textSecondary, other.textSecondary, t)!,
+      textMuted: Color.lerp(textMuted, other.textMuted, t)!,
       primaryDark: Color.lerp(primaryDark, other.primaryDark, t)!,
     );
   }

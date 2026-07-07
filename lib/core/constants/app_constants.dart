@@ -12,4 +12,6 @@ class AppConstants {
   static const defaultRescuePinExpiryHours = 72;
   static const defaultCurrency = 'SAR';
   static const maxContentWidth = 420.0;
+  static const authContentWidth = 344.0;
+  static const authHorizontalPadding = 16.0;
 }

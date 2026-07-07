@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 ///
 /// Centralizes the asset path so it lives in a single place.
 class GoogleGlyph extends StatelessWidget {
-  const GoogleGlyph({super.key, this.size = 20});
+  const GoogleGlyph({super.key, this.size = 22});
 
   final double size;
 
