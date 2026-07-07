@@ -197,7 +197,7 @@ abstract class AppLocalizations {
   /// No description provided for @otpTitle.
   ///
   /// In en, this message translates to:
-  /// **'Verify phone'**
+  /// **'Verify your number'**
   String get otpTitle;
 
   /// No description provided for @otpSubtitle.
@@ -205,6 +205,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Enter the code sent to {phone}'**
   String otpSubtitle(String phone);
+
+  /// No description provided for @otpInstruction.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the {length}-digit code sent to'**
+  String otpInstruction(int length);
+
+  /// No description provided for @otpInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the {length}-digit code'**
+  String otpInvalid(int length);
+
+  /// No description provided for @otpResent.
+  ///
+  /// In en, this message translates to:
+  /// **'Code resent'**
+  String get otpResent;
+
+  /// No description provided for @didntGetCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Didn\'t get the code?'**
+  String get didntGetCode;
+
+  /// No description provided for @resendIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend in {time}'**
+  String resendIn(String time);
+
+  /// No description provided for @resend.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend'**
+  String get resend;
 
   /// No description provided for @confirm.
   ///

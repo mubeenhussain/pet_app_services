@@ -4,9 +4,14 @@ import 'package:go_router/go_router.dart';
 import 'package:pet_app/core/constants/app_constants.dart';
 import 'package:pet_app/core/extensions/context_extensions.dart';
 import 'package:pet_app/core/router/route_names.dart';
+import 'package:pet_app/core/utils/phone_formatter.dart';
 import 'package:pet_app/features/auth/presentation/providers/auth_controller.dart';
 import 'package:pet_app/shared/widgets/app_button.dart';
+import 'package:pet_app/shared/widgets/app_icon_badge.dart';
 import 'package:pet_app/shared/widgets/auth_shell.dart';
+import 'package:pet_app/shared/widgets/mailbox_glyph.dart';
+import 'package:pet_app/shared/widgets/otp_input_field.dart';
+import 'package:pet_app/shared/widgets/resend_countdown.dart';
 
 /// BRD 6.2 — OTP Confirmation (Firebase Phone Auth)
 class OtpScreen extends ConsumerStatefulWidget {
@@ -24,19 +29,12 @@ class OtpScreen extends ConsumerStatefulWidget {
 }
 
 class _OtpScreenState extends ConsumerState<OtpScreen> {
-  final _otpController = TextEditingController();
-
-  @override
-  void dispose() {
-    _otpController.dispose();
-    super.dispose();
-  }
+  String _otp = '';
 
   Future<void> _confirm() async {
-    final code = _otpController.text.trim();
-    if (code.length != AppConstants.otpLength) {
+    if (_otp.length != AppConstants.otpLength) {
       context.showAppSnackBar(
-        'Enter ${AppConstants.otpLength}-digit code',
+        context.l10n.otpInvalid(AppConstants.otpLength),
         isError: true,
       );
       return;
@@ -45,55 +43,74 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
     final controller = ref.read(authControllerProvider.notifier);
 
     if (widget.flow == 'register') {
-      await controller.confirmPhoneOtp(code);
+      await controller.confirmPhoneOtp(_otp);
     } else {
       context.push(RouteNames.setPassword);
       return;
     }
 
     if (!mounted) return;
-    final state = ref.read(authControllerProvider);
-    state.whenOrNull(
-      error: (error, _) => context.showAppSnackBar(
-        controller.mapError(error) ?? context.l10n.errorGeneric,
-        isError: true,
-      ),
-      data: (_) => context.go(RouteNames.home),
-    );
+    ref.read(authControllerProvider).whenOrNull(
+          error: (error, _) => context.showAppSnackBar(
+            controller.mapError(error) ?? context.l10n.errorGeneric,
+            isError: true,
+          ),
+          data: (_) => context.go(RouteNames.home),
+        );
   }
 
   Future<void> _resend() async {
     await ref.read(authControllerProvider.notifier).sendRegisterOtp(widget.phone);
-    if (mounted) context.showAppSnackBar('OTP resent.');
+    if (mounted) context.showAppSnackBar(context.l10n.otpResent);
   }
 
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(authControllerProvider).isLoading;
     final l10n = context.l10n;
+    final maskedPhone = PhoneFormatter.mask(widget.phone);
 
     return AuthShell(
-      showBack: true,
+      circleBack: true,
+      header: const AppIconBadge(child: MailboxGlyph()),
       title: l10n.otpTitle,
-      subtitle: l10n.otpSubtitle(widget.phone),
-      child: Column(
+      subtitleWidget: Column(
         children: [
-          TextField(
-            controller: _otpController,
-            keyboardType: TextInputType.number,
-            maxLength: AppConstants.otpLength,
-            decoration: const InputDecoration(hintText: '000000'),
+          Text(
+            l10n.otpInstruction(AppConstants.otpLength),
+            style: context.textTheme.bodyMedium,
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 4),
+          Text(
+            maskedPhone,
+            style: context.textTheme.bodyMedium?.copyWith(
+              fontWeight: FontWeight.w700,
+              color: context.colorScheme.onSurface,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          OtpInputField(
+            length: AppConstants.otpLength,
+            onChanged: (value) => setState(() => _otp = value),
+            onCompleted: (_) => _confirm(),
+          ),
+          const SizedBox(height: 24),
+          ResendCountdown(
+            duration: const Duration(seconds: 47),
+            enabled: !isLoading,
+            onResend: _resend,
+          ),
+          const SizedBox(height: 32),
           AppButton(
             label: l10n.confirm,
             isLoading: isLoading,
             onPressed: _confirm,
-          ),
-          TextButton(
-            onPressed: isLoading ? null : _resend,
-            child: Text(l10n.resendOtp),
           ),
         ],
       ),

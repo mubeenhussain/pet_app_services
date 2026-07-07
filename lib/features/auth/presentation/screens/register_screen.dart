@@ -34,41 +34,33 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     super.dispose();
   }
 
+  void _goToOtp(String phone) {
+    context.push(
+      '${RouteNames.otp}?phone=${Uri.encodeComponent(phone)}&flow=register',
+    );
+  }
+
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
 
     final phone = _phoneController.text.trim();
     final controller = ref.read(authControllerProvider.notifier);
 
-    await controller.registerWithPhone(
-      phone: phone,
-      password: _passwordController.text,
-      username: _usernameController.text.trim(),
-      city: _cityController.text.trim(),
-    );
-
-    if (!mounted) return;
-    var state = ref.read(authControllerProvider);
-    if (state.hasError) {
-      context.showAppSnackBar(
-        controller.mapError(state.error!) ?? context.l10n.errorGeneric,
-        isError: true,
-      );
-      return;
-    }
-
     await controller.sendRegisterOtp(phone);
 
     if (!mounted) return;
-    state = ref.read(authControllerProvider);
+    final state = ref.read(authControllerProvider);
+    // OTP send failure (e.g. Firebase not configured yet) still advances the
+    // flow so the UI can be exercised end-to-end during development.
     state.whenOrNull(
-      error: (error, _) => context.showAppSnackBar(
-        controller.mapError(error) ?? context.l10n.errorGeneric,
-        isError: true,
-      ),
-      data: (_) => context.push(
-        '${RouteNames.otp}?phone=${Uri.encodeComponent(phone)}&flow=register',
-      ),
+      error: (error, _) {
+        context.showAppSnackBar(
+          controller.mapError(error) ?? context.l10n.errorGeneric,
+          isError: true,
+        );
+        _goToOtp(phone);
+      },
+      data: (_) => _goToOtp(phone),
     );
   }
 

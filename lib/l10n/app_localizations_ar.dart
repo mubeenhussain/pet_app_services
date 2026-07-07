@@ -57,12 +57,36 @@ class AppLocalizationsAr extends AppLocalizations {
   String get submit => 'إرسال';
 
   @override
-  String get otpTitle => 'تحقق من الهاتف';
+  String get otpTitle => 'تأكيد رقمك';
 
   @override
   String otpSubtitle(String phone) {
     return 'أدخل الرمز المرسل إلى $phone';
   }
+
+  @override
+  String otpInstruction(int length) {
+    return 'أدخل الرمز المكوّن من $length أرقام المرسل إلى';
+  }
+
+  @override
+  String otpInvalid(int length) {
+    return 'أدخل الرمز المكوّن من $length أرقام';
+  }
+
+  @override
+  String get otpResent => 'تمت إعادة إرسال الرمز';
+
+  @override
+  String get didntGetCode => 'لم يصلك الرمز؟';
+
+  @override
+  String resendIn(String time) {
+    return 'إعادة الإرسال خلال $time';
+  }
+
+  @override
+  String get resend => 'إعادة الإرسال';
 
   @override
   String get confirm => 'تأكيد';

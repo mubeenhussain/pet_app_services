@@ -57,12 +57,36 @@ class AppLocalizationsEn extends AppLocalizations {
   String get submit => 'Submit';
 
   @override
-  String get otpTitle => 'Verify phone';
+  String get otpTitle => 'Verify your number';
 
   @override
   String otpSubtitle(String phone) {
     return 'Enter the code sent to $phone';
   }
+
+  @override
+  String otpInstruction(int length) {
+    return 'Enter the $length-digit code sent to';
+  }
+
+  @override
+  String otpInvalid(int length) {
+    return 'Enter the $length-digit code';
+  }
+
+  @override
+  String get otpResent => 'Code resent';
+
+  @override
+  String get didntGetCode => 'Didn\'t get the code?';
+
+  @override
+  String resendIn(String time) {
+    return 'Resend in $time';
+  }
+
+  @override
+  String get resend => 'Resend';
 
   @override
   String get confirm => 'Confirm';

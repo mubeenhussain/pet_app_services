@@ -16,13 +16,34 @@
   "usernameHint": "Username",
   "cityHint": "City",
   "submit": "Submit",
-  "otpTitle": "Verify phone",
+  "otpTitle": "Verify your number",
   "otpSubtitle": "Enter the code sent to {phone}",
   "@otpSubtitle": {
     "placeholders": {
       "phone": {"type": "String"}
     }
   },
+  "otpInstruction": "Enter the {length}-digit code sent to",
+  "@otpInstruction": {
+    "placeholders": {
+      "length": {"type": "int"}
+    }
+  },
+  "otpInvalid": "Enter the {length}-digit code",
+  "@otpInvalid": {
+    "placeholders": {
+      "length": {"type": "int"}
+    }
+  },
+  "otpResent": "Code resent",
+  "didntGetCode": "Didn't get the code?",
+  "resendIn": "Resend in {time}",
+  "@resendIn": {
+    "placeholders": {
+      "time": {"type": "String"}
+    }
+  },
+  "resend": "Resend",
   "confirm": "Confirm",
   "resendOtp": "Resend code",
   "homeGreeting": "Hello, {name}!",
