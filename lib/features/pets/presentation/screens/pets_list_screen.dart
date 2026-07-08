@@ -3,49 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pet_app/core/router/route_names.dart';
 import 'package:pet_app/core/theme/app_colors.dart';
+import 'package:pet_app/features/pets/presentation/providers/demo_pets.dart';
 import 'package:pet_app/features/pets/presentation/providers/pets_controller.dart';
 import 'package:pet_app/shared/models/pet_model.dart';
 import 'package:pet_app/shared/widgets/app_loading.dart';
 import 'package:pet_app/shared/widgets/auth_circle_back_button.dart';
-
-/// Figma dummy pets used when the user has none yet (UI preview).
-const _dummyPets = <PetModel>[
-  PetModel(
-    id: 'dummy_buddy_1',
-    ownerId: 'demo',
-    name: 'Buddy',
-    species: 'Dog',
-    age: 3,
-  ),
-  PetModel(
-    id: 'dummy_milo_1',
-    ownerId: 'demo',
-    name: 'Milo',
-    species: 'Cat',
-    age: 1,
-  ),
-  PetModel(
-    id: 'dummy_buddy_2',
-    ownerId: 'demo',
-    name: 'Buddy',
-    species: 'Dog',
-    age: 3,
-  ),
-  PetModel(
-    id: 'dummy_milo_2',
-    ownerId: 'demo',
-    name: 'Milo',
-    species: 'Cat',
-    age: 1,
-  ),
-  PetModel(
-    id: 'dummy_rio_1',
-    ownerId: 'demo',
-    name: 'Rio',
-    species: 'Bird',
-    age: 2,
-  ),
-];
 
 /// BRD 6.9 — My Pets List (Figma)
 class PetsListScreen extends ConsumerWidget {
@@ -54,6 +16,7 @@ class PetsListScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final petsAsync = ref.watch(petsListProvider);
+    final demoPets = ref.watch(demoPetsProvider);
 
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FB),
@@ -64,9 +27,9 @@ class PetsListScreen extends ConsumerWidget {
             Expanded(
               child: petsAsync.when(
                 loading: () => const AppLoadingView(message: 'Loading...'),
-                error: (_, __) => _PetsGrid(pets: _dummyPets),
+                error: (_, __) => _PetsGrid(pets: demoPets),
                 data: (pets) => _PetsGrid(
-                  pets: pets.isEmpty ? _dummyPets : pets,
+                  pets: pets.isEmpty ? demoPets : pets,
                 ),
               ),
             ),
@@ -156,12 +119,9 @@ class _PetsGrid extends StatelessWidget {
         }
 
         final pet = pets[index];
-        final isDummy = pet.id.startsWith('dummy_');
         return _PetCard(
           pet: pet,
-          onTap: isDummy
-              ? () => context.push(RouteNames.addPet)
-              : () => context.push('/pets/${pet.id}/edit'),
+          onTap: () => context.push('/pets/${pet.id}/edit'),
         );
       },
     );
