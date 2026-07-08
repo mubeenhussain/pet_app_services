@@ -127,14 +127,24 @@ class _PetsGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final itemCount = pets.length + 1;
+    final width = MediaQuery.sizeOf(context).width;
+
+    // Responsive side padding + gutters scaled from Figma (~20 / 16 / 24).
+    final horizontalPadding = (width * 0.053).clamp(16.0, 24.0);
+    final crossSpacing = (width * 0.042).clamp(12.0, 20.0);
+    final mainSpacing = (crossSpacing * 1.35).clamp(16.0, 28.0);
 
     return GridView.builder(
-      // Figma: ~20 outer margin, equal gutters ~16 between cards
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+      padding: EdgeInsets.fromLTRB(
+        horizontalPadding,
+        16,
+        horizontalPadding,
+        24,
+      ),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        crossAxisSpacing: 16,
-        mainAxisSpacing: 16,
+        crossAxisSpacing: crossSpacing,
+        mainAxisSpacing: mainSpacing,
         childAspectRatio: 0.88,
       ),
       itemCount: itemCount,
