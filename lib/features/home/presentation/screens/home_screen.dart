@@ -36,26 +36,36 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       key: _scaffoldKey,
       backgroundColor: const Color(0xFFF8F9FB),
       drawer: AppDrawer(username: name),
-      body: IndexedStack(
-        index: _tab.index,
+      body: Stack(
         children: [
-          _HomeTab(
-            firstName: firstName,
-            fullName: name,
-            onOpenDrawer: () => _scaffoldKey.currentState?.openDrawer(),
-            onOpenProfile: () => setState(() => _tab = AppBottomTab.profile),
+          IndexedStack(
+            index: _tab.index,
+            children: [
+              _HomeTab(
+                firstName: firstName,
+                fullName: name,
+                onOpenDrawer: () => _scaffoldKey.currentState?.openDrawer(),
+                onOpenProfile: () => setState(() => _tab = AppBottomTab.profile),
+              ),
+              const _PlaceholderTab(
+                title: 'Services',
+                subtitle: 'Browse pet services',
+                icon: Icons.menu_rounded,
+              ),
+              const _PlaceholderTab(
+                title: 'Rescue',
+                subtitle: 'Emergency rescue — coming soon',
+                icon: Icons.health_and_safety_outlined,
+              ),
+              const ProfileScreen(showBack: false),
+            ],
           ),
-          const _PlaceholderTab(
-            title: 'Services',
-            subtitle: 'Browse pet services',
-            icon: Icons.menu_rounded,
-          ),
-          const _PlaceholderTab(
-            title: 'Rescue',
-            subtitle: 'Emergency rescue — coming soon',
-            icon: Icons.health_and_safety_outlined,
-          ),
-          const ProfileScreen(showBack: false),
+          if (_tab == AppBottomTab.home)
+            _HomeSpeedDial(
+              onSupplies: () {},
+              onRescue: () => setState(() => _tab = AppBottomTab.rescue),
+              onRide: () => context.push(RouteNames.rideRequest),
+            ),
         ],
       ),
       bottomNavigationBar: AppBottomNav(
@@ -237,6 +247,8 @@ class _HomeTab extends StatelessWidget {
             ),
           ),
           const SliverToBoxAdapter(child: SizedBox(height: _sectionGap)),
+          // Clearance for the home speed-dial FAB.
+          const SliverToBoxAdapter(child: SizedBox(height: 80)),
         ],
       ),
     );
@@ -421,11 +433,11 @@ class _RescueBanner extends StatelessWidget {
             borderRadius: BorderRadius.circular(14),
             border: Border.all(color: const Color(0xFFF5C2C2)),
           ),
-          child: const Row(
+          child: Row(
             children: [
-              Icon(Icons.campaign_outlined, color: Color(0xFFC62828), size: 22),
-              SizedBox(width: 10),
-              Expanded(
+              const Text('🚨', style: TextStyle(fontSize: 20, height: 1)),
+              const SizedBox(width: 10),
+              const Expanded(
                 child: Text(
                   'Active rescue nearby — tap to help',
                   style: TextStyle(
@@ -435,7 +447,7 @@ class _RescueBanner extends StatelessWidget {
                   ),
                 ),
               ),
-              Icon(Icons.chevron_right, color: Color(0xFF9CA3AF), size: 20),
+              const Icon(Icons.chevron_right, color: Color(0xFF9CA3AF), size: 20),
             ],
           ),
         ),
@@ -606,6 +618,242 @@ class _BuySellCard extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _HomeSpeedDial extends StatefulWidget {
+  const _HomeSpeedDial({
+    required this.onSupplies,
+    required this.onRescue,
+    required this.onRide,
+  });
+
+  final VoidCallback onSupplies;
+  final VoidCallback onRescue;
+  final VoidCallback onRide;
+
+  @override
+  State<_HomeSpeedDial> createState() => _HomeSpeedDialState();
+}
+
+class _HomeSpeedDialState extends State<_HomeSpeedDial>
+    with SingleTickerProviderStateMixin {
+  static const _green = Color(0xFF17A855);
+  static const _fabSize = 56.0;
+  static const _actionSize = 44.0;
+
+  bool _open = false;
+  late final AnimationController _controller = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 220),
+  );
+  late final Animation<double> _fade = CurvedAnimation(
+    parent: _controller,
+    curve: Curves.easeOut,
+  );
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _toggle() {
+    setState(() => _open = !_open);
+    if (_open) {
+      _controller.forward();
+    } else {
+      _controller.reverse();
+    }
+  }
+
+  void _close() {
+    if (!_open) return;
+    setState(() => _open = false);
+    _controller.reverse();
+  }
+
+  void _handle(VoidCallback action) {
+    _close();
+    action();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned.fill(
+      child: Stack(
+        children: [
+          if (_open)
+            Positioned.fill(
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: _close,
+                child: const SizedBox.expand(),
+              ),
+            ),
+          Positioned(
+            right: 20,
+            bottom: 16,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                FadeTransition(
+                  opacity: _fade,
+                  child: SizeTransition(
+                    axisAlignment: 1,
+                    sizeFactor: _fade,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        _SpeedDialAction(
+                          label: 'Supplies',
+                          onTap: () => _handle(widget.onSupplies),
+                          child: const Icon(
+                            Icons.shopping_cart_outlined,
+                            color: Color(0xFF6B7280),
+                            size: 20,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        _SpeedDialAction(
+                          label: 'Rescue',
+                          onTap: () => _handle(widget.onRescue),
+                          iconShape: BoxShape.rectangle,
+                          iconBorderRadius: BorderRadius.circular(12),
+                          child: const Text(
+                            '🆘',
+                            style: TextStyle(fontSize: 18, height: 1),
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        _SpeedDialAction(
+                          label: 'Ride',
+                          onTap: () => _handle(widget.onRide),
+                          child: const Text(
+                            '🚗',
+                            style: TextStyle(fontSize: 18, height: 1),
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                      ],
+                    ),
+                  ),
+                ),
+                Material(
+                  elevation: 0,
+                  shape: const CircleBorder(),
+                  clipBehavior: Clip.antiAlias,
+                  child: InkWell(
+                    onTap: _toggle,
+                    customBorder: const CircleBorder(),
+                    child: Ink(
+                      width: _fabSize,
+                      height: _fabSize,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        gradient: const LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [Color(0xFF1DBF63), _green],
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: _green.withValues(alpha: 0.35),
+                            blurRadius: 14,
+                            offset: const Offset(0, 6),
+                          ),
+                        ],
+                      ),
+                      child: const Icon(
+                        Icons.add,
+                        color: Colors.white,
+                        size: 28,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SpeedDialAction extends StatelessWidget {
+  const _SpeedDialAction({
+    required this.label,
+    required this.onTap,
+    required this.child,
+    this.iconShape = BoxShape.circle,
+    this.iconBorderRadius,
+  });
+
+  final String label;
+  final VoidCallback onTap;
+  final Widget child;
+  final BoxShape iconShape;
+  final BorderRadius? iconBorderRadius;
+
+  static const _fill = Colors.white;
+  static const _elevation = 3.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Material(
+          color: _fill,
+          elevation: _elevation,
+          shadowColor: Colors.black.withValues(alpha: 0.12),
+          borderRadius: BorderRadius.circular(24),
+          clipBehavior: Clip.antiAlias,
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(24),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              child: Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Material(
+          color: _fill,
+          elevation: _elevation,
+          shadowColor: Colors.black.withValues(alpha: 0.12),
+          shape: iconShape == BoxShape.circle
+              ? const CircleBorder()
+              : RoundedRectangleBorder(
+                  borderRadius: iconBorderRadius ?? BorderRadius.circular(12),
+                ),
+          clipBehavior: Clip.antiAlias,
+          child: InkWell(
+            onTap: onTap,
+            customBorder: iconShape == BoxShape.circle
+                ? const CircleBorder()
+                : RoundedRectangleBorder(
+                    borderRadius: iconBorderRadius ?? BorderRadius.circular(12),
+                  ),
+            child: SizedBox(
+              width: _HomeSpeedDialState._actionSize,
+              height: _HomeSpeedDialState._actionSize,
+              child: Center(child: child),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
