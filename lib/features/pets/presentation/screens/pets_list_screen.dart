@@ -1,16 +1,53 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:pet_app/core/extensions/context_extensions.dart';
 import 'package:pet_app/core/router/route_names.dart';
+import 'package:pet_app/core/theme/app_colors.dart';
 import 'package:pet_app/features/pets/presentation/providers/pets_controller.dart';
-import 'package:pet_app/shared/providers/app_providers.dart';
-import 'package:pet_app/shared/widgets/app_empty_state.dart';
-import 'package:pet_app/shared/widgets/app_top_bar.dart';
-import 'package:pet_app/shared/widgets/app_error_view.dart';
+import 'package:pet_app/shared/models/pet_model.dart';
 import 'package:pet_app/shared/widgets/app_loading.dart';
+import 'package:pet_app/shared/widgets/auth_circle_back_button.dart';
 
-/// BRD 6.9 — My Pets List
+/// Figma dummy pets used when the user has none yet (UI preview).
+const _dummyPets = <PetModel>[
+  PetModel(
+    id: 'dummy_buddy_1',
+    ownerId: 'demo',
+    name: 'Buddy',
+    species: 'Dog',
+    age: 3,
+  ),
+  PetModel(
+    id: 'dummy_milo_1',
+    ownerId: 'demo',
+    name: 'Milo',
+    species: 'Cat',
+    age: 1,
+  ),
+  PetModel(
+    id: 'dummy_buddy_2',
+    ownerId: 'demo',
+    name: 'Buddy',
+    species: 'Dog',
+    age: 3,
+  ),
+  PetModel(
+    id: 'dummy_milo_2',
+    ownerId: 'demo',
+    name: 'Milo',
+    species: 'Cat',
+    age: 1,
+  ),
+  PetModel(
+    id: 'dummy_rio_1',
+    ownerId: 'demo',
+    name: 'Rio',
+    species: 'Bird',
+    age: 2,
+  ),
+];
+
+/// BRD 6.9 — My Pets List (Figma)
 class PetsListScreen extends ConsumerWidget {
   const PetsListScreen({super.key});
 
@@ -19,49 +56,323 @@ class PetsListScreen extends ConsumerWidget {
     final petsAsync = ref.watch(petsListProvider);
 
     return Scaffold(
-      appBar: AppTopBar(title: Text(context.l10n.yourPets)),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => context.push(RouteNames.addPet),
-        icon: const Icon(Icons.add),
-        label: Text(context.l10n.addPet),
-      ),
-      body: petsAsync.when(
-        loading: () => AppLoadingView(message: context.l10n.loading),
-        error: (e, _) => AppErrorView(
-          message: e.toString(),
-          onRetry: () => ref.invalidate(petsListProvider),
-        ),
-        data: (pets) {
-          if (pets.isEmpty) {
-            return AppEmptyState(
-              message: context.l10n.noPetsYet,
-              actionLabel: context.l10n.addPet,
-              onAction: () => context.push(RouteNames.addPet),
-              icon: Icons.pets,
-            );
-          }
-
-          return ListView.separated(
-            padding: const EdgeInsets.all(16),
-            itemCount: pets.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 12),
-            itemBuilder: (context, index) {
-              final pet = pets[index];
-              return Card(
-                child: ListTile(
-                  leading: CircleAvatar(
-                    child: Text(pet.name.isNotEmpty ? pet.name[0] : '?'),
-                  ),
-                  title: Text(pet.name),
-                  subtitle: Text('${pet.species}${pet.age != null ? ' · ${pet.age}y' : ''}'),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () => context.push('/pets/${pet.id}/edit'),
+      backgroundColor: const Color(0xFFF8F9FB),
+      body: SafeArea(
+        child: Column(
+          children: [
+            const _MyPetsHeader(),
+            Expanded(
+              child: petsAsync.when(
+                loading: () => const AppLoadingView(message: 'Loading...'),
+                error: (_, __) => _PetsGrid(pets: _dummyPets),
+                data: (pets) => _PetsGrid(
+                  pets: pets.isEmpty ? _dummyPets : pets,
                 ),
-              );
-            },
-          );
-        },
+              ),
+            ),
+          ],
+        ),
       ),
     );
+  }
+}
+
+class _MyPetsHeader extends StatelessWidget {
+  const _MyPetsHeader();
+
+  static const _green = Color(0xFF17A855);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 8),
+      child: Row(
+        children: [
+          const AuthCircleBackButton(),
+          const Expanded(
+            child: Text(
+              'My Pets',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                color: AppColors.textPrimary,
+              ),
+            ),
+          ),
+          Material(
+            color: _green,
+            shape: const CircleBorder(),
+            child: InkWell(
+              customBorder: const CircleBorder(),
+              onTap: () => context.push(RouteNames.addPet),
+              child: const SizedBox(
+                width: 40,
+                height: 40,
+                child: Icon(Icons.add, color: Colors.white, size: 22),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PetsGrid extends StatelessWidget {
+  const _PetsGrid({required this.pets});
+
+  final List<PetModel> pets;
+
+  @override
+  Widget build(BuildContext context) {
+    final itemCount = pets.length + 1;
+
+    return GridView.builder(
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 14,
+        mainAxisSpacing: 14,
+        childAspectRatio: 0.88,
+      ),
+      itemCount: itemCount,
+      itemBuilder: (context, index) {
+        if (index == pets.length) {
+          return _AddNewPetCard(
+            onTap: () => context.push(RouteNames.addPet),
+          );
+        }
+
+        final pet = pets[index];
+        final isDummy = pet.id.startsWith('dummy_');
+        return _PetCard(
+          pet: pet,
+          onTap: isDummy
+              ? () => context.push(RouteNames.addPet)
+              : () => context.push('/pets/${pet.id}/edit'),
+        );
+      },
+    );
+  }
+}
+
+class _PetCard extends StatelessWidget {
+  const _PetCard({required this.pet, required this.onTap});
+
+  final PetModel pet;
+  final VoidCallback onTap;
+
+  // Figma: radius 16, white card, soft shadow
+  static const _radius = 16.0;
+
+  @override
+  Widget build(BuildContext context) {
+    final style = _PetVisuals.fromSpecies(pet.species);
+    final subtitle = pet.age == null
+        ? _titleCase(pet.species)
+        : '${_titleCase(pet.species)} · ${pet.age} ${pet.age == 1 ? 'yr' : 'yrs'}';
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(_radius),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(_radius),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.06),
+                blurRadius: 10,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          padding: const EdgeInsets.fromLTRB(10, 12, 10, 14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: style.gradient,
+                    ),
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    style.emoji,
+                    style: const TextStyle(fontSize: 44),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                pet.name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                subtitle,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w400,
+                  color: AppColors.textSecondary,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  static String _titleCase(String value) {
+    final t = value.trim();
+    if (t.isEmpty) return 'Pet';
+    return t[0].toUpperCase() + t.substring(1).toLowerCase();
+  }
+}
+
+class _AddNewPetCard extends StatelessWidget {
+  const _AddNewPetCard({required this.onTap});
+
+  final VoidCallback onTap;
+
+  static const _green = Color(0xFF17A855);
+  static const _greenSoft = Color(0xFFE8F7EE);
+  static const _radius = 16.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(_radius),
+        child: CustomPaint(
+          painter: const _DashedRRectPainter(
+            color: _green,
+            strokeWidth: 1.5,
+            radius: _radius,
+          ),
+          child: const Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 40,
+                  height: 40,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: _greenSoft,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(Icons.add, color: _green, size: 22),
+                  ),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  'Add New Pet',
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    color: _green,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PetVisuals {
+  const _PetVisuals({required this.emoji, required this.gradient});
+
+  final String emoji;
+  final List<Color> gradient;
+
+  /// Figma colors + emoji (no extra icon package needed).
+  static _PetVisuals fromSpecies(String species) {
+    final key = species.trim().toLowerCase();
+    if (key.contains('cat')) {
+      return const _PetVisuals(
+        emoji: '🐱',
+        gradient: [Color(0xFFFFF4EC), Color(0xFFFFE4D4)],
+      );
+    }
+    if (key.contains('bird') || key.contains('parrot')) {
+      return const _PetVisuals(
+        emoji: '🐦',
+        gradient: [Color(0xFFEFF6FF), Color(0xFFD9ECFF)],
+      );
+    }
+    return const _PetVisuals(
+      emoji: '🐶',
+      gradient: [Color(0xFFEDF9F1), Color(0xFFD8F0E2)],
+    );
+  }
+}
+
+class _DashedRRectPainter extends CustomPainter {
+  const _DashedRRectPainter({
+    required this.color,
+    required this.strokeWidth,
+    required this.radius,
+  });
+
+  final Color color;
+  final double strokeWidth;
+  final double radius;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final rrect = RRect.fromRectAndRadius(
+      Offset.zero & size,
+      Radius.circular(radius),
+    );
+    final path = Path()..addRRect(rrect);
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = strokeWidth;
+
+    for (final metric in path.computeMetrics()) {
+      const dash = 5.0;
+      const gap = 4.0;
+      var distance = 0.0;
+      while (distance < metric.length) {
+        final next = distance + dash;
+        canvas.drawPath(
+          metric.extractPath(distance, next.clamp(0, metric.length)),
+          paint,
+        );
+        distance = next + gap;
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _DashedRRectPainter oldDelegate) {
+    return oldDelegate.color != color ||
+        oldDelegate.strokeWidth != strokeWidth ||
+        oldDelegate.radius != radius;
   }
 }
