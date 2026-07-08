@@ -257,7 +257,10 @@ class _HomeTopBar extends StatelessWidget {
   final VoidCallback onOpenProfile;
 
   static const _green = Color(0xFF17A855);
-  static const _sideButtonSize = 40.0;
+  // Figma Dev Mode: 36×36, fill #F4FCF6, 1px #0F8A42 @ 55% border, #0F8A42 icon.
+  static const _menuFill = Color(0xFFF4FCF6);
+  static const _menuStroke = Color(0xFF0F8A42);
+  static const _sideButtonSize = 36.0;
 
   String _initials(String value) {
     final parts = value.trim().split(RegExp(r'\s+')).where((e) => e.isNotEmpty);
@@ -276,11 +279,14 @@ class _HomeTopBar extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         _RoundIconButton(
-          background: const Color(0xFFE8F7EE),
-          icon: Icons.menu_rounded,
-          iconColor: _green,
+          outlined: true,
+          background: _menuFill,
+          borderColor: _menuStroke.withValues(alpha: 0.55),
+          icon: Icons.menu,
+          iconColor: _menuStroke,
           size: _sideButtonSize,
-          iconSize: 20,
+          iconSize: 16,
+          borderWidth: 1,
           onTap: onOpenDrawer,
         ),
         Expanded(
@@ -331,7 +337,7 @@ class _HomeTopBar extends StatelessWidget {
                   style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w700,
-                    fontSize: 13,
+                    fontSize: 12,
                   ),
                 ),
               ),
@@ -345,12 +351,15 @@ class _HomeTopBar extends StatelessWidget {
 
 class _RoundIconButton extends StatelessWidget {
   const _RoundIconButton({
-    required this.background,
+    this.background = Colors.transparent,
     required this.icon,
     required this.iconColor,
     required this.onTap,
     this.size = 44,
     this.iconSize = 22,
+    this.outlined = false,
+    this.borderColor,
+    this.borderWidth = 1.5,
   });
 
   final Color background;
@@ -359,18 +368,34 @@ class _RoundIconButton extends StatelessWidget {
   final VoidCallback onTap;
   final double size;
   final double iconSize;
+  final bool outlined;
+  final Color? borderColor;
+  final double borderWidth;
 
   @override
   Widget build(BuildContext context) {
+    final strokeColor = borderColor ?? iconColor;
+    final border = outlined
+        ? BorderSide(color: strokeColor, width: borderWidth)
+        : BorderSide.none;
+
     return Material(
-      color: background,
-      shape: const CircleBorder(),
+      color: Colors.transparent,
+      shape: CircleBorder(side: border),
       child: InkWell(
-        customBorder: const CircleBorder(),
+        customBorder: CircleBorder(side: border),
         onTap: onTap,
-        child: SizedBox(
+        child: Container(
           width: size,
           height: size,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: background,
+            border: outlined
+                ? Border.all(color: strokeColor, width: borderWidth)
+                : null,
+          ),
+          alignment: Alignment.center,
           child: Icon(icon, color: iconColor, size: iconSize),
         ),
       ),
