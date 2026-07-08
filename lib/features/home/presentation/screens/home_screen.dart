@@ -81,6 +81,14 @@ class _HomeTab extends StatelessWidget {
 
   static const _green = Color(0xFF17A855);
 
+  static const _screenHorizontalPadding = 20.0;
+  static const _sectionTitleGap = 16.0;
+  static const _sectionGap = 32.0;
+  static const _serviceGridSpacing = 12.0;
+  static const _serviceCardVerticalPadding = 20.0;
+  static const _serviceCardHeight =
+      _serviceCardVerticalPadding * 2 + 50 + 8 + 18; // icon + label + gaps
+
   static final _listings = [
     const _BuySellItem(
       title: 'Labrador Pup',
@@ -102,16 +110,6 @@ class _HomeTab extends StatelessWidget {
     ),
   ];
 
-  String _initials(String value) {
-    final parts = value.trim().split(RegExp(r'\s+')).where((e) => e.isNotEmpty);
-    if (parts.isEmpty) return '?';
-    if (parts.length == 1) {
-      return parts.first.characters.take(2).toString().toUpperCase();
-    }
-    return '${parts.first.characters.take(1)}${parts.last.characters.take(1)}'
-        .toUpperCase();
-  }
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -120,69 +118,24 @@ class _HomeTab extends StatelessWidget {
         slivers: [
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+              padding: const EdgeInsets.fromLTRB(
+                _screenHorizontalPadding,
+                12,
+                _screenHorizontalPadding,
+                0,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      _RoundIconButton(
-                        background: const Color(0xFFE8F7EE),
-                        icon: Icons.menu_rounded,
-                        iconColor: _green,
-                        onTap: onOpenDrawer,
-                      ),
-                      const SizedBox(width: 14),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Welcome,',
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w400,
-                                color: AppColors.textSecondary,
-                              ),
-                            ),
-                            Text(
-                              '$firstName 👋',
-                              style: const TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.w700,
-                                color: AppColors.textPrimary,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Material(
-                        color: _green,
-                        shape: const CircleBorder(),
-                        child: InkWell(
-                          customBorder: const CircleBorder(),
-                          onTap: onOpenProfile,
-                          child: SizedBox(
-                            width: 44,
-                            height: 44,
-                            child: Center(
-                              child: Text(
-                                _initials(fullName),
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                  _HomeTopBar(
+                    firstName: firstName,
+                    fullName: fullName,
+                    onOpenDrawer: onOpenDrawer,
+                    onOpenProfile: onOpenProfile,
                   ),
                   const SizedBox(height: 18),
                   const _RescueBanner(),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: _sectionGap),
                   const Text(
                     'Services',
                     style: TextStyle(
@@ -191,14 +144,14 @@ class _HomeTab extends StatelessWidget {
                       color: AppColors.textPrimary,
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: _sectionTitleGap),
                   GridView.count(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     crossAxisCount: 2,
-                    crossAxisSpacing: 12,
-                    mainAxisSpacing: 12,
-                    childAspectRatio: 1.05,
+                    crossAxisSpacing: _serviceGridSpacing,
+                    mainAxisSpacing: _serviceGridSpacing,
+                    mainAxisExtent: _serviceCardHeight,
                     children: [
                       _ServiceCard(
                         label: 'Grooming',
@@ -230,7 +183,7 @@ class _HomeTab extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: _sectionGap),
                   Row(
                     children: [
                       const Expanded(
@@ -247,7 +200,7 @@ class _HomeTab extends StatelessWidget {
                         onPressed: () {},
                         style: TextButton.styleFrom(
                           foregroundColor: _green,
-                          padding: EdgeInsets.zero,
+                          padding: const EdgeInsets.only(left: 8),
                           minimumSize: Size.zero,
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         ),
@@ -261,28 +214,131 @@ class _HomeTab extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: _sectionTitleGap),
                 ],
               ),
             ),
           ),
           SliverToBoxAdapter(
             child: SizedBox(
-              height: 210,
+              height: 214,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: _HomeTab._screenHorizontalPadding,
+                ),
                 itemCount: _listings.length,
-                separatorBuilder: (_, __) => const SizedBox(width: 12),
+                separatorBuilder: (_, __) =>
+                    const SizedBox(width: _HomeTab._serviceGridSpacing),
                 itemBuilder: (context, index) {
                   return _BuySellCard(item: _listings[index]);
                 },
               ),
             ),
           ),
-          const SliverToBoxAdapter(child: SizedBox(height: 24)),
+          const SliverToBoxAdapter(child: SizedBox(height: _sectionGap)),
         ],
       ),
+    );
+  }
+}
+
+class _HomeTopBar extends StatelessWidget {
+  const _HomeTopBar({
+    required this.firstName,
+    required this.fullName,
+    required this.onOpenDrawer,
+    required this.onOpenProfile,
+  });
+
+  final String firstName;
+  final String fullName;
+  final VoidCallback onOpenDrawer;
+  final VoidCallback onOpenProfile;
+
+  static const _green = Color(0xFF17A855);
+  static const _sideButtonSize = 40.0;
+
+  String _initials(String value) {
+    final parts = value.trim().split(RegExp(r'\s+')).where((e) => e.isNotEmpty);
+    if (parts.isEmpty) return '?';
+    if (parts.length == 1) {
+      return parts.first.characters.take(2).toString().toUpperCase();
+    }
+    return '${parts.first.characters.take(1)}${parts.last.characters.take(1)}'
+        .toUpperCase();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Figma: menu + avatar on the edges, welcome block centered between them.
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        _RoundIconButton(
+          background: const Color(0xFFE8F7EE),
+          icon: Icons.menu_rounded,
+          iconColor: _green,
+          size: _sideButtonSize,
+          iconSize: 20,
+          onTap: onOpenDrawer,
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Text(
+                  'Welcome,',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w400,
+                    color: AppColors.textSecondary,
+                    height: 1.2,
+                  ),
+                ),
+                Text(
+                  '$firstName 👋',
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.textPrimary,
+                    height: 1.15,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        Material(
+          color: _green,
+          shape: const CircleBorder(),
+          child: InkWell(
+            customBorder: const CircleBorder(),
+            onTap: onOpenProfile,
+            child: SizedBox(
+              width: _sideButtonSize,
+              height: _sideButtonSize,
+              child: Center(
+                child: Text(
+                  _initials(fullName),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 13,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -293,12 +349,16 @@ class _RoundIconButton extends StatelessWidget {
     required this.icon,
     required this.iconColor,
     required this.onTap,
+    this.size = 44,
+    this.iconSize = 22,
   });
 
   final Color background;
   final IconData icon;
   final Color iconColor;
   final VoidCallback onTap;
+  final double size;
+  final double iconSize;
 
   @override
   Widget build(BuildContext context) {
@@ -309,9 +369,9 @@ class _RoundIconButton extends StatelessWidget {
         customBorder: const CircleBorder(),
         onTap: onTap,
         child: SizedBox(
-          width: 44,
-          height: 44,
-          child: Icon(icon, color: iconColor, size: 22),
+          width: size,
+          height: size,
+          child: Icon(icon, color: iconColor, size: iconSize),
         ),
       ),
     );
@@ -386,6 +446,11 @@ class _ServiceCard extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(16),
         child: Container(
+          height: _HomeTab._serviceCardHeight,
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: _HomeTab._serviceCardVerticalPadding,
+          ),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),
@@ -401,8 +466,8 @@ class _ServiceCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                width: 52,
-                height: 52,
+                width: 50,
+                height: 50,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
@@ -412,19 +477,22 @@ class _ServiceCard extends StatelessWidget {
                       Color.lerp(tint, Colors.white, 0.35)!,
                     ],
                   ),
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 alignment: Alignment.center,
                 child: Icon(icon, color: iconColor, size: 24),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 8),
               Text(
                 label,
                 textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w700,
                   color: AppColors.textPrimary,
+                  height: 1.2,
                 ),
               ),
             ],
@@ -472,7 +540,7 @@ class _BuySellCard extends StatelessWidget {
           ),
         ],
       ),
-      padding: const EdgeInsets.fromLTRB(10, 10, 10, 12),
+      padding: const EdgeInsets.all(12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -480,7 +548,7 @@ class _BuySellCard extends StatelessWidget {
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(14),
+                borderRadius: BorderRadius.circular(12),
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
@@ -491,7 +559,7 @@ class _BuySellCard extends StatelessWidget {
               child: Text(item.emoji, style: const TextStyle(fontSize: 44)),
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
           Text(
             item.title,
             maxLines: 1,
@@ -502,7 +570,7 @@ class _BuySellCard extends StatelessWidget {
               color: AppColors.textPrimary,
             ),
           ),
-          const SizedBox(height: 2),
+          const SizedBox(height: 4),
           Text(
             'SAR ${_priceFormat.format(item.priceSar)}',
             style: const TextStyle(
