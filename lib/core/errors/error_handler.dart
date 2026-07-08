@@ -11,6 +11,10 @@ class ErrorHandler {
     if (error is Failure) {
       return error;
     }
+    if (error is StateError) {
+      final message = error.message;
+      if (message.isNotEmpty) return AuthFailure(message);
+    }
     return ServerFailure(error.toString());
   }
 

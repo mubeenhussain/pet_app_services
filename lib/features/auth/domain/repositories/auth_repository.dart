@@ -16,5 +16,6 @@ abstract class AuthRepository {
   Future<void> enableGuestMode();
   Future<UserModel?> getUserProfile(String uid);
   Future<void> updateUserProfile(UserModel user);
+  Future<void> saveUserProfile(UserModel user);
   Future<void> sendPasswordResetEmail(String email);
 }

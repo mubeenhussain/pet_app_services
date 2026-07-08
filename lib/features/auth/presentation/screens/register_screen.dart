@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pet_app/core/config/app_config.dart';
 import 'package:pet_app/core/extensions/context_extensions.dart';
 import 'package:pet_app/core/router/route_names.dart';
 import 'package:pet_app/core/utils/validators.dart';
@@ -68,22 +69,30 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     final phone = _phoneController.text.trim();
     final controller = ref.read(authControllerProvider.notifier);
 
+    // Persist draft so OTP Confirm can create the account with real profile data.
+    await controller.savePendingRegistration(
+      username: _usernameController.text.trim(),
+      phone: phone,
+      password: _passwordController.text,
+      city: _selectedCity ?? '',
+    );
+
     await controller.sendRegisterOtp(phone);
 
     if (!mounted) return;
+    // Always continue to OTP in debug/dev; session is recreated on Confirm if needed.
     final state = ref.read(authControllerProvider);
-    // OTP send failure (e.g. Firebase not configured yet) still advances the
-    // flow so the UI can be exercised end-to-end during development.
     state.whenOrNull(
       error: (error, _) {
-        context.showAppSnackBar(
-          controller.mapError(error) ?? context.l10n.errorGeneric,
-          isError: true,
-        );
-        _goToOtp(phone);
+        if (!AppConfig.instance.useFakeOtp) {
+          context.showAppSnackBar(
+            controller.mapError(error) ?? context.l10n.errorGeneric,
+            isError: true,
+          );
+        }
       },
-      data: (_) => _goToOtp(phone),
     );
+    _goToOtp(phone);
   }
 
   @override

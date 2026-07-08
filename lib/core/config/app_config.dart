@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 enum AppFlavor { consumer, admin }
 
 enum AppEnvironment { dev, staging, prod }
@@ -22,6 +24,10 @@ class AppConfig {
   bool get isAdmin => flavor == AppFlavor.admin;
   bool get isConsumer => flavor == AppFlavor.consumer;
   bool get isDev => environment == AppEnvironment.dev;
+
+  /// Skip Firebase Phone Auth and accept [AppConstants.fakeOtpCode].
+  /// Enabled for all debug builds so OTP works without Phone Auth setup.
+  bool get useFakeOtp => isDev || kDebugMode;
 
   static AppConfig? _instance;
 

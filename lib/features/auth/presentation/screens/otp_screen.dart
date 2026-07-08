@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pet_app/core/config/app_config.dart';
 import 'package:pet_app/core/constants/app_constants.dart';
 import 'package:pet_app/core/extensions/context_extensions.dart';
 import 'package:pet_app/core/router/route_names.dart';
 import 'package:pet_app/core/utils/phone_formatter.dart';
 import 'package:pet_app/features/auth/presentation/providers/auth_controller.dart';
+import 'package:pet_app/shared/providers/app_providers.dart';
+import 'package:pet_app/shared/services/phone_auth_service.dart';
 import 'package:pet_app/shared/widgets/app_button.dart';
 import 'package:pet_app/shared/widgets/app_icon_badge.dart';
 import 'package:pet_app/shared/widgets/auth_shell.dart';
@@ -31,6 +34,39 @@ class OtpScreen extends ConsumerStatefulWidget {
 class _OtpScreenState extends ConsumerState<OtpScreen> {
   String _otp = '';
 
+  @override
+  void initState() {
+    super.initState();
+    // Restore OTP challenge from local storage if memory state was lost.
+    Future.microtask(_restoreOtpSession);
+  }
+
+  Future<void> _restoreOtpSession() async {
+    final memory = ref.read(phoneAuthSessionProvider);
+    if (memory != null) return;
+
+    final storage = ref.read(localStorageProvider);
+    final stored = await storage.readPendingOtpSession();
+    if (!mounted) return;
+
+    if (stored != null) {
+      ref.read(phoneAuthSessionProvider.notifier).state = stored.session;
+      return;
+    }
+
+    if (AppConfig.instance.useFakeOtp) {
+      const session = PhoneAuthSession(
+        verificationId: AppConstants.fakeOtpVerificationId,
+      );
+      ref.read(phoneAuthSessionProvider.notifier).state = session;
+      await storage.savePendingOtpSession(
+        session: session,
+        phone: widget.phone,
+        flow: widget.flow,
+      );
+    }
+  }
+
   Future<void> _confirm() async {
     if (_otp.length != AppConstants.otpLength) {
       context.showAppSnackBar(
@@ -43,7 +79,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
     final controller = ref.read(authControllerProvider.notifier);
 
     if (widget.flow == 'register') {
-      await controller.confirmPhoneOtp(_otp);
+      await controller.confirmPhoneOtp(_otp, phone: widget.phone);
     } else {
       context.push(RouteNames.setPassword);
       return;
@@ -93,6 +129,17 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
             ),
             textAlign: TextAlign.center,
           ),
+          if (AppConfig.instance.useFakeOtp) ...[
+            const SizedBox(height: 8),
+            Text(
+              'Dev OTP: ${AppConstants.fakeOtpCode}',
+              style: context.textTheme.bodySmall?.copyWith(
+                color: context.colorScheme.primary,
+                fontWeight: FontWeight.w600,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
         ],
       ),
       child: Column(

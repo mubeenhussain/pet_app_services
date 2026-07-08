@@ -38,6 +38,7 @@ class AuthFirebaseDataSource {
     await _users.doc(uid).set({
       'username': username,
       'phone': phone,
+      'email': email,
       'city': city,
       'role': UserRole.petOwner.value,
       'verified': false,
@@ -63,6 +64,16 @@ class AuthFirebaseDataSource {
 
   Future<void> updateUserProfile(UserModel user) async {
     await _users.doc(user.uid).update(user.toMap());
+  }
+
+  Future<void> saveUserProfile(UserModel user) async {
+    await _users.doc(user.uid).set(
+      {
+        ...user.toMap(),
+        'createdAt': FieldValue.serverTimestamp(),
+      },
+      SetOptions(merge: true),
+    );
   }
 
   Future<void> sendPasswordResetEmail(String email) {

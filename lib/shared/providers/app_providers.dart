@@ -10,6 +10,7 @@ import 'package:pet_app/features/pets/domain/repositories/pets_repository.dart';
 import 'package:pet_app/features/rides/data/datasources/rides_firestore_datasource.dart';
 import 'package:pet_app/features/rides/data/repositories/rides_repository_impl.dart';
 import 'package:pet_app/features/rides/domain/repositories/rides_repository.dart';
+import 'package:pet_app/shared/enums/user_role.dart';
 import 'package:pet_app/shared/models/auth_session.dart';
 import 'package:pet_app/shared/models/user_model.dart';
 import 'package:pet_app/shared/providers/guest_mode_provider.dart';
@@ -69,12 +70,34 @@ final authStateProvider = StreamProvider<AuthSession>((ref) async* {
 
   await for (final firebaseUser in repository.authStateChanges()) {
     if (firebaseUser == null) {
-      final isGuest = ref.read(guestModeProvider) || await storage.isGuestMode();
+      final local = await storage.readLocalAuthSession();
+      if (local != null) {
+        await storage.clearGuestMode();
+        ref.read(guestModeProvider.notifier).state = false;
+        yield AuthSession(
+          user: UserModel(
+            uid: local.uid.isEmpty ? 'local_${local.phone}' : local.uid,
+            username: local.username,
+            phone: local.phone,
+            email: local.email,
+            city: local.city,
+            role: UserRole.petOwner,
+            createdAt: local.createdAtYear == null
+                ? null
+                : DateTime(local.createdAtYear!),
+          ),
+        );
+        continue;
+      }
+
+      final isGuest =
+          ref.read(guestModeProvider) || await storage.isGuestMode();
       yield isGuest ? AuthSession.guest : AuthSession.unauthenticated;
       continue;
     }
 
     await storage.clearGuestMode();
+    await storage.clearLocalAuthSession();
     ref.read(guestModeProvider.notifier).state = false;
     final profile = await repository.getUserProfile(firebaseUser.uid);
     yield AuthSession(user: profile);
@@ -83,4 +106,9 @@ final authStateProvider = StreamProvider<AuthSession>((ref) async* {
 
 final currentUserProvider = Provider<UserModel?>((ref) {
   return ref.watch(authStateProvider).valueOrNull?.user;
+});
+
+/// Local fallback of last successful login/register profile for User Settings.
+final cachedUserProfileProvider = FutureProvider<CachedUserProfile?>((ref) {
+  return ref.watch(localStorageProvider).readCachedUserProfile();
 });

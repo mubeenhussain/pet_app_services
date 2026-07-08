@@ -6,6 +6,9 @@ class AppConstants {
   static const minUsernameLength = 3;
   static const maxUsernameLength = 30;
   static const otpLength = 6;
+  /// Development-only OTP when Firebase Phone Auth is not configured.
+  static const fakeOtpCode = '123456';
+  static const fakeOtpVerificationId = 'fake_otp_verification';
   static const maxOtpRequestsPerWindow = 3;
   static const otpRateLimitMinutes = 10;
   static const rescuePinMaxDescriptionLength = 200;
