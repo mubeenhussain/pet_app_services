@@ -50,8 +50,8 @@ class AppDrawer extends ConsumerWidget {
                   },
                 ),
                 ListTile(
-                  leading: const Icon(Icons.receipt_long_outlined),
-                  title: Text(context.l10n.orders),
+                  leading: const Icon(Icons.history),
+                  title: const Text('Service History'),
                   onTap: () {
                     Navigator.pop(context);
                     context.push(RouteNames.orders);
