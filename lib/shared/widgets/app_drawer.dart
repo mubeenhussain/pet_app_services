@@ -118,6 +118,14 @@ class AppDrawer extends ConsumerWidget {
                     },
                   ),
                   _DrawerItem(
+                    icon: Icons.chat_bubble_outline,
+                    label: 'Messages',
+                    onTap: () {
+                      Navigator.pop(context);
+                      context.push(RouteNames.messages);
+                    },
+                  ),
+                  _DrawerItem(
                     icon: Icons.credit_card_outlined,
                     label: 'Orders',
                     onTap: () {

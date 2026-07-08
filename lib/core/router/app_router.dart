@@ -10,6 +10,8 @@ import 'package:pet_app/features/auth/presentation/screens/login_screen.dart';
 import 'package:pet_app/features/auth/presentation/screens/otp_screen.dart';
 import 'package:pet_app/features/auth/presentation/screens/register_screen.dart';
 import 'package:pet_app/features/auth/presentation/screens/set_password_screen.dart';
+import 'package:pet_app/features/chat/presentation/screens/chat_thread_screen.dart';
+import 'package:pet_app/features/chat/presentation/screens/messages_list_screen.dart';
 import 'package:pet_app/features/checkout/presentation/screens/checkout_screen.dart';
 import 'package:pet_app/features/checkout/presentation/screens/payment_failure_screen.dart';
 import 'package:pet_app/features/checkout/presentation/screens/payment_success_screen.dart';
@@ -137,6 +139,16 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: RouteNames.orders,
         builder: (_, __) => const ServiceHistoryScreen(),
+      ),
+      GoRoute(
+        path: RouteNames.messages,
+        builder: (_, __) => const MessagesListScreen(),
+      ),
+      GoRoute(
+        path: RouteNames.chatThread,
+        builder: (_, state) => ChatThreadScreen(
+          conversationId: state.pathParameters['id']!,
+        ),
       ),
       GoRoute(
         path: RouteNames.rideRequest,

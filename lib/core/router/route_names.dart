@@ -17,6 +17,11 @@ class RouteNames {
   static const editPet = '/pets/:id/edit';
   static const orders = '/orders';
 
+  // Chat
+  static const messages = '/chat';
+  static const chatThread = '/chat/:id';
+  static String chatThreadPath(String id) => '/chat/$id';
+
   // Rides
   static const rideRequest = '/rides/request';
   static const rideReview = '/rides/review';
