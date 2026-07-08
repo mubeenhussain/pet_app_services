@@ -129,11 +129,12 @@ class _PetsGrid extends StatelessWidget {
     final itemCount = pets.length + 1;
 
     return GridView.builder(
-      padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+      // Figma: ~20 outer margin, equal gutters ~16 between cards
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        crossAxisSpacing: 14,
-        mainAxisSpacing: 14,
+        crossAxisSpacing: 16,
+        mainAxisSpacing: 16,
         childAspectRatio: 0.88,
       ),
       itemCount: itemCount,
@@ -254,7 +255,6 @@ class _AddNewPetCard extends StatelessWidget {
   final VoidCallback onTap;
 
   static const _green = Color(0xFF17A855);
-  static const _greenSoft = Color(0xFFE8F7EE);
   static const _radius = 16.0;
 
   @override
@@ -264,37 +264,53 @@ class _AddNewPetCard extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(_radius),
-        child: CustomPaint(
-          painter: const _DashedRRectPainter(
-            color: _green,
-            strokeWidth: 1.5,
-            radius: _radius,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(_radius),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.06),
+                blurRadius: 10,
+                offset: const Offset(0, 2),
+              ),
+            ],
           ),
-          child: const Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: _greenSoft,
-                      shape: BoxShape.circle,
+          child: CustomPaint(
+            painter: const _DashedRRectPainter(
+              color: _green,
+              strokeWidth: 1.5,
+              radius: _radius,
+            ),
+            child: const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 40,
+                    height: 40,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        border: Border.fromBorderSide(
+                          BorderSide(color: _green, width: 1.5),
+                        ),
+                      ),
+                      child: Icon(Icons.add, color: _green, size: 22),
                     ),
-                    child: Icon(Icons.add, color: _green, size: 22),
                   ),
-                ),
-                SizedBox(height: 10),
-                Text(
-                  'Add New Pet',
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
-                    color: _green,
+                  SizedBox(height: 10),
+                  Text(
+                    'Add New Pet',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: _green,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
