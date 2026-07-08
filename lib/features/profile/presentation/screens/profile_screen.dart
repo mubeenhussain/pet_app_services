@@ -13,7 +13,13 @@ import 'package:pet_app/shared/widgets/app_top_bar.dart';
 
 /// BRD 6.7 — Display User Info (Figma: Profile)
 class ProfileScreen extends ConsumerWidget {
-  const ProfileScreen({super.key});
+  const ProfileScreen({
+    super.key,
+    this.showBack = true,
+  });
+
+  /// When false (e.g. bottom-nav tab), hide back and keep title centered.
+  final bool showBack;
 
   Future<void> _logout(BuildContext context, WidgetRef ref) async {
     await ref.read(authControllerProvider.notifier).signOut();
@@ -79,10 +85,13 @@ class ProfileScreen extends ConsumerWidget {
                   children: [
                     Row(
                       children: [
-                        _CircleIconButton(
-                          icon: Icons.chevron_left_rounded,
-                          onPressed: () => context.pop(),
-                        ),
+                        if (showBack)
+                          _CircleIconButton(
+                            icon: Icons.chevron_left_rounded,
+                            onPressed: () => context.pop(),
+                          )
+                        else
+                          const SizedBox(width: 40),
                         const Expanded(
                           child: Text(
                             'Profile',
