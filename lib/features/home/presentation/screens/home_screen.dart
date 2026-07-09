@@ -104,24 +104,32 @@ class _HomeTab extends StatelessWidget {
   static const _serviceIconTileHeight = 46.0;
   static const _serviceIconLabelGap = 7.0;
 
+  // Shared Figma gradients (services tiles + buy & sell media).
+  static const _groomingGradient = [Color(0xFFF4FCF6), Color(0xFF6ED99A)];
+  static const _deliveryGradient = [Color(0xFFFFF6EE), Color(0xFFFFB366)];
+  static const _boardingGradient = [Color(0xFFFAF4FF), Color(0xFFD4A8F8)];
+  static const _showerGradient = [Color(0xFFF0F8FF), Color(0xFF7FC4FF)];
+  // Large buy & sell media: compress gradient so bottom hue reads like 52×46 tiles.
+  static const _buySellGradientStops = [0.0, 0.52];
+
   static final _listings = [
     const _BuySellItem(
       title: 'Labrador Pup',
       priceSar: 25000,
       iconAsset: 'assets/icons/pets/🐶.png',
-      gradient: [Color(0xFFEDF9F1), Color(0xFFD8F0E2)],
+      gradient: _groomingGradient,
     ),
     const _BuySellItem(
       title: 'Cockatiel',
       priceSar: 4500,
       iconAsset: 'assets/icons/pets/🐦.png',
-      gradient: [Color(0xFFEFF6FF), Color(0xFFD9ECFF)],
+      gradient: _showerGradient,
     ),
     const _BuySellItem(
       title: 'Arabian Horse',
       priceSar: 180000,
       iconAsset: 'assets/icons/pets/🐴.png',
-      gradient: [Color(0xFFFFF4EC), Color(0xFFFFE4D4)],
+      gradient: _deliveryGradient,
     ),
   ];
 
@@ -173,10 +181,7 @@ class _HomeTab extends StatelessWidget {
                                 label: 'Grooming',
                                 iconAsset:
                                     'assets/icons/services/grooming.png',
-                                gradient: const [
-                                  Color(0xFFF4FCF6),
-                                  Color(0xFF6ED99A),
-                                ],
+                                gradient: _HomeTab._groomingGradient,
                                 onTap: () {},
                               ),
                               const SizedBox(width: _serviceGridSpacing),
@@ -185,10 +190,7 @@ class _HomeTab extends StatelessWidget {
                                 label: 'Delivery',
                                 iconAsset:
                                     'assets/icons/services/delivery.png',
-                                gradient: const [
-                                  Color(0xFFFFF6EE),
-                                  Color(0xFFFFB366),
-                                ],
+                                gradient: _HomeTab._deliveryGradient,
                                 onTap: () =>
                                     context.push(RouteNames.rideRequest),
                               ),
@@ -202,10 +204,7 @@ class _HomeTab extends StatelessWidget {
                                 label: 'Boarding',
                                 iconAsset:
                                     'assets/icons/services/boarding.png',
-                                gradient: const [
-                                  Color(0xFFFAF4FF),
-                                  Color(0xFFD4A8F8),
-                                ],
+                                gradient: _HomeTab._boardingGradient,
                                 onTap: () {},
                               ),
                               const SizedBox(width: _serviceGridSpacing),
@@ -214,10 +213,7 @@ class _HomeTab extends StatelessWidget {
                                 label: 'Shower',
                                 iconAsset:
                                     'assets/icons/services/shower.png',
-                                gradient: const [
-                                  Color(0xFFF0F8FF),
-                                  Color(0xFF7FC4FF),
-                                ],
+                                gradient: _HomeTab._showerGradient,
                                 onTap: () {},
                               ),
                             ],
@@ -646,22 +642,23 @@ class _BuySellCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
-            child: Container(
-              width: double.infinity,
+            child: DecoratedBox(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(_imageRadius),
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: item.gradient,
+                  stops: _HomeTab._buySellGradientStops,
                 ),
               ),
-              alignment: Alignment.center,
-              child: Image.asset(
-                item.iconAsset,
-                width: 48,
-                height: 48,
-                fit: BoxFit.contain,
+              child: Center(
+                child: Image.asset(
+                  item.iconAsset,
+                  width: 48,
+                  height: 48,
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
           ),
