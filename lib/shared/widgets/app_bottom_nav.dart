@@ -59,6 +59,8 @@ class _NavItem extends StatelessWidget {
   final bool selected;
   final VoidCallback onTap;
 
+  static const _iconSize = 24.0;
+
   @override
   Widget build(BuildContext context) {
     final color = selected
@@ -72,7 +74,7 @@ class _NavItem extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(_iconFor(tab, selected), size: 24, color: color),
+          _buildIcon(color),
           const SizedBox(height: 4),
           Text(
             _labelFor(tab),
@@ -88,6 +90,34 @@ class _NavItem extends StatelessWidget {
     );
   }
 
+  Widget _buildIcon(Color color) {
+    final asset = _assetFor(tab);
+    if (asset == null) {
+      return Icon(
+        _materialIconFor(tab, selected),
+        size: _iconSize,
+        color: color,
+      );
+    }
+
+    return ColorFiltered(
+      colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+      child: Image.asset(
+        asset,
+        width: _iconSize,
+        height: _iconSize,
+        fit: BoxFit.contain,
+      ),
+    );
+  }
+
+  static String? _assetFor(AppBottomTab tab) => switch (tab) {
+        AppBottomTab.home => null,
+        AppBottomTab.services => 'assets/icons/system/bottombar_menu.png',
+        AppBottomTab.rescue => 'assets/icons/system/bottombar_rescu.png',
+        AppBottomTab.profile => 'assets/icons/system/bottombar_profile.png',
+      };
+
   static String _labelFor(AppBottomTab tab) => switch (tab) {
         AppBottomTab.home => 'Home',
         AppBottomTab.services => 'Services',
@@ -95,7 +125,8 @@ class _NavItem extends StatelessWidget {
         AppBottomTab.profile => 'Profile',
       };
 
-  static IconData _iconFor(AppBottomTab tab, bool selected) => switch (tab) {
+  static IconData _materialIconFor(AppBottomTab tab, bool selected) =>
+      switch (tab) {
         AppBottomTab.home =>
           selected ? Icons.home_rounded : Icons.home_outlined,
         AppBottomTab.services => Icons.menu_rounded,
