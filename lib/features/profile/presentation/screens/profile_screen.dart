@@ -92,11 +92,11 @@ class ProfileScreen extends ConsumerWidget {
                           )
                         else
                           const SizedBox(width: 40),
-                        const Expanded(
+                        Expanded(
                           child: Text(
-                            'Profile',
+                            context.l10n.profile,
                             textAlign: TextAlign.center,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w700,
                               color: AppColors.textPrimary,
@@ -138,7 +138,7 @@ class ProfileScreen extends ConsumerWidget {
                     if (profile.memberSinceYear != null) ...[
                       const SizedBox(height: 6),
                       Text(
-                        'Member since ${profile.memberSinceYear}',
+                        context.l10n.memberSince(profile.memberSinceYear!),
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           fontSize: 14,
@@ -150,13 +150,13 @@ class ProfileScreen extends ConsumerWidget {
                     const SizedBox(height: 28),
                     _InfoCard(
                       icon: Icons.phone_outlined,
-                      label: 'PHONE',
+                      label: context.l10n.labelPhone,
                       value: profile.phone.isEmpty ? '-' : profile.phone,
                     ),
                     const SizedBox(height: 12),
                     _InfoCard(
                       icon: Icons.location_on_outlined,
-                      label: 'CITY',
+                      label: context.l10n.labelCity,
                       value: profile.city?.trim().isNotEmpty == true
                           ? profile.city!
                           : '-',
@@ -164,7 +164,7 @@ class ProfileScreen extends ConsumerWidget {
                     const SizedBox(height: 12),
                     _InfoCard(
                       icon: Icons.mail_outline_rounded,
-                      label: 'EMAIL',
+                      label: context.l10n.labelEmail,
                       value: profile.email?.trim().isNotEmpty == true
                           ? profile.email!
                           : '-',
@@ -361,16 +361,16 @@ class _EditProfileButton extends StatelessWidget {
               radius: _radius,
               devicePixelRatio: dpr,
             ),
-            child: const Center(
+            child: Center(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.edit_outlined, size: 16, color: _label),
-                  SizedBox(width: 8),
+                  const Icon(Icons.edit_outlined, size: 16, color: _label),
+                  const SizedBox(width: 8),
                   Text(
-                    'Edit Profile',
-                    style: TextStyle(
+                    context.l10n.editProfile,
+                    style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
                       color: _label,

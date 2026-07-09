@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
+import 'package:pet_app/core/extensions/context_extensions.dart';
+import 'package:pet_app/core/l10n/l10n_helpers.dart';
 import 'package:pet_app/core/theme/app_colors.dart';
 import 'package:pet_app/features/pets/presentation/utils/buy_pet_filters.dart';
 
@@ -19,7 +20,6 @@ class _BuyPetFiltersScreenState extends State<BuyPetFiltersScreen> {
 
   late Set<String> _categories;
   late RangeValues _priceRange;
-  final _priceFormat = NumberFormat('#,###');
 
   @override
   void initState() {
@@ -62,11 +62,11 @@ class _BuyPetFiltersScreenState extends State<BuyPetFiltersScreen> {
               child: Row(
                 children: [
                   _FilterCloseButton(onTap: () => context.pop()),
-                  const Expanded(
+                  Expanded(
                     child: Text(
-                      'Filters',
+                      context.l10n.filters,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
                         color: AppColors.textPrimary,
@@ -75,9 +75,9 @@ class _BuyPetFiltersScreenState extends State<BuyPetFiltersScreen> {
                   ),
                   TextButton(
                     onPressed: _reset,
-                    child: const Text(
-                      'Reset',
-                      style: TextStyle(
+                    child: Text(
+                      context.l10n.reset,
+                      style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: _green,
@@ -92,9 +92,9 @@ class _BuyPetFiltersScreenState extends State<BuyPetFiltersScreen> {
               child: ListView(
                 padding: const EdgeInsets.fromLTRB(16, 20, 16, 16),
                 children: [
-                  const Text(
-                    'Category',
-                    style: TextStyle(
+                  Text(
+                    context.l10n.category,
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
                       color: AppColors.textPrimary,
@@ -105,24 +105,24 @@ class _BuyPetFiltersScreenState extends State<BuyPetFiltersScreen> {
                     spacing: 8,
                     runSpacing: 8,
                     children: [
-                      for (final entry in buyPetFilterCategories.entries)
+                      for (final categoryId in buyPetFilterCategories)
                         _CategoryChip(
-                          label: entry.key,
-                          selected: _categories.contains(entry.value),
+                          label: context.l10n.buyPetCategoryLabel(categoryId),
+                          selected: _categories.contains(categoryId),
                           onTap: () => setState(() {
-                            if (_categories.contains(entry.value)) {
-                              _categories.remove(entry.value);
+                            if (_categories.contains(categoryId)) {
+                              _categories.remove(categoryId);
                             } else {
-                              _categories.add(entry.value);
+                              _categories.add(categoryId);
                             }
                           }),
                         ),
                     ],
                   ),
                   const SizedBox(height: 28),
-                  const Text(
-                    'Price Range',
-                    style: TextStyle(
+                  Text(
+                    context.l10n.priceRange,
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
                       color: AppColors.textPrimary,
@@ -153,7 +153,7 @@ class _BuyPetFiltersScreenState extends State<BuyPetFiltersScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'SAR ${_priceFormat.format(_priceRange.start.round())}',
+                        context.l10n.sarAmount(_priceRange.start.round()),
                         style: const TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
@@ -161,7 +161,7 @@ class _BuyPetFiltersScreenState extends State<BuyPetFiltersScreen> {
                         ),
                       ),
                       Text(
-                        'SAR ${_priceFormat.format(_priceRange.end.round())}',
+                        context.l10n.sarAmount(_priceRange.end.round()),
                         style: const TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
@@ -187,7 +187,7 @@ class _BuyPetFiltersScreenState extends State<BuyPetFiltersScreen> {
                   ),
                   onPressed: _apply,
                   child: Text(
-                    'Apply ($_resultCount results)',
+                    context.l10n.applyWithCount(_resultCount),
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,

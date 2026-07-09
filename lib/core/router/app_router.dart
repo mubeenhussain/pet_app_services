@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pet_app/core/config/app_config.dart';
+import 'package:pet_app/core/extensions/context_extensions.dart';
 import 'package:pet_app/core/router/route_names.dart';
 import 'package:pet_app/features/admin/presentation/screens/admin_dashboard_screen.dart';
 import 'package:pet_app/features/admin/presentation/screens/pending_driver_requests_screen.dart';
@@ -139,12 +140,12 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: ':id',
-            builder: (_, state) {
+            builder: (context, state) {
               final listing =
                   buyPetListingById(state.pathParameters['id']!);
               if (listing == null) {
-                return const Scaffold(
-                  body: Center(child: Text('Listing not found')),
+                return Scaffold(
+                  body: Center(child: Text(context.l10n.listingNotFound)),
                 );
               }
               return BuyPetDetailScreen(listing: listing);

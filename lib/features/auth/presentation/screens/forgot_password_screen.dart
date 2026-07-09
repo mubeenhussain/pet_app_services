@@ -86,7 +86,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
               controller: _phoneController,
               label: l10n.phoneHint,
               hint: l10n.phoneExample,
-              validator: Validators.phone,
+              validator: Validators.phone(context.l10n),
               onSubmitted: (_) => _submit(),
             ),
             const SizedBox(height: 28),

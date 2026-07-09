@@ -11,20 +11,6 @@ import 'package:pet_app/shared/widgets/app_text_field.dart';
 import 'package:pet_app/shared/widgets/auth_circle_back_button.dart';
 import 'package:pet_app/shared/widgets/phone_field.dart';
 
-/// Cities shown in the Edit Profile dropdown (Figma + existing register list).
-const _cities = [
-  'Riyadh',
-  'Jeddah',
-  'Mecca',
-  'Medina',
-  'Dammam',
-  'Khobar',
-  'Tabuk',
-  'Abha',
-  'Dubai, UAE',
-  'Lahore, Pakistan',
-];
-
 /// BRD 6.8 — Edit User Info (Figma: Edit Profile)
 class EditProfileScreen extends ConsumerStatefulWidget {
   const EditProfileScreen({super.key});
@@ -41,6 +27,19 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   String? _selectedCity;
   var _initialized = false;
   var _saving = false;
+
+  List<String> _localizedCities(BuildContext context) => [
+        context.l10n.cityRiyadh,
+        context.l10n.cityJeddah,
+        context.l10n.cityMecca,
+        context.l10n.cityMedina,
+        context.l10n.cityDammam,
+        context.l10n.cityKhobar,
+        context.l10n.cityTabuk,
+        context.l10n.cityAbha,
+        context.l10n.cityDubai,
+        context.l10n.cityLahore,
+      ];
 
   @override
   void initState() {
@@ -67,11 +66,6 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     _phoneController.text = _stripDialCode(phone);
     _emailController.text = email.startsWith('phone_') ? '' : email;
     _selectedCity = (city != null && city.trim().isNotEmpty) ? city : null;
-
-    // Ensure selected city appears in dropdown items.
-    if (_selectedCity != null && !_cities.contains(_selectedCity)) {
-      // keep as-is; AppSelectField needs value in items — inject via local list
-    }
 
     _initialized = true;
   }
@@ -158,13 +152,15 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final localizedCities = _localizedCities(context);
     final displayName = _nameController.text.trim().isEmpty
-        ? 'User'
+        ? l10n.userFallback
         : _nameController.text.trim();
 
     final cityItems = [
-      ..._cities,
-      if (_selectedCity != null && !_cities.contains(_selectedCity))
+      ...localizedCities,
+      if (_selectedCity != null && !localizedCities.contains(_selectedCity))
         _selectedCity!,
     ];
 
@@ -178,11 +174,11 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
               child: Row(
                 children: [
                   const AuthCircleBackButton(),
-                  const Expanded(
+                  Expanded(
                     child: Text(
-                      'Edit Profile',
+                      l10n.editProfile,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
                         color: AppColors.textPrimary,
@@ -235,7 +231,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                       customBorder: const CircleBorder(),
                                       onTap: () {
                                         context.showAppSnackBar(
-                                          'Photo update coming soon',
+                                          l10n.photoUpdateSoon,
                                         );
                                       },
                                       child: const SizedBox(
@@ -254,9 +250,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                             ),
                           ),
                           const SizedBox(height: 12),
-                          const Text(
-                            'Tap to change photo',
-                            style: TextStyle(
+                          Text(
+                            l10n.tapChangePhoto,
+                            style: const TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w400,
                               color: AppColors.textSecondary,
@@ -268,20 +264,20 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                     const SizedBox(height: 28),
                     AppTextField(
                       controller: _nameController,
-                      label: 'Name',
+                      label: l10n.name,
                       textInputAction: TextInputAction.next,
                     ),
                     const SizedBox(height: 18),
                     PhoneField(
                       controller: _phoneController,
-                      label: 'Phone',
-                      hint: '5X XXX XXXX',
+                      label: l10n.phone,
+                      hint: l10n.phonePlaceholder,
                       textInputAction: TextInputAction.next,
                     ),
                     const SizedBox(height: 18),
                     AppSelectField<String>(
-                      label: 'City',
-                      hint: 'Select your city',
+                      label: l10n.cityHint,
+                      hint: l10n.selectCity,
                       value: _selectedCity,
                       items: cityItems,
                       itemLabel: (c) => c,
@@ -291,7 +287,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                     const SizedBox(height: 18),
                     AppTextField(
                       controller: _emailController,
-                      label: 'Email',
+                      label: l10n.email,
                       keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.done,
                     ),
@@ -363,9 +359,9 @@ class _SaveChangesButton extends StatelessWidget {
                   color: Colors.white,
                 ),
               )
-            : const Text(
-                'Save Changes',
-                style: TextStyle(
+            : Text(
+                context.l10n.saveChanges,
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
                   color: Colors.white,

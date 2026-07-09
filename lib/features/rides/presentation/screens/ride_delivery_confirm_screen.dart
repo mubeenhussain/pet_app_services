@@ -28,7 +28,7 @@ class RideDeliveryConfirmScreen extends ConsumerWidget {
             Text(context.l10n.deliveryConfirmed),
             const Spacer(),
             AppButton(
-              label: 'Confirm delivery',
+              label: context.l10n.confirmDelivery,
               onPressed: () async {
                 if (rideId != null) {
                   await ref.read(ridesRepositoryProvider).updateRideStatus(

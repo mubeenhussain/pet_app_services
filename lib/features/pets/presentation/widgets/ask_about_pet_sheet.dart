@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
+import 'package:pet_app/core/extensions/context_extensions.dart';
+import 'package:pet_app/core/l10n/l10n_helpers.dart';
 import 'package:pet_app/core/router/route_names.dart';
 import 'package:pet_app/core/theme/app_colors.dart';
 import 'package:pet_app/features/pets/presentation/models/buy_pet_listing.dart';
@@ -8,9 +9,9 @@ import 'package:pet_app/features/pets/presentation/models/buy_pet_listing.dart';
 const _green = Color(0xFF17A855);
 const _inputBorder = Color(0xFFDDEFE2);
 
-String _defaultMessage(BuyPetListing listing) {
+String _defaultMessage(BuildContext context, BuyPetListing listing) {
   final name = listing.petName.split(RegExp(r'\s+&?\s*')).first;
-  return 'Hi, I\'m interested in $name — is $name still available?';
+  return context.l10n.askDefaultMessage(name);
 }
 
 /// Figma — Ask about pet bottom sheet.
@@ -47,9 +48,7 @@ class _AskAboutPetSheetState extends State<_AskAboutPetSheet> {
   @override
   void initState() {
     super.initState();
-    _messageController = TextEditingController(
-      text: _defaultMessage(widget.listing),
-    );
+    _messageController = TextEditingController();
   }
 
   @override
@@ -68,7 +67,10 @@ class _AskAboutPetSheetState extends State<_AskAboutPetSheet> {
   @override
   Widget build(BuildContext context) {
     final listing = widget.listing;
-    final priceFormat = NumberFormat('#,###');
+    final petShortName = listing.petName.split(RegExp(r'\s+&?\s*')).first;
+    if (_messageController.text.isEmpty) {
+      _messageController.text = _defaultMessage(context, listing);
+    }
 
     return DecoratedBox(
       decoration: const BoxDecoration(
@@ -103,7 +105,7 @@ class _AskAboutPetSheetState extends State<_AskAboutPetSheet> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Ask about ${listing.petName.split(RegExp(r'\s+&?\s*')).first}',
+                          context.l10n.askAbout(petShortName),
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w700,
@@ -112,7 +114,10 @@ class _AskAboutPetSheetState extends State<_AskAboutPetSheet> {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          '${listing.breed} · SAR ${priceFormat.format(listing.priceSar)}',
+                          context.l10n.breedPriceLine(
+                            listing.breed,
+                            context.l10n.sarAmount(listing.priceSar),
+                          ),
                           style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
@@ -125,9 +130,9 @@ class _AskAboutPetSheetState extends State<_AskAboutPetSheet> {
                 ],
               ),
               const SizedBox(height: 24),
-              const Text(
-                'YOUR MESSAGE',
-                style: TextStyle(
+              Text(
+                context.l10n.yourMessage,
+                style: const TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w600,
                   letterSpacing: 0.6,
@@ -183,9 +188,9 @@ class _AskAboutPetSheetState extends State<_AskAboutPetSheet> {
                     borderRadius: BorderRadius.circular(14),
                   ),
                 ),
-                child: const Text(
-                  'Send Message',
-                  style: TextStyle(
+                child: Text(
+                  context.l10n.sendMessage,
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
                   ),

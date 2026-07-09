@@ -38,14 +38,15 @@ class _RideRequestScreenState extends ConsumerState<RideRequestScreen> {
   }
 
   Future<void> _initLocation() async {
+    final l10n = context.l10n;
     final current = await LocationService.getCurrentLatLng();
     if (current != null && mounted) {
       setState(() {
         _mapCenter = current;
         _pickupLatLng = current;
         _destinationLatLng = LocationService.offsetDemo(current);
-        _pickupController.text = 'Current location';
-        _destinationController.text = 'Selected destination';
+        _pickupController.text = l10n.currentLocation;
+        _destinationController.text = l10n.selectedDestination;
       });
     } else {
       setState(() {
@@ -66,10 +67,13 @@ class _RideRequestScreenState extends ConsumerState<RideRequestScreen> {
     if (_selectedPetId == null ||
         _pickupLatLng == null ||
         _destinationLatLng == null ||
-        Validators.requiredField(_pickupController.text, field: 'Pickup') !=
+        Validators.requiredField(
+              context.l10n,
+              field: context.l10n.pickupShort,
+            )(_pickupController.text) !=
             null) {
       context.showAppSnackBar(
-        'Select pickup, destination, and a pet.',
+        context.l10n.selectPickupDestPet,
         isError: true,
       );
       return;
@@ -115,7 +119,7 @@ class _RideRequestScreenState extends ConsumerState<RideRequestScreen> {
         Marker(
           markerId: const MarkerId('pickup'),
           position: _pickupLatLng!,
-          infoWindow: const InfoWindow(title: 'Pickup'),
+          infoWindow: InfoWindow(title: context.l10n.pickupShort),
           icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
         ),
       );
@@ -125,7 +129,7 @@ class _RideRequestScreenState extends ConsumerState<RideRequestScreen> {
         Marker(
           markerId: const MarkerId('destination'),
           position: _destinationLatLng!,
-          infoWindow: const InfoWindow(title: 'Destination'),
+          infoWindow: InfoWindow(title: context.l10n.destinationShort),
           icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
         ),
       );
@@ -145,9 +149,12 @@ class _RideRequestScreenState extends ConsumerState<RideRequestScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             SegmentedButton<bool>(
-              segments: const [
-                ButtonSegment(value: false, label: Text('Set pickup')),
-                ButtonSegment(value: true, label: Text('Set destination')),
+              segments: [
+                ButtonSegment(value: false, label: Text(context.l10n.setPickup)),
+                ButtonSegment(
+                  value: true,
+                  label: Text(context.l10n.setDestination),
+                ),
               ],
               selected: {_selectingDestination},
               onSelectionChanged: (v) =>
@@ -179,16 +186,19 @@ class _RideRequestScreenState extends ConsumerState<RideRequestScreen> {
                     .map((p) => DropdownMenuItem(value: p.id, child: Text(p.name)))
                     .toList(),
                 onChanged: (v) => setState(() => _selectedPetId = v),
-                decoration: const InputDecoration(hintText: 'Choose pet'),
+                decoration: InputDecoration(hintText: context.l10n.choosePet),
               ),
               loading: () => const LinearProgressIndicator(),
-              error: (_, __) => const Text('Could not load pets'),
+              error: (_, __) => Text(context.l10n.couldNotLoadPets),
             ),
             const SizedBox(height: 16),
             SegmentedButton<String>(
-              segments: const [
-                ButtonSegment(value: 'any', label: Text('Any car')),
-                ButtonSegment(value: 'specific', label: Text('Specific')),
+              segments: [
+                ButtonSegment(value: 'any', label: Text(context.l10n.anyCar)),
+                ButtonSegment(
+                  value: 'specific',
+                  label: Text(context.l10n.specificCar),
+                ),
               ],
               selected: {_carType},
               onSelectionChanged: (v) => setState(() => _carType = v.first),

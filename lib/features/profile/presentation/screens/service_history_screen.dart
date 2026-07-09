@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pet_app/core/extensions/context_extensions.dart';
+import 'package:pet_app/core/l10n/l10n_helpers.dart';
 import 'package:intl/intl.dart';
 import 'package:pet_app/core/theme/app_colors.dart';
 import 'package:pet_app/shared/widgets/auth_circle_back_button.dart';
@@ -10,10 +12,12 @@ enum _HistoryStatus { completed, pending, cancelled }
 
 enum _HistoryCategory { rides, services, housing, supplies }
 
+enum _HistoryTitle { homeGrooming, vetVisit, boarding, supplies }
+
 class _HistoryItem {
   const _HistoryItem({
     required this.id,
-    required this.title,
+    required this.titleKey,
     required this.date,
     required this.amountSar,
     required this.status,
@@ -21,7 +25,7 @@ class _HistoryItem {
   });
 
   final String id;
-  final String title;
+  final _HistoryTitle titleKey;
   final DateTime date;
   final int amountSar;
   final _HistoryStatus status;
@@ -32,7 +36,7 @@ class _HistoryItem {
 final _demoHistory = <_HistoryItem>[
   _HistoryItem(
     id: '1',
-    title: 'Home Grooming',
+    titleKey: _HistoryTitle.homeGrooming,
     date: DateTime(2026, 6, 12),
     amountSar: 500,
     status: _HistoryStatus.completed,
@@ -40,7 +44,7 @@ final _demoHistory = <_HistoryItem>[
   ),
   _HistoryItem(
     id: '2',
-    title: 'Home Grooming',
+    titleKey: _HistoryTitle.homeGrooming,
     date: DateTime(2026, 6, 12),
     amountSar: 500,
     status: _HistoryStatus.completed,
@@ -48,7 +52,7 @@ final _demoHistory = <_HistoryItem>[
   ),
   _HistoryItem(
     id: '3',
-    title: 'Vet Home Visit',
+    titleKey: _HistoryTitle.vetVisit,
     date: DateTime(2026, 6, 18),
     amountSar: 2800,
     status: _HistoryStatus.pending,
@@ -56,7 +60,7 @@ final _demoHistory = <_HistoryItem>[
   ),
   _HistoryItem(
     id: '4',
-    title: 'Vet Home Visit',
+    titleKey: _HistoryTitle.vetVisit,
     date: DateTime(2026, 6, 18),
     amountSar: 2800,
     status: _HistoryStatus.pending,
@@ -64,7 +68,7 @@ final _demoHistory = <_HistoryItem>[
   ),
   _HistoryItem(
     id: '5',
-    title: 'Pet Boarding 3 nights',
+    titleKey: _HistoryTitle.boarding,
     date: DateTime(2026, 6, 2),
     amountSar: 6000,
     status: _HistoryStatus.completed,
@@ -72,7 +76,7 @@ final _demoHistory = <_HistoryItem>[
   ),
   _HistoryItem(
     id: '6',
-    title: 'Grooming Kit Supplies',
+    titleKey: _HistoryTitle.supplies,
     date: DateTime(2026, 5, 28),
     amountSar: 950,
     status: _HistoryStatus.cancelled,
@@ -114,23 +118,23 @@ class _ServiceHistoryScreenState extends ConsumerState<ServiceHistoryScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Padding(
+            Padding(
               padding: EdgeInsets.fromLTRB(16, 12, 16, 0),
               child: Row(
                 children: [
-                  AuthCircleBackButton(),
+                  const AuthCircleBackButton(),
                   Expanded(
                     child: Text(
-                      'Service History',
+                      context.l10n.serviceHistory,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
                         color: AppColors.textPrimary,
                       ),
                     ),
                   ),
-                  SizedBox(width: 40),
+                  const SizedBox(width: 40),
                 ],
               ),
             ),
@@ -142,33 +146,33 @@ class _ServiceHistoryScreenState extends ConsumerState<ServiceHistoryScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 children: [
                   _FilterChip(
-                    label: 'All',
+                    label: context.l10n.filterAll,
                     selected: _filter == _HistoryFilter.all,
                     onTap: () => setState(() => _filter = _HistoryFilter.all),
                   ),
                   const SizedBox(width: 8),
                   _FilterChip(
-                    label: 'Rides',
+                    label: context.l10n.filterRides,
                     selected: _filter == _HistoryFilter.rides,
                     onTap: () => setState(() => _filter = _HistoryFilter.rides),
                   ),
                   const SizedBox(width: 8),
                   _FilterChip(
-                    label: 'Services',
+                    label: context.l10n.filterServices,
                     selected: _filter == _HistoryFilter.services,
                     onTap: () =>
                         setState(() => _filter = _HistoryFilter.services),
                   ),
                   const SizedBox(width: 8),
                   _FilterChip(
-                    label: 'Housing',
+                    label: context.l10n.filterHousing,
                     selected: _filter == _HistoryFilter.housing,
                     onTap: () =>
                         setState(() => _filter = _HistoryFilter.housing),
                   ),
                   const SizedBox(width: 8),
                   _FilterChip(
-                    label: 'Supplies',
+                    label: context.l10n.filterSupplies,
                     selected: _filter == _HistoryFilter.supplies,
                     onTap: () =>
                         setState(() => _filter = _HistoryFilter.supplies),
@@ -179,10 +183,10 @@ class _ServiceHistoryScreenState extends ConsumerState<ServiceHistoryScreen> {
             const SizedBox(height: 16),
             Expanded(
               child: items.isEmpty
-                  ? const Center(
+                  ? Center(
                       child: Text(
-                        'No history yet',
-                        style: TextStyle(color: AppColors.textSecondary),
+                        context.l10n.noHistoryYet,
+                        style: const TextStyle(color: AppColors.textSecondary),
                       ),
                     )
                   : ListView.separated(
@@ -246,7 +250,16 @@ class _HistoryCard extends StatelessWidget {
   final _HistoryItem item;
 
   static final _dateFormat = DateFormat('d MMM, yyyy');
-  static final _amountFormat = NumberFormat('#,###');
+
+  String _title(BuildContext context) {
+    final l10n = context.l10n;
+    return switch (item.titleKey) {
+      _HistoryTitle.homeGrooming => l10n.historyHomeGrooming,
+      _HistoryTitle.vetVisit => l10n.historyVetVisit,
+      _HistoryTitle.boarding => l10n.historyBoarding,
+      _HistoryTitle.supplies => l10n.historySupplies,
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -284,7 +297,7 @@ class _HistoryCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  item.title,
+                  _title(context),
                   style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
@@ -309,7 +322,7 @@ class _HistoryCard extends StatelessWidget {
               _StatusPill(status: item.status),
               const SizedBox(height: 10),
               Text(
-                'SAR ${_amountFormat.format(item.amountSar)}',
+                context.l10n.sarAmount(item.amountSar),
                 style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
@@ -332,19 +345,20 @@ class _StatusPill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Figma: Completed = light green bg + dark green text (not solid green).
+    final l10n = context.l10n;
     final (label, bg, fg) = switch (status) {
       _HistoryStatus.completed => (
-          'Completed',
+          l10n.statusCompleted,
           const Color(0xFFE8F7EE),
           const Color(0xFF17A855),
         ),
       _HistoryStatus.pending => (
-          'Pending',
+          l10n.statusPending,
           const Color(0xFFFFF0E0),
           const Color(0xFFE67E22),
         ),
       _HistoryStatus.cancelled => (
-          'Cancelled',
+          l10n.statusCancelled,
           const Color(0xFFEEEEEE),
           const Color(0xFF6B7280),
         ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pet_app/core/extensions/context_extensions.dart';
 import 'package:pet_app/shared/widgets/app_top_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -11,15 +12,15 @@ class AdminDashboardScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppTopBar(title: const Text('Admin Dashboard')),
+      appBar: AppTopBar(title: Text(context.l10n.adminDashboard)),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          _StatCard(title: 'Pending rides', value: '—'),
-          _StatCard(title: 'Pending verifications', value: '—'),
+          _StatCard(title: context.l10n.pendingRides, value: '—'),
+          _StatCard(title: context.l10n.pendingVerifications, value: '—'),
           ListTile(
             leading: const Icon(Icons.local_shipping),
-            title: const Text('Pending driver requests'),
+            title: Text(context.l10n.pendingDriverRequests),
             onTap: () => context.push(RouteNames.adminPendingDrivers),
           ),
         ],

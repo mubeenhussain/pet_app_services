@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pet_app/core/extensions/context_extensions.dart';
 import 'package:pet_app/shared/widgets/app_button.dart';
 
 class AppErrorView extends StatelessWidget {
@@ -24,7 +25,7 @@ class AppErrorView extends StatelessWidget {
             Text(message, textAlign: TextAlign.center),
             if (onRetry != null) ...[
               const SizedBox(height: 16),
-              AppButton(label: 'Retry', onPressed: onRetry),
+              AppButton(label: context.l10n.retry, onPressed: onRetry),
             ],
           ],
         ),

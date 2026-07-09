@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pet_app/core/config/maps_config.dart';
+import 'package:pet_app/core/extensions/context_extensions.dart';
 
 class AppMapView extends StatelessWidget {
   const AppMapView({
@@ -29,11 +30,10 @@ class AppMapView extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: Theme.of(context).dividerColor),
         ),
-        child: const Padding(
-          padding: EdgeInsets.all(16),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
           child: Text(
-            'Add GOOGLE_MAPS_API_KEY to run the map.\n'
-            'See README → Google Maps setup.',
+            context.l10n.mapsApiKeyMissing,
             textAlign: TextAlign.center,
           ),
         ),

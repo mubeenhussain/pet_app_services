@@ -20,10 +20,12 @@ class CheckoutScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const TextField(decoration: InputDecoration(labelText: 'Delivery address')),
+            TextField(
+              decoration: InputDecoration(labelText: context.l10n.deliveryAddress),
+            ),
             const SizedBox(height: 16),
             ListTile(
-              title: const Text('Mada'),
+              title: Text(context.l10n.mada),
               trailing: Icon(Icons.check_circle, color: context.colors.success),
             ),
             const Spacer(),
@@ -34,7 +36,7 @@ class CheckoutScreen extends ConsumerWidget {
                   amountHalalas: 4500,
                   currency: 'SAR',
                   idempotencyKey: DateTime.now().millisecondsSinceEpoch.toString(),
-                  description: 'Pet service checkout',
+                  description: context.l10n.petServiceCheckout,
                 );
                 if (!context.mounted) return;
                 context.go(

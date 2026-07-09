@@ -358,4 +358,528 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get tabRescueSubtitle => 'إنقاذ طارئ — قريباً';
+
+  @override
+  String get retry => 'إعادة المحاولة';
+
+  @override
+  String get name => 'الاسم';
+
+  @override
+  String get phone => 'الهاتف';
+
+  @override
+  String get email => 'البريد الإلكتروني';
+
+  @override
+  String get verified => 'موثّق';
+
+  @override
+  String get reset => 'إعادة تعيين';
+
+  @override
+  String get apply => 'تطبيق';
+
+  @override
+  String get filters => 'الفلاتر';
+
+  @override
+  String get category => 'الفئة';
+
+  @override
+  String get priceRange => 'نطاق السعر';
+
+  @override
+  String applyWithCount(int count) {
+    return 'تطبيق ($count نتيجة)';
+  }
+
+  @override
+  String sarAmountFormatted(String amount) {
+    return '$amount ر.س';
+  }
+
+  @override
+  String ageYear(int count) {
+    return '$count سنة';
+  }
+
+  @override
+  String ageYears(int count) {
+    return '$count سنوات';
+  }
+
+  @override
+  String get male => 'ذكر';
+
+  @override
+  String get female => 'أنثى';
+
+  @override
+  String get gender => 'الجنس';
+
+  @override
+  String get paymentMethods => 'طرق الدفع';
+
+  @override
+  String get messages => 'الرسائل';
+
+  @override
+  String get profile => 'الملف الشخصي';
+
+  @override
+  String get editProfile => 'تعديل الملف';
+
+  @override
+  String memberSince(int year) {
+    return 'عضو منذ $year';
+  }
+
+  @override
+  String get labelPhone => 'الهاتف';
+
+  @override
+  String get labelCity => 'المدينة';
+
+  @override
+  String get labelEmail => 'البريد الإلكتروني';
+
+  @override
+  String get saveChanges => 'حفظ التغييرات';
+
+  @override
+  String get photoUpdateSoon => 'تحديث الصورة قريباً';
+
+  @override
+  String get tapChangePhoto => 'اضغط لتغيير الصورة';
+
+  @override
+  String get signInToSavePet => 'يرجى تسجيل الدخول لحفظ الحيوان';
+
+  @override
+  String get petSaved => 'تم حفظ الحيوان';
+
+  @override
+  String get petUpdated => 'تم تحديث الحيوان';
+
+  @override
+  String get petDeleted => 'تم حذف الحيوان';
+
+  @override
+  String get addNewPet => 'إضافة حيوان جديد';
+
+  @override
+  String get editPet => 'تعديل الحيوان';
+
+  @override
+  String get savePet => 'حفظ الحيوان';
+
+  @override
+  String get myPets => 'حيواناتي';
+
+  @override
+  String get nameHintBuddy => 'مثال: بادي';
+
+  @override
+  String get breedHintGoldenRetriever => 'مثال: جولدن ريتريفر';
+
+  @override
+  String get speciesDog => 'كلب';
+
+  @override
+  String get speciesCat => 'قطة';
+
+  @override
+  String get speciesBird => 'طائر';
+
+  @override
+  String get speciesOther => 'أخرى';
+
+  @override
+  String get photoUploadSoon => 'رفع الصورة قريباً';
+
+  @override
+  String get addPhoto => 'إضافة صورة';
+
+  @override
+  String get deletePet => 'حذف الحيوان';
+
+  @override
+  String deletePetConfirm(String name) {
+    return 'إزالة $name؟';
+  }
+
+  @override
+  String get petNotFound => 'الحيوان غير موجود';
+
+  @override
+  String editPetName(String name) {
+    return 'تعديل $name';
+  }
+
+  @override
+  String get buyAPet => 'شراء حيوان';
+
+  @override
+  String get searchBreedCity => 'ابحث عن السلالة، المدينة...';
+
+  @override
+  String get loadingMore => 'جاري تحميل المزيد...';
+
+  @override
+  String get providerDetails => 'تفاصيل المزوّد';
+
+  @override
+  String get flagInterestReport => 'الإبلاغ / الإبلاغ عن اهتمام';
+
+  @override
+  String get askAboutPet => 'اسأل عن الحيوان';
+
+  @override
+  String get buyNow => 'اشترِ الآن';
+
+  @override
+  String askAbout(String name) {
+    return 'اسأل عن $name';
+  }
+
+  @override
+  String get yourMessage => 'رسالتك';
+
+  @override
+  String get sendMessage => 'إرسال الرسالة';
+
+  @override
+  String askDefaultMessage(String name) {
+    return 'مرحباً، أنا مهتم بـ $name — هل $name متاح؟';
+  }
+
+  @override
+  String breedPriceLine(String breed, String price) {
+    return '$breed · $price';
+  }
+
+  @override
+  String get categoryDogs => 'كلاب';
+
+  @override
+  String get categoryCats => 'قطط';
+
+  @override
+  String get categoryBirds => 'طيور';
+
+  @override
+  String get categoryHorses => 'خيول';
+
+  @override
+  String get categoryCamels => 'إبل';
+
+  @override
+  String get categoryAdoption => 'تبنٍ';
+
+  @override
+  String get chatTitle => 'محادثة';
+
+  @override
+  String get activeNow => 'متصل الآن';
+
+  @override
+  String get chatSafetyBanner => 'يتم مراقبة هذه المحادثة للسلامة';
+
+  @override
+  String get typeMessage => 'اكتب رسالة...';
+
+  @override
+  String get contactInfoWarning => 'الرسالة تحتوي على معلومات اتصال';
+
+  @override
+  String get demoMsgKittenAvailable =>
+      'مرحباً! هل القطة الفارسية ما زالت متاحة؟';
+
+  @override
+  String get demoMsgKittenReply => 'نعم! مُطعّمة وجاهزة للتبنّي 🐱';
+
+  @override
+  String get demoMsgKittenConfirm =>
+      'ممتاز، شكراً! تُقفل المحادثة بعد التأكيد 🔒';
+
+  @override
+  String get previewPersianAvailable => 'هل القطة الفارسية ما ز…';
+
+  @override
+  String get previewDeliverSaturday => 'يمكننا توصيلها يوم الس…';
+
+  @override
+  String get previewThankYouSaturday => 'شكراً! نراك يوم الس…';
+
+  @override
+  String get previewNewArrivalsFriday => 'وصول جديد يوم الجمعة…';
+
+  @override
+  String get timeYesterday => 'أمس';
+
+  @override
+  String get timeMonday => 'الإثنين';
+
+  @override
+  String get currentLocation => 'الموقع الحالي';
+
+  @override
+  String get selectedDestination => 'الوجهة المحددة';
+
+  @override
+  String get selectPickupDestPet => 'اختر نقطة الاستلام والوجهة والحيوان.';
+
+  @override
+  String get pickupShort => 'الاستلام';
+
+  @override
+  String get destinationShort => 'الوجهة';
+
+  @override
+  String get setPickup => 'تعيين الاستلام';
+
+  @override
+  String get setDestination => 'تعيين الوجهة';
+
+  @override
+  String get choosePet => 'اختر الحيوان';
+
+  @override
+  String get couldNotLoadPets => 'تعذّر تحميل الحيوانات';
+
+  @override
+  String get anyCar => 'أي سيارة';
+
+  @override
+  String get specificCar => 'محددة';
+
+  @override
+  String get routeAndFare => 'المسار والأجرة';
+
+  @override
+  String fromLabel(String location) {
+    return 'من: $location';
+  }
+
+  @override
+  String toLabel(String location) {
+    return 'إلى: $location';
+  }
+
+  @override
+  String distanceKm(String km) {
+    return 'المسافة: $km كم';
+  }
+
+  @override
+  String estimatedFare(String fare) {
+    return 'الأجرة التقديرية: $fare';
+  }
+
+  @override
+  String get fareFromServer =>
+      'الأجرة من دالة calculateFare (الخادم هو المرجع).';
+
+  @override
+  String get madaCard => 'مدى / بطاقة';
+
+  @override
+  String get defaultPaymentMethod => 'طريقة الدفع الافتراضية';
+
+  @override
+  String get rideStatus => 'حالة الرحلة';
+
+  @override
+  String get rideNotFound => 'الرحلة غير موجودة';
+
+  @override
+  String get simulateDriverAllocated => 'محاكاة تعيين سائق';
+
+  @override
+  String get trackRide => 'تتبع الرحلة';
+
+  @override
+  String get confirmDelivery => 'تأكيد التسليم';
+
+  @override
+  String get deliveryAddress => 'عنوان التسليم';
+
+  @override
+  String get mada => 'مدى';
+
+  @override
+  String get petServiceCheckout => 'دفع خدمة الحيوان';
+
+  @override
+  String get serviceHistory => 'سجل الخدمات';
+
+  @override
+  String get filterAll => 'الكل';
+
+  @override
+  String get filterRides => 'الرحلات';
+
+  @override
+  String get filterServices => 'الخدمات';
+
+  @override
+  String get filterHousing => 'الإيواء';
+
+  @override
+  String get filterSupplies => 'المستلزمات';
+
+  @override
+  String get noHistoryYet => 'لا يوجد سجل بعد';
+
+  @override
+  String get statusCompleted => 'مكتمل';
+
+  @override
+  String get statusPending => 'قيد الانتظار';
+
+  @override
+  String get statusCancelled => 'ملغى';
+
+  @override
+  String get historyHomeGrooming => 'عناية منزلية';
+
+  @override
+  String get historyVetVisit => 'زيارة بيطرية منزلية';
+
+  @override
+  String get historyBoarding => 'إيواء 3 ليالٍ';
+
+  @override
+  String get historySupplies => 'مستلزمات العناية';
+
+  @override
+  String get adminDashboard => 'لوحة الإدارة';
+
+  @override
+  String get pendingRides => 'رحلات قيد الانتظار';
+
+  @override
+  String get pendingVerifications => 'تحققات قيد الانتظار';
+
+  @override
+  String get pendingDriverRequests => 'طلبات السائقين المعلّقة';
+
+  @override
+  String get noPendingRideRequests => 'لا توجد طلبات رحلات معلّقة.';
+
+  @override
+  String petLabel(String petId) {
+    return 'الحيوان: $petId';
+  }
+
+  @override
+  String rideFareLabel(String fare) {
+    return 'الأجرة: $fare';
+  }
+
+  @override
+  String get allocateDemoDriver => 'تعيين سائق تجريبي';
+
+  @override
+  String get mapsApiKeyMissing =>
+      'أضف GOOGLE_MAPS_API_KEY لتشغيل الخريطة.\nراجع README → إعداد خرائط Google.';
+
+  @override
+  String get phonePlaceholder => '5X XXX XXXX';
+
+  @override
+  String devOtp(String code) {
+    return 'رمز التطوير: $code';
+  }
+
+  @override
+  String get cityRiyadh => 'الرياض';
+
+  @override
+  String get cityJeddah => 'جدة';
+
+  @override
+  String get cityMecca => 'مكة';
+
+  @override
+  String get cityMedina => 'المدينة';
+
+  @override
+  String get cityDammam => 'الدمام';
+
+  @override
+  String get cityKhobar => 'الخبر';
+
+  @override
+  String get cityTabuk => 'تبوك';
+
+  @override
+  String get cityAbha => 'أبها';
+
+  @override
+  String get cityDubai => 'دبي، الإمارات';
+
+  @override
+  String get cityLahore => 'لاهور، باكستان';
+
+  @override
+  String get userFallback => 'مستخدم';
+
+  @override
+  String get listingNotFound => 'الإعلان غير موجود';
+
+  @override
+  String get thisPet => 'هذا الحيوان';
+
+  @override
+  String get petFallback => 'حيوان';
+
+  @override
+  String get uploadLicenseHint => 'ارفع رخصة القيادة / الهوية';
+
+  @override
+  String get rolePetOwner => 'مالك حيوان';
+
+  @override
+  String get roleSeller => 'بائع';
+
+  @override
+  String get roleProvider => 'مقدّم خدمة';
+
+  @override
+  String get roleHouser => 'مقدّم إيواء';
+
+  @override
+  String get roleClinic => 'عيادة';
+
+  @override
+  String get phoneRequired => 'رقم الهاتف مطلوب';
+
+  @override
+  String get phoneInvalid => 'أدخل رقم هاتف صالحاً (E.164)';
+
+  @override
+  String get passwordRequired => 'كلمة المرور مطلوبة';
+
+  @override
+  String passwordMinLength(int count) {
+    return 'يجب أن تكون كلمة المرور $count أحرف على الأقل';
+  }
+
+  @override
+  String get usernameRequired => 'اسم المستخدم مطلوب';
+
+  @override
+  String usernameLength(int min, int max) {
+    return 'يجب أن يكون اسم المستخدم بين $min و$max حرفاً';
+  }
+
+  @override
+  String fieldRequired(String field) {
+    return '$field مطلوب';
+  }
+
+  @override
+  String get passwordsDoNotMatch => 'كلمتا المرور غير متطابقتين';
 }

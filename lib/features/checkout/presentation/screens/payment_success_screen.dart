@@ -27,7 +27,7 @@ class PaymentSuccessScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 32),
             AppButton(
-              label: 'Home',
+              label: context.l10n.navHome,
               onPressed: () => context.go(RouteNames.home),
             ),
           ],

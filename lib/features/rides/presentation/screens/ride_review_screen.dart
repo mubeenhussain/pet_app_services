@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:pet_app/core/extensions/context_extensions.dart';
 import 'package:pet_app/core/router/route_names.dart';
 import 'package:pet_app/features/rides/presentation/providers/ride_controller.dart';
@@ -45,7 +46,7 @@ class _RideReviewScreenState extends ConsumerState<RideReviewScreen> {
         Marker(
           markerId: const MarkerId('pickup'),
           position: pickup,
-          infoWindow: const InfoWindow(title: 'Pickup'),
+          infoWindow: InfoWindow(title: context.l10n.pickupShort),
         ),
       );
       if (draft.destinationLat != null && draft.destinationLng != null) {
@@ -55,7 +56,7 @@ class _RideReviewScreenState extends ConsumerState<RideReviewScreen> {
           Marker(
             markerId: const MarkerId('destination'),
             position: destination,
-            infoWindow: const InfoWindow(title: 'Destination'),
+            infoWindow: InfoWindow(title: context.l10n.destinationShort),
           ),
         );
         polylines.add(
@@ -70,7 +71,7 @@ class _RideReviewScreenState extends ConsumerState<RideReviewScreen> {
     }
 
     return Scaffold(
-      appBar: AppTopBar(title: const Text('Route & fare')),
+      appBar: AppTopBar(title: Text(context.l10n.routeAndFare)),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
@@ -91,24 +92,36 @@ class _RideReviewScreenState extends ConsumerState<RideReviewScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('From: ${draft.pickup ?? '-'}'),
+                    Text(context.l10n.fromLabel(draft.pickup ?? '-')),
                     const SizedBox(height: 8),
-                    Text('To: ${draft.destination ?? '-'}'),
+                    Text(context.l10n.toLabel(draft.destination ?? '-')),
                     if (draft.distanceKm != null) ...[
                       const SizedBox(height: 8),
-                      Text('Distance: ${draft.distanceKm!.toStringAsFixed(1)} km'),
+                      Text(
+                        context.l10n.distanceKm(
+                          draft.distanceKm!.toStringAsFixed(1),
+                        ),
+                      ),
                     ],
                     const Divider(height: 24),
                     if (_loadingFare)
                       AppLoadingView(message: context.l10n.loading)
                     else
                       Text(
-                        'Estimated fare: SAR ${draft.fareAmount?.toStringAsFixed(2) ?? '--'}',
+                        context.l10n.estimatedFare(
+                          draft.fareAmount == null
+                              ? '--'
+                              : context.l10n.sarAmountFormatted(
+                                  NumberFormat(
+                                    '#,##0.00',
+                                  ).format(draft.fareAmount),
+                                ),
+                        ),
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                     const SizedBox(height: 8),
                     Text(
-                      'Fare from calculateFare Cloud Function (server authoritative).',
+                      context.l10n.fareFromServer,
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ],

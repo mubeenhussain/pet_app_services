@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pet_app/core/extensions/context_extensions.dart';
 import 'package:pet_app/core/router/route_names.dart';
 import 'package:pet_app/core/theme/app_colors.dart';
 import 'package:pet_app/features/auth/presentation/providers/auth_controller.dart';
@@ -14,7 +15,6 @@ class AppDrawer extends ConsumerWidget {
 
   static const _green = Color(0xFF17A855);
   static const _headerBg = Color(0xFFF3FAF5);
-  static const _iconColor = Color(0xFF1A1A2E);
 
   Future<void> _logout(BuildContext context, WidgetRef ref) async {
     Navigator.pop(context);
@@ -103,7 +103,7 @@ class AppDrawer extends ConsumerWidget {
                 children: [
                   _DrawerItem(
                     icon: Icons.person_outline,
-                    label: 'User Settings',
+                    label: context.l10n.userSettings,
                     onTap: () {
                       Navigator.pop(context);
                       context.push(RouteNames.profile);
@@ -111,7 +111,7 @@ class AppDrawer extends ConsumerWidget {
                   ),
                   _DrawerItem(
                     icon: Icons.pets_outlined,
-                    label: 'Your Pets',
+                    label: context.l10n.yourPets,
                     onTap: () {
                       Navigator.pop(context);
                       context.push(RouteNames.pets);
@@ -119,7 +119,7 @@ class AppDrawer extends ConsumerWidget {
                   ),
                   _DrawerItem(
                     icon: Icons.chat_bubble_outline,
-                    label: 'Messages',
+                    label: context.l10n.messages,
                     onTap: () {
                       Navigator.pop(context);
                       context.push(RouteNames.messages);
@@ -127,7 +127,7 @@ class AppDrawer extends ConsumerWidget {
                   ),
                   _DrawerItem(
                     icon: Icons.credit_card_outlined,
-                    label: 'Orders',
+                    label: context.l10n.orders,
                     onTap: () {
                       Navigator.pop(context);
                       context.push(RouteNames.orders);
@@ -135,7 +135,7 @@ class AppDrawer extends ConsumerWidget {
                   ),
                   _DrawerItem(
                     icon: Icons.shield_outlined,
-                    label: 'Account Type',
+                    label: context.l10n.accountType,
                     onTap: () {
                       Navigator.pop(context);
                       context.push(RouteNames.accountType);
@@ -143,7 +143,7 @@ class AppDrawer extends ConsumerWidget {
                   ),
                   _DrawerItem(
                     icon: Icons.credit_card_outlined,
-                    label: 'Payment Methods',
+                    label: context.l10n.paymentMethods,
                     onTap: () {
                       Navigator.pop(context);
                       context.push(RouteNames.ridePayment);
@@ -155,7 +155,7 @@ class AppDrawer extends ConsumerWidget {
             const Divider(height: 1, color: Color(0xFFE8EAEF)),
             _DrawerItem(
               icon: Icons.logout,
-              label: 'Logout',
+              label: context.l10n.logout,
               onTap: () => _logout(context, ref),
             ),
             const SizedBox(height: 8),

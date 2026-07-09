@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pet_app/core/extensions/context_extensions.dart';
+import 'package:pet_app/core/l10n/l10n_helpers.dart';
 import 'package:pet_app/core/theme/app_colors.dart';
 import 'package:pet_app/core/utils/validators.dart';
 import 'package:pet_app/features/pets/presentation/providers/pets_controller.dart';
@@ -12,7 +13,7 @@ import 'package:pet_app/shared/widgets/app_text_field.dart';
 import 'package:pet_app/shared/widgets/auth_circle_back_button.dart';
 import 'package:pet_app/shared/widgets/field_label.dart';
 
-const _speciesOptions = ['Dog', 'Cat', 'Bird', 'Other'];
+const _speciesOptions = ['dog', 'cat', 'bird', 'other'];
 
 /// BRD 6.10 — Add Pet (Figma)
 class AddPetScreen extends ConsumerStatefulWidget {
@@ -28,7 +29,7 @@ class _AddPetScreenState extends ConsumerState<AddPetScreen> {
   final _breedController = TextEditingController();
   final _ageController = TextEditingController(text: '1');
 
-  String _species = 'Dog';
+  String _species = 'dog';
   String _gender = 'male';
   var _saving = false;
 
@@ -49,7 +50,7 @@ class _AddPetScreenState extends ConsumerState<AddPetScreen> {
     final cached = ref.read(cachedUserProfileProvider).valueOrNull;
     final ownerId = user?.uid ?? cached?.uid;
     if (ownerId == null || ownerId.isEmpty) {
-      context.showAppSnackBar('Please sign in to save a pet', isError: true);
+      context.showAppSnackBar(context.l10n.signInToSavePet, isError: true);
       return;
     }
 
@@ -70,7 +71,7 @@ class _AddPetScreenState extends ConsumerState<AddPetScreen> {
     try {
       await ref.read(petsControllerProvider.notifier).create(pet);
       if (mounted) {
-        context.showAppSnackBar('Pet saved');
+        context.showAppSnackBar(context.l10n.petSaved);
         context.pop();
       }
     } catch (e) {
@@ -91,16 +92,16 @@ class _AddPetScreenState extends ConsumerState<AddPetScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            const Padding(
+            Padding(
               padding: EdgeInsets.fromLTRB(16, 12, 16, 0),
               child: Row(
                 children: [
-                  AuthCircleBackButton(),
+                  const AuthCircleBackButton(),
                   Expanded(
                     child: Text(
-                      'Add New Pet',
+                      context.l10n.addNewPet,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
                         color: AppColors.textPrimary,
@@ -123,14 +124,16 @@ class _AddPetScreenState extends ConsumerState<AddPetScreen> {
                       const SizedBox(height: 28),
                       AppTextField(
                         controller: _nameController,
-                        label: 'Name',
-                        hint: 'e.g. Buddy',
+                        label: context.l10n.name,
+                        hint: context.l10n.nameHintBuddy,
                         textInputAction: TextInputAction.next,
-                        validator: (v) =>
-                            Validators.requiredField(v, field: 'Name'),
+                        validator: Validators.requiredField(
+                          context.l10n,
+                          field: context.l10n.name,
+                        ),
                       ),
                       const SizedBox(height: 18),
-                      const FieldLabel(label: 'Species'),
+                      FieldLabel(label: context.l10n.species),
                       const SizedBox(height: 8),
                       Wrap(
                         spacing: 8,
@@ -138,7 +141,7 @@ class _AddPetScreenState extends ConsumerState<AddPetScreen> {
                         children: [
                           for (final option in _speciesOptions)
                             _SpeciesChip(
-                              label: option,
+                              label: context.l10n.speciesLabel(option),
                               selected: _species == option,
                               onTap: () => setState(() => _species = option),
                             ),
@@ -147,8 +150,8 @@ class _AddPetScreenState extends ConsumerState<AddPetScreen> {
                       const SizedBox(height: 18),
                       AppTextField(
                         controller: _breedController,
-                        label: 'Breed',
-                        hint: 'e.g. Golden Retriever',
+                        label: context.l10n.breed,
+                        hint: context.l10n.breedHintGoldenRetriever,
                         textInputAction: TextInputAction.next,
                       ),
                       const SizedBox(height: 18),
@@ -198,7 +201,7 @@ class _AddPhotoButton extends StatelessWidget {
           child: InkWell(
             customBorder: const CircleBorder(),
             onTap: () {
-              context.showAppSnackBar('Photo upload coming soon');
+              context.showAppSnackBar(context.l10n.photoUploadSoon);
             },
             child: SizedBox(
               width: 88,
@@ -220,9 +223,9 @@ class _AddPhotoButton extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 10),
-        const Text(
-          'Add Photo',
-          style: TextStyle(
+        Text(
+          context.l10n.addPhoto,
+          style: const TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.w400,
             color: AppColors.textSecondary,
@@ -281,7 +284,7 @@ class _AgeField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const FieldLabel(label: 'Age'),
+        FieldLabel(label: context.l10n.age),
         const SizedBox(height: 8),
         TextFormField(
           controller: controller,
@@ -289,11 +292,6 @@ class _AgeField extends StatelessWidget {
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           decoration: const InputDecoration(
             hintText: '1',
-            suffixText: 'yrs',
-            suffixStyle: TextStyle(
-              color: AppColors.textSecondary,
-              fontWeight: FontWeight.w500,
-            ),
           ),
         ),
       ],
@@ -318,7 +316,7 @@ class _GenderToggle extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const FieldLabel(label: 'Gender'),
+        FieldLabel(label: context.l10n.gender),
         const SizedBox(height: 8),
         Container(
           height: 48,
@@ -331,14 +329,14 @@ class _GenderToggle extends StatelessWidget {
             children: [
               Expanded(
                 child: _GenderSegment(
-                  label: 'Male',
+                  label: context.l10n.male,
                   selected: value == 'male',
                   onTap: () => onChanged('male'),
                 ),
               ),
               Expanded(
                 child: _GenderSegment(
-                  label: 'Female',
+                  label: context.l10n.female,
                   selected: value == 'female',
                   onTap: () => onChanged('female'),
                 ),
@@ -423,9 +421,9 @@ class _SavePetButton extends StatelessWidget {
                   color: Colors.white,
                 ),
               )
-            : const Text(
-                'Save Pet',
-                style: TextStyle(
+            : Text(
+                context.l10n.savePet,
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
                   color: Colors.white,

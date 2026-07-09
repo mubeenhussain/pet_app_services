@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 import 'package:pet_app/core/extensions/context_extensions.dart';
+import 'package:pet_app/core/l10n/l10n_helpers.dart';
 import 'package:pet_app/l10n/app_localizations.dart';
 import 'package:pet_app/core/router/route_names.dart';
 import 'package:pet_app/core/theme/app_colors.dart';
@@ -649,8 +649,6 @@ class _BuySellCard extends StatelessWidget {
   const _BuySellCard({required this.item});
 
   final _BuySellItem item;
-
-  static final _priceFormat = NumberFormat('#,###');
   // Figma: white card, light stroke, no shadow.
   static const _cardBorder = Color(0xFFDDEFE2);
   static const _cardBorderWidth = 0.8;
@@ -713,7 +711,7 @@ class _BuySellCard extends StatelessWidget {
           ),
           const SizedBox(height: _titlePriceGap),
           Text(
-            'SAR ${_priceFormat.format(item.priceSar)}',
+            context.l10n.sarAmount(item.priceSar),
             style: const TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w700,

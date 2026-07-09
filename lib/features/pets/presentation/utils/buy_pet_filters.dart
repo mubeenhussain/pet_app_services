@@ -24,14 +24,14 @@ class BuyPetFilterResult {
   final RangeValues priceRange;
 }
 
-const buyPetFilterCategories = {
-  'Dogs': 'dogs',
-  'Cats': 'cats',
-  'Birds': 'birds',
-  'Horses': 'horses',
-  'Camels': 'camels',
-  'Adoption': 'adoption',
-};
+const buyPetFilterCategories = [
+  'dogs',
+  'cats',
+  'birds',
+  'horses',
+  'camels',
+  'adoption',
+];
 
 const defaultBuyPetPriceRange = RangeValues(5000, 200000);
 

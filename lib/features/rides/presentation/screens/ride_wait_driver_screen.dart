@@ -31,7 +31,7 @@ class RideWaitDriverScreen extends ConsumerWidget {
             ),
             const Spacer(),
             AppButton(
-              label: 'Track ride',
+              label: context.l10n.trackRide,
               onPressed: () {
                 if (draft.rideId != null) {
                   context.push('/rides/status/${draft.rideId}');

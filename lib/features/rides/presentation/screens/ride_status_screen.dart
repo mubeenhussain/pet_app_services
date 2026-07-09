@@ -20,12 +20,12 @@ class RideStatusScreen extends ConsumerWidget {
     final rideAsync = ref.watch(_rideProvider(rideId));
 
     return Scaffold(
-      appBar: AppTopBar(title: const Text('Ride status')),
+      appBar: AppTopBar(title: Text(context.l10n.rideStatus)),
       body: rideAsync.when(
         loading: () => AppLoadingView(message: context.l10n.loading),
         error: (e, _) => Center(child: Text(e.toString())),
         data: (ride) {
-          if (ride == null) return const Center(child: Text('Ride not found'));
+          if (ride == null) return Center(child: Text(context.l10n.rideNotFound));
           return Padding(
             padding: const EdgeInsets.all(24),
             child: Column(
@@ -38,7 +38,7 @@ class RideStatusScreen extends ConsumerWidget {
                           ? Icons.check_circle
                           : Icons.radio_button_unchecked,
                     ),
-                    title: Text(status.label),
+                    title: Text(_statusLabel(context, status)),
                   ),
                 ),
                 const Spacer(),
@@ -52,6 +52,16 @@ class RideStatusScreen extends ConsumerWidget {
         },
       ),
     );
+  }
+
+  String _statusLabel(BuildContext context, RideStatus status) {
+    return switch (status) {
+      RideStatus.requested => context.l10n.statusPending,
+      RideStatus.driverAllocated => context.l10n.driverAllocated,
+      RideStatus.inProgress => context.l10n.statusPending,
+      RideStatus.delivered => context.l10n.statusCompleted,
+      RideStatus.cancelled => context.l10n.statusCancelled,
+    };
   }
 }
 

@@ -64,7 +64,7 @@ class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
               label: l10n.newPassword,
               obscureText: true,
               textInputAction: TextInputAction.next,
-              validator: Validators.password,
+              validator: Validators.password(context.l10n),
             ),
             const SizedBox(height: 12),
             PasswordStrengthMeter(password: _password),
@@ -74,8 +74,10 @@ class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
               label: l10n.confirmPassword,
               obscureText: true,
               textInputAction: TextInputAction.done,
-              validator: (v) =>
-                  Validators.confirmPassword(v, _passwordController.text),
+              validator: Validators.confirmPassword(
+                context.l10n,
+                _passwordController.text,
+              ),
               onSubmitted: (_) => _submit(),
             ),
             const SizedBox(height: 28),

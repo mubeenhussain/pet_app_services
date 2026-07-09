@@ -33,7 +33,7 @@ class RideSearchingScreen extends ConsumerWidget {
               onPressed: () => context.go(RouteNames.home),
             ),
             AppButton(
-              label: 'Simulate driver allocated',
+              label: context.l10n.simulateDriverAllocated,
               onPressed: () => context.push(RouteNames.rideWaitDriver),
             ),
           ],

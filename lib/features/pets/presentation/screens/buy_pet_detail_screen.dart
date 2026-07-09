@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
+import 'package:pet_app/core/extensions/context_extensions.dart';
+import 'package:pet_app/core/l10n/l10n_helpers.dart';
 import 'package:pet_app/core/theme/app_colors.dart';
 import 'package:pet_app/features/pets/presentation/models/buy_pet_listing.dart';
 import 'package:pet_app/features/pets/presentation/widgets/ask_about_pet_sheet.dart';
@@ -24,7 +25,6 @@ class _BuyPetDetailScreenState extends State<BuyPetDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final listing = widget.listing;
-    final priceFormat = NumberFormat('#,###');
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -110,7 +110,7 @@ class _BuyPetDetailScreenState extends State<BuyPetDetailScreen> {
                         ),
                         const SizedBox(height: 6),
                         Text(
-                          listing.breedAgeLabel,
+                          context.l10n.breedAgeLine(listing.breed, listing.ageYears),
                           style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
@@ -119,7 +119,7 @@ class _BuyPetDetailScreenState extends State<BuyPetDetailScreen> {
                         ),
                         const SizedBox(height: 16),
                         Text(
-                          'SAR ${priceFormat.format(listing.priceSar)}',
+                          context.l10n.sarAmount(listing.priceSar),
                           style: const TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.w700,
@@ -128,7 +128,7 @@ class _BuyPetDetailScreenState extends State<BuyPetDetailScreen> {
                         ),
                         const SizedBox(height: 24),
                         _LinkRow(
-                          label: 'Provider Details',
+                          label: context.l10n.providerDetails,
                           onTap: () {},
                         ),
                         const Divider(
@@ -137,7 +137,7 @@ class _BuyPetDetailScreenState extends State<BuyPetDetailScreen> {
                           color: Color(0xFFF0F2F5),
                         ),
                         _LinkRow(
-                          label: 'Flag Interest / Report',
+                          label: context.l10n.flagInterestReport,
                           labelColor: const Color(0xFFC62828),
                           onTap: () {},
                         ),
@@ -162,9 +162,9 @@ class _BuyPetDetailScreenState extends State<BuyPetDetailScreen> {
                                   borderRadius: BorderRadius.circular(14),
                                 ),
                               ),
-                              child: const Text(
-                                'Ask About Pet',
-                                style: TextStyle(
+                              child: Text(
+                                context.l10n.askAboutPet,
+                                style: const TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -182,9 +182,9 @@ class _BuyPetDetailScreenState extends State<BuyPetDetailScreen> {
                                   borderRadius: BorderRadius.circular(14),
                                 ),
                               ),
-                              child: const Text(
-                                'Buy Now',
-                                style: TextStyle(
+                              child: Text(
+                                context.l10n.buyNow,
+                                style: const TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -300,7 +300,7 @@ class _VerifiedBadge extends StatelessWidget {
         color: const Color(0xFFE8F7EE),
         borderRadius: BorderRadius.circular(20),
       ),
-      child: const Padding(
+      child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -308,8 +308,8 @@ class _VerifiedBadge extends StatelessWidget {
             Icon(Icons.verified_rounded, size: 14, color: _green),
             SizedBox(width: 4),
             Text(
-              'Verified',
-              style: TextStyle(
+              context.l10n.verified,
+              style: const TextStyle(
                 fontSize: 11,
                 fontWeight: FontWeight.w600,
                 color: _green,

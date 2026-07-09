@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
+import 'package:pet_app/core/extensions/context_extensions.dart';
 import 'package:pet_app/shared/enums/ride_status.dart';
 import 'package:pet_app/shared/models/ride_model.dart';
 import 'package:pet_app/shared/providers/app_providers.dart';
@@ -16,15 +18,16 @@ class PendingDriverRequestsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ridesAsync = ref.watch(_pendingRidesProvider);
+    final l10n = context.l10n;
 
     return Scaffold(
-      appBar: AppTopBar(title: const Text('Pending driver requests')),
+      appBar: AppTopBar(title: Text(l10n.pendingDriverRequests)),
       body: ridesAsync.when(
         loading: () => const AppLoadingView(),
         error: (e, _) => Center(child: Text(e.toString())),
         data: (rides) {
           if (rides.isEmpty) {
-            return const Center(child: Text('No pending ride requests.'));
+            return Center(child: Text(l10n.noPendingRideRequests));
           }
 
           return ListView.separated(
@@ -40,11 +43,21 @@ class PendingDriverRequestsScreen extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Text('${ride.pickup} → ${ride.destination}'),
-                      Text('Pet: ${ride.petId}'),
-                      Text('Fare: SAR ${ride.fareAmount ?? '--'}'),
+                      Text(l10n.petLabel(ride.petId)),
+                      Text(
+                        l10n.rideFareLabel(
+                          ride.fareAmount == null
+                              ? '--'
+                              : l10n.sarAmountFormatted(
+                                  NumberFormat(
+                                    '#,##0.00',
+                                  ).format(ride.fareAmount),
+                                ),
+                        ),
+                      ),
                       const SizedBox(height: 8),
                       AppButton(
-                        label: 'Allocate demo driver',
+                        label: l10n.allocateDemoDriver,
                         onPressed: () => _allocate(ref, ride.id),
                       ),
                     ],

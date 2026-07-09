@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
+import 'package:pet_app/core/extensions/context_extensions.dart';
+import 'package:pet_app/core/l10n/l10n_helpers.dart';
 import 'package:pet_app/core/router/route_names.dart';
 import 'package:pet_app/core/theme/app_colors.dart';
 import 'package:pet_app/features/pets/presentation/models/buy_pet_listing.dart';
@@ -55,7 +56,6 @@ class _BuyPetScreenState extends State<BuyPetScreen> {
   @override
   Widget build(BuildContext context) {
     final listings = _filtered;
-    final priceFormat = NumberFormat('#,###');
 
     return Scaffold(
       backgroundColor: _screenBg,
@@ -69,10 +69,10 @@ class _BuyPetScreenState extends State<BuyPetScreen> {
                 children: [
                   const AuthCircleBackButton(),
                   const SizedBox(width: 8),
-                  const Expanded(
+                  Expanded(
                     child: Text(
-                      'Buy a Pet',
-                      style: TextStyle(
+                      context.l10n.buyAPet,
+                      style: const TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.w700,
                         color: AppColors.textPrimary,
@@ -129,7 +129,6 @@ class _BuyPetScreenState extends State<BuyPetScreen> {
                       delegate: SliverChildBuilderDelegate(
                         (context, index) => _BuyPetCard(
                           listing: listings[index],
-                          priceFormat: priceFormat,
                         ),
                         childCount: listings.length,
                       ),
@@ -187,13 +186,13 @@ class _SearchField extends StatelessWidget {
             fontSize: 14,
             color: AppColors.textPrimary,
           ),
-          decoration: const InputDecoration(
-            hintText: 'Search breed, city...',
-            hintStyle: TextStyle(
+          decoration: InputDecoration(
+            hintText: context.l10n.searchBreedCity,
+            hintStyle: const TextStyle(
               fontSize: 14,
               color: AppColors.textSecondary,
             ),
-            prefixIcon: Icon(
+            prefixIcon: const Icon(
               Icons.search_rounded,
               size: 22,
               color: AppColors.textSecondary,
@@ -212,13 +211,9 @@ class _SearchField extends StatelessWidget {
 }
 
 class _BuyPetCard extends StatelessWidget {
-  const _BuyPetCard({
-    required this.listing,
-    required this.priceFormat,
-  });
+  const _BuyPetCard({required this.listing});
 
   final BuyPetListing listing;
-  final NumberFormat priceFormat;
 
   static const _cardBorder = Color(0xFFDDEFE2);
   static const _priceColor = Color(0xFF0F8A42);
@@ -290,7 +285,7 @@ class _BuyPetCard extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                'SAR ${priceFormat.format(listing.priceSar)}',
+                context.l10n.sarAmount(listing.priceSar),
                 style: const TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
@@ -346,7 +341,7 @@ class _VerifiedBadge extends StatelessWidget {
           ),
         ],
       ),
-      child: const Padding(
+      child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 6, vertical: 3),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -354,8 +349,8 @@ class _VerifiedBadge extends StatelessWidget {
             Icon(Icons.verified_rounded, size: 12, color: _green),
             SizedBox(width: 3),
             Text(
-              'Verified',
-              style: TextStyle(
+              context.l10n.verified,
+              style: const TextStyle(
                 fontSize: 10,
                 fontWeight: FontWeight.w600,
                 color: _green,
@@ -373,10 +368,10 @@ class _LoadingMoreFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SizedBox(
+        const SizedBox(
           width: 18,
           height: 18,
           child: CircularProgressIndicator(
@@ -384,10 +379,10 @@ class _LoadingMoreFooter extends StatelessWidget {
             color: AppColors.textSecondary,
           ),
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         Text(
-          'Loading more...',
-          style: TextStyle(
+          context.l10n.loadingMore,
+          style: const TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w500,
             color: AppColors.textSecondary,

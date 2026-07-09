@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pet_app/core/extensions/context_extensions.dart';
 import 'package:pet_app/core/theme/app_colors.dart';
 import 'package:pet_app/shared/widgets/auth_circle_back_button.dart';
 
@@ -55,18 +56,17 @@ class ChatThreadScreen extends StatelessWidget {
 
   final String conversationId;
 
-  _ConversationInfo get _info =>
-      _conversations[conversationId] ??
-      const _ConversationInfo(
-        name: 'Chat',
-        avatarColor: Color(0xFFE8EEF5),
-        initials: '?',
-        initialsColor: Color(0xFF3B82F6),
-      );
-
   @override
   Widget build(BuildContext context) {
-    final info = _info;
+    final l10n = context.l10n;
+    final info =
+        _conversations[conversationId] ??
+        _ConversationInfo(
+          name: l10n.chatTitle,
+          avatarColor: const Color(0xFFE8EEF5),
+          initials: '?',
+          initialsColor: const Color(0xFF3B82F6),
+        );
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -95,8 +95,8 @@ class ChatThreadScreen extends StatelessWidget {
                           ),
                         ),
                         if (info.activeNow)
-                          const Text(
-                            'Active now',
+                          Text(
+                            l10n.activeNow,
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
@@ -114,14 +114,18 @@ class ChatThreadScreen extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.symmetric(vertical: 10),
             color: const Color(0xFFE8F7EE),
-            child: const Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.shield_outlined, size: 14, color: Color(0xFF0F8A42)),
-                SizedBox(width: 6),
+                const Icon(
+                  Icons.shield_outlined,
+                  size: 14,
+                  color: Color(0xFF0F8A42),
+                ),
+                const SizedBox(width: 6),
                 Text(
-                  'This chat is monitored for safety',
-                  style: TextStyle(
+                  l10n.chatSafetyBanner,
+                  style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                     color: Color(0xFF0F8A42),
@@ -133,23 +137,23 @@ class ChatThreadScreen extends StatelessWidget {
           Expanded(
             child: ListView(
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
-              children: const [
+              children: [
                 _Bubble(
-                  text: 'Hi! Is the Persian kitten still available?',
+                  text: l10n.demoMsgKittenAvailable,
                   isMine: false,
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 _Bubble(
-                  text: 'Yes she is! Vaccinated and ready to go 🐱',
+                  text: l10n.demoMsgKittenReply,
                   isMine: true,
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 _Bubble(
-                  text: 'Perfect, thank you! Chat locked once we confirm 🔒',
+                  text: l10n.demoMsgKittenConfirm,
                   isMine: false,
                 ),
-                SizedBox(height: 16),
-                _WarningBanner(),
+                const SizedBox(height: 16),
+                const _WarningBanner(),
               ],
             ),
           ),
@@ -193,16 +197,16 @@ class ChatThreadScreen extends StatelessWidget {
                                 focusedErrorBorder: InputBorder.none,
                               ),
                             ),
-                            child: const TextField(
+                            child: TextField(
                               minLines: 1,
                               maxLines: 4,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 14,
                                 color: AppColors.textPrimary,
                               ),
                               decoration: InputDecoration(
-                                hintText: 'Type a message...',
-                                hintStyle: TextStyle(
+                                hintText: l10n.typeMessage,
+                                hintStyle: const TextStyle(
                                   fontSize: 14,
                                   color: AppColors.textSecondary,
                                 ),
@@ -367,14 +371,18 @@ class _WarningBanner extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         border: Border.all(color: const Color(0xFFF5C2C2)),
       ),
-      child: const Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.warning_amber_rounded, size: 16, color: Color(0xFFC62828)),
-          SizedBox(width: 6),
+          const Icon(
+            Icons.warning_amber_rounded,
+            size: 16,
+            color: Color(0xFFC62828),
+          ),
+          const SizedBox(width: 6),
           Text(
-            'Message contains contact info',
-            style: TextStyle(
+            context.l10n.contactInfoWarning,
+            style: const TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
               color: Color(0xFFC62828),

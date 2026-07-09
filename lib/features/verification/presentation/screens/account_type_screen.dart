@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pet_app/core/extensions/context_extensions.dart';
+import 'package:pet_app/core/l10n/l10n_helpers.dart';
 import 'package:pet_app/core/router/route_names.dart';
 import 'package:pet_app/shared/enums/user_role.dart';
 import 'package:pet_app/shared/widgets/app_top_bar.dart';
@@ -24,7 +25,7 @@ class AccountTypeScreen extends ConsumerWidget {
             UserRole.clinic,
           ])
             ListTile(
-              title: Text(role.value),
+              title: Text(context.l10n.userRoleLabel(role)),
               trailing: role.needsVerification
                   ? const Icon(Icons.verified_user_outlined)
                   : null,

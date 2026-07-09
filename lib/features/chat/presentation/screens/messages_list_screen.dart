@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pet_app/core/extensions/context_extensions.dart';
 import 'package:pet_app/core/router/route_names.dart';
 import 'package:pet_app/core/theme/app_colors.dart';
 import 'package:pet_app/shared/widgets/auth_circle_back_button.dart';
@@ -8,8 +9,6 @@ class _ChatPreview {
   const _ChatPreview({
     required this.id,
     required this.name,
-    required this.preview,
-    required this.time,
     required this.avatarColor,
     this.initials,
     this.initialsColor,
@@ -19,8 +18,6 @@ class _ChatPreview {
 
   final String id;
   final String name;
-  final String preview;
-  final String time;
   final Color avatarColor;
   final String? initials;
   final Color? initialsColor;
@@ -35,8 +32,6 @@ const _chats = [
   _ChatPreview(
     id: 'hassan',
     name: 'Hassan Khan',
-    preview: 'Is the Persian still avai…',
-    time: '2m',
     initials: 'HK',
     avatarColor: Color(0xFF17A855),
     initialsColor: Colors.white,
@@ -45,16 +40,12 @@ const _chats = [
   _ChatPreview(
     id: 'farm-stables',
     name: 'Farm Stables Co.',
-    preview: 'We can deliver it Satur…',
-    time: '3h',
     iconAsset: 'assets/icons/pets/🐶.png',
     avatarColor: Color(0xFFFFF4EC),
   ),
   _ChatPreview(
     id: 'mariam',
     name: 'Mariam S.',
-    preview: 'Thank you! See you S…',
-    time: 'Yesterday',
     initials: 'MS',
     avatarColor: Color(0xFFD9ECFF),
     initialsColor: Color(0xFF3B82F6),
@@ -62,8 +53,6 @@ const _chats = [
   _ChatPreview(
     id: 'birds-more',
     name: 'Birds & More',
-    preview: 'New arrivals this Frid…',
-    time: 'Mon',
     iconAsset: 'assets/icons/pets/🐦.png',
     avatarColor: Color(0xFFE8EEF5),
   ),
@@ -75,6 +64,28 @@ class MessagesListScreen extends StatelessWidget {
 
   static const _cardRadius = 20.0;
 
+  String _previewFor(BuildContext context, String id) {
+    final l10n = context.l10n;
+    return switch (id) {
+      'hassan' => l10n.previewPersianAvailable,
+      'farm-stables' => l10n.previewDeliverSaturday,
+      'mariam' => l10n.previewThankYouSaturday,
+      'birds-more' => l10n.previewNewArrivalsFriday,
+      _ => '',
+    };
+  }
+
+  String _timeFor(BuildContext context, String id) {
+    final l10n = context.l10n;
+    return switch (id) {
+      'hassan' => '2m',
+      'farm-stables' => '3h',
+      'mariam' => l10n.timeYesterday,
+      'birds-more' => l10n.timeMonday,
+      _ => '',
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,23 +93,23 @@ class MessagesListScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            const Padding(
+            Padding(
               padding: EdgeInsets.fromLTRB(16, 12, 16, 0),
               child: Row(
                 children: [
-                  AuthCircleBackButton(),
+                  const AuthCircleBackButton(),
                   Expanded(
                     child: Text(
-                      'Messages',
+                      context.l10n.messages,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
                         color: AppColors.textPrimary,
                       ),
                     ),
                   ),
-                  SizedBox(width: 40),
+                  const SizedBox(width: 40),
                 ],
               ),
             ),
@@ -156,7 +167,7 @@ class MessagesListScreen extends StatelessWidget {
                                       ),
                                       const SizedBox(height: 4),
                                       Text(
-                                        chat.preview,
+                                        _previewFor(context, chat.id),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: const TextStyle(
@@ -172,7 +183,7 @@ class MessagesListScreen extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     Text(
-                                      chat.time,
+                                      _timeFor(context, chat.id),
                                       style: const TextStyle(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w500,

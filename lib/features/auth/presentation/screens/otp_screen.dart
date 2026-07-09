@@ -132,7 +132,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
           if (AppConfig.instance.useFakeOtp) ...[
             const SizedBox(height: 8),
             Text(
-              'Dev OTP: ${AppConstants.fakeOtpCode}',
+              l10n.devOtp(AppConstants.fakeOtpCode),
               style: context.textTheme.bodySmall?.copyWith(
                 color: context.colorScheme.primary,
                 fontWeight: FontWeight.w600,

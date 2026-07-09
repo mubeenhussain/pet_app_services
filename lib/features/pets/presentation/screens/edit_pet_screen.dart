@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pet_app/core/extensions/context_extensions.dart';
+import 'package:pet_app/core/l10n/l10n_helpers.dart';
 import 'package:pet_app/core/theme/app_colors.dart';
 import 'package:pet_app/core/utils/validators.dart';
 import 'package:pet_app/features/pets/presentation/providers/demo_pets.dart';
@@ -14,7 +15,7 @@ import 'package:pet_app/shared/widgets/app_text_field.dart';
 import 'package:pet_app/shared/widgets/auth_circle_back_button.dart';
 import 'package:pet_app/shared/widgets/field_label.dart';
 
-const _speciesOptions = ['Dog', 'Cat', 'Bird', 'Other'];
+const _speciesOptions = ['dog', 'cat', 'bird', 'other'];
 
 /// BRD 6.11 — Edit Pet Info (Figma)
 class EditPetScreen extends ConsumerStatefulWidget {
@@ -33,7 +34,7 @@ class _EditPetScreenState extends ConsumerState<EditPetScreen> {
   final _ageController = TextEditingController();
 
   PetModel? _pet;
-  String _species = 'Dog';
+  String _species = 'dog';
   String _gender = 'male';
   var _loading = true;
   var _saving = false;
@@ -110,13 +111,13 @@ class _EditPetScreenState extends ConsumerState<EditPetScreen> {
 
   String _normalizeSpecies(String raw) {
     final t = raw.trim().toLowerCase();
-    if (t.contains('cat')) return 'Cat';
-    if (t.contains('bird') || t.contains('parrot')) return 'Bird';
-    if (t.contains('dog')) return 'Dog';
+    if (t.contains('cat')) return 'cat';
+    if (t.contains('bird') || t.contains('parrot')) return 'bird';
+    if (t.contains('dog')) return 'dog';
     if (_speciesOptions.map((e) => e.toLowerCase()).contains(t)) {
-      return t[0].toUpperCase() + t.substring(1);
+      return t;
     }
-    return 'Other';
+    return 'other';
   }
 
   String _emojiForSpecies(String species) {
@@ -155,7 +156,7 @@ class _EditPetScreenState extends ConsumerState<EditPetScreen> {
         await ref.read(petsControllerProvider.notifier).update(updated);
       }
       if (mounted) {
-        context.showAppSnackBar('Pet updated');
+        context.showAppSnackBar(context.l10n.petUpdated);
         context.pop();
       }
     } catch (e) {
@@ -169,17 +170,19 @@ class _EditPetScreenState extends ConsumerState<EditPetScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Delete Pet'),
-        content: Text('Remove ${_pet?.name ?? 'this pet'}?'),
+        title: Text(context.l10n.deletePet),
+        content: Text(
+          context.l10n.deletePetConfirm(_pet?.name ?? context.l10n.thisPet),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(context.l10n.cancel),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
             style: TextButton.styleFrom(foregroundColor: _deleteRed),
-            child: const Text('Delete'),
+            child: Text(context.l10n.delete),
           ),
         ],
       ),
@@ -199,7 +202,7 @@ class _EditPetScreenState extends ConsumerState<EditPetScreen> {
         await ref.read(petsControllerProvider.notifier).delete(widget.petId);
       }
       if (mounted) {
-        context.showAppSnackBar('Pet deleted');
+        context.showAppSnackBar(context.l10n.petDeleted);
         context.pop();
       }
     } catch (e) {
@@ -212,9 +215,9 @@ class _EditPetScreenState extends ConsumerState<EditPetScreen> {
   @override
   Widget build(BuildContext context) {
     if (_loading) {
-      return const Scaffold(
+      return Scaffold(
         backgroundColor: Color(0xFFF8F9FB),
-        body: AppLoadingView(message: 'Loading...'),
+        body: AppLoadingView(message: context.l10n.loading),
       );
     }
 
@@ -224,16 +227,16 @@ class _EditPetScreenState extends ConsumerState<EditPetScreen> {
         body: SafeArea(
           child: Column(
             children: [
-              const Padding(
+              Padding(
                 padding: EdgeInsets.fromLTRB(16, 12, 16, 0),
                 child: Row(
                   children: [
-                    AuthCircleBackButton(),
+                    const AuthCircleBackButton(),
                     Expanded(
                       child: Text(
-                        'Edit Pet',
+                        context.l10n.editPet,
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w700,
                         ),
@@ -243,8 +246,8 @@ class _EditPetScreenState extends ConsumerState<EditPetScreen> {
                   ],
                 ),
               ),
-              const Expanded(
-                child: Center(child: Text('Pet not found')),
+              Expanded(
+                child: Center(child: Text(context.l10n.petNotFound)),
               ),
             ],
           ),
@@ -268,7 +271,7 @@ class _EditPetScreenState extends ConsumerState<EditPetScreen> {
                   const AuthCircleBackButton(),
                   Expanded(
                     child: Text(
-                      'Edit $titleName',
+                      context.l10n.editPetName(titleName),
                       textAlign: TextAlign.center,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -313,9 +316,9 @@ class _EditPetScreenState extends ConsumerState<EditPetScreen> {
                               ),
                             ),
                             const SizedBox(height: 10),
-                            const Text(
-                              'Tap to change photo',
-                              style: TextStyle(
+                            Text(
+                              context.l10n.tapChangePhoto,
+                              style: const TextStyle(
                                 fontSize: 13,
                                 color: AppColors.textSecondary,
                               ),
@@ -326,13 +329,15 @@ class _EditPetScreenState extends ConsumerState<EditPetScreen> {
                       const SizedBox(height: 28),
                       AppTextField(
                         controller: _nameController,
-                        label: 'Name',
+                        label: context.l10n.name,
                         textInputAction: TextInputAction.next,
-                        validator: (v) =>
-                            Validators.requiredField(v, field: 'Name'),
+                        validator: Validators.requiredField(
+                          context.l10n,
+                          field: context.l10n.name,
+                        ),
                       ),
                       const SizedBox(height: 18),
-                      const FieldLabel(label: 'Species'),
+                      FieldLabel(label: context.l10n.species),
                       const SizedBox(height: 8),
                       Wrap(
                         spacing: 8,
@@ -340,7 +345,7 @@ class _EditPetScreenState extends ConsumerState<EditPetScreen> {
                         children: [
                           for (final option in _speciesOptions)
                             _SpeciesChip(
-                              label: option,
+                              label: context.l10n.speciesLabel(option),
                               selected: _species == option,
                               onTap: () => setState(() => _species = option),
                             ),
@@ -349,7 +354,7 @@ class _EditPetScreenState extends ConsumerState<EditPetScreen> {
                       const SizedBox(height: 18),
                       AppTextField(
                         controller: _breedController,
-                        label: 'Breed',
+                        label: context.l10n.breed,
                         textInputAction: TextInputAction.next,
                       ),
                       const SizedBox(height: 18),
@@ -384,9 +389,9 @@ class _EditPetScreenState extends ConsumerState<EditPetScreen> {
                               color: _deleteRed,
                               size: 18,
                             ),
-                            label: const Text(
-                              'Delete Pet',
-                              style: TextStyle(
+                            label: Text(
+                              context.l10n.deletePet,
+                              style: const TextStyle(
                                 color: _deleteRed,
                                 fontWeight: FontWeight.w600,
                                 fontSize: 14,
@@ -455,7 +460,7 @@ class _AgeField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const FieldLabel(label: 'Age'),
+        FieldLabel(label: context.l10n.age),
         const SizedBox(height: 8),
         TextFormField(
           controller: controller,
@@ -463,11 +468,6 @@ class _AgeField extends StatelessWidget {
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           decoration: const InputDecoration(
             hintText: '1',
-            suffixText: 'yrs',
-            suffixStyle: TextStyle(
-              color: AppColors.textSecondary,
-              fontWeight: FontWeight.w500,
-            ),
           ),
         ),
       ],
@@ -492,7 +492,7 @@ class _GenderToggle extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const FieldLabel(label: 'Gender'),
+        FieldLabel(label: context.l10n.gender),
         const SizedBox(height: 8),
         Container(
           height: 48,
@@ -505,14 +505,14 @@ class _GenderToggle extends StatelessWidget {
             children: [
               Expanded(
                 child: _GenderSegment(
-                  label: 'Male',
+                  label: context.l10n.male,
                   selected: value == 'male',
                   onTap: () => onChanged('male'),
                 ),
               ),
               Expanded(
                 child: _GenderSegment(
-                  label: 'Female',
+                  label: context.l10n.female,
                   selected: value == 'female',
                   onTap: () => onChanged('female'),
                 ),
@@ -596,9 +596,9 @@ class _SavePetButton extends StatelessWidget {
                   color: Colors.white,
                 ),
               )
-            : const Text(
-                'Save Pet',
-                style: TextStyle(
+            : Text(
+                context.l10n.savePet,
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
                   color: Colors.white,

@@ -46,8 +46,8 @@ class RidePaymentScreen extends ConsumerWidget {
           children: [
             ListTile(
               leading: const Icon(Icons.credit_card),
-              title: const Text('Mada / Card'),
-              subtitle: const Text('Default payment method'),
+              title: Text(context.l10n.madaCard),
+              subtitle: Text(context.l10n.defaultPaymentMethod),
               trailing: Icon(Icons.check_circle, color: context.colors.success),
             ),
             const Spacer(),

@@ -25,12 +25,12 @@ class DocumentUploadScreen extends ConsumerWidget {
                 border: Border.all(color: Theme.of(context).dividerColor),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const Column(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.upload_file, size: 40),
-                  SizedBox(height: 8),
-                  Text('Upload license / ID documents'),
+                  const Icon(Icons.upload_file, size: 40),
+                  const SizedBox(height: 8),
+                  Text(context.l10n.uploadLicenseHint),
                 ],
               ),
             ),

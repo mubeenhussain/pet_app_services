@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pet_app/core/extensions/context_extensions.dart';
+import 'package:pet_app/core/l10n/l10n_helpers.dart';
 import 'package:pet_app/core/router/route_names.dart';
 import 'package:pet_app/core/theme/app_colors.dart';
 import 'package:pet_app/features/pets/presentation/providers/demo_pets.dart';
@@ -26,7 +28,7 @@ class PetsListScreen extends ConsumerWidget {
             const _MyPetsHeader(),
             Expanded(
               child: petsAsync.when(
-                loading: () => const AppLoadingView(message: 'Loading...'),
+                loading: () => AppLoadingView(message: context.l10n.loading),
                 error: (_, __) => _PetsGrid(pets: demoPets),
                 data: (pets) => _PetsGrid(
                   pets: pets.isEmpty ? demoPets : pets,
@@ -52,11 +54,11 @@ class _MyPetsHeader extends StatelessWidget {
       child: Row(
         children: [
           const AuthCircleBackButton(),
-          const Expanded(
+          Expanded(
             child: Text(
-              'My Pets',
+              context.l10n.myPets,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
                 color: AppColors.textPrimary,
@@ -140,9 +142,10 @@ class _PetCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final style = _PetVisuals.fromSpecies(pet.species);
+    final l10n = context.l10n;
     final subtitle = pet.age == null
-        ? _titleCase(pet.species)
-        : '${_titleCase(pet.species)} · ${pet.age} ${pet.age == 1 ? 'yr' : 'yrs'}';
+        ? l10n.speciesLabel(pet.species)
+        : '${l10n.speciesLabel(pet.species)} · ${l10n.ageLabel(pet.age)}';
 
     return Material(
       color: Colors.transparent,
@@ -212,11 +215,6 @@ class _PetCard extends StatelessWidget {
     );
   }
 
-  static String _titleCase(String value) {
-    final t = value.trim();
-    if (t.isEmpty) return 'Pet';
-    return t[0].toUpperCase() + t.substring(1).toLowerCase();
-  }
 }
 
 class _AddNewPetCard extends StatelessWidget {
@@ -252,7 +250,7 @@ class _AddNewPetCard extends StatelessWidget {
               strokeWidth: 1.5,
               radius: _radius,
             ),
-            child: const Center(
+            child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -272,8 +270,8 @@ class _AddNewPetCard extends StatelessWidget {
                   ),
                   SizedBox(height: 10),
                   Text(
-                    'Add New Pet',
-                    style: TextStyle(
+                    context.l10n.addNewPet,
+                    style: const TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w700,
                       color: _green,

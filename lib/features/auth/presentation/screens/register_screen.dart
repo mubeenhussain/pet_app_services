@@ -16,16 +16,19 @@ import 'package:pet_app/shared/widgets/auth_shell.dart';
 import 'package:pet_app/shared/widgets/phone_field.dart';
 
 /// Saudi cities offered in the optional city/address selector.
-const _cities = [
-  'Riyadh',
-  'Jeddah',
-  'Mecca',
-  'Medina',
-  'Dammam',
-  'Khobar',
-  'Tabuk',
-  'Abha',
-];
+List<String> _cities(BuildContext context) {
+  final l10n = context.l10n;
+  return [
+    l10n.cityRiyadh,
+    l10n.cityJeddah,
+    l10n.cityMecca,
+    l10n.cityMedina,
+    l10n.cityDammam,
+    l10n.cityKhobar,
+    l10n.cityTabuk,
+    l10n.cityAbha,
+  ];
+}
 
 /// BRD 6.4 — Register Page (phone + password, then OTP verify)
 class RegisterScreen extends ConsumerStatefulWidget {
@@ -117,14 +120,14 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
               hint: l10n.usernameExample,
               prefixIcon: const Icon(Icons.person_outline),
               textInputAction: TextInputAction.next,
-              validator: Validators.username,
+              validator: Validators.username(l10n),
             ),
             const SizedBox(height: 18),
             PhoneField(
               controller: _phoneController,
               label: l10n.phoneHint,
               hint: l10n.phoneExample,
-              validator: Validators.phone,
+              validator: Validators.phone(l10n),
             ),
             const SizedBox(height: 18),
             AppTextField(
@@ -133,7 +136,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
               hint: l10n.passwordMinHint,
               helperText: l10n.passwordHelper,
               obscureText: true,
-              validator: Validators.password,
+              validator: Validators.password(l10n),
             ),
             const SizedBox(height: 18),
             AppSelectField<String>(
@@ -141,7 +144,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
               optionalLabel: true,
               hint: l10n.selectCity,
               value: _selectedCity,
-              items: _cities,
+              items: _cities(context),
               itemLabel: (city) => city,
               onChanged: (city) => setState(() => _selectedCity = city),
             ),

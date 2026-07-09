@@ -137,5 +137,267 @@
   "tabServicesTitle": "Services",
   "tabServicesSubtitle": "Browse pet services",
   "tabRescueTitle": "Rescue",
-  "tabRescueSubtitle": "Emergency rescue — coming soon"
+  "tabRescueSubtitle": "Emergency rescue — coming soon",
+  "retry": "Retry",
+  "name": "Name",
+  "phone": "Phone",
+  "email": "Email",
+  "verified": "Verified",
+  "reset": "Reset",
+  "apply": "Apply",
+  "filters": "Filters",
+  "category": "Category",
+  "priceRange": "Price Range",
+  "applyWithCount": "Apply ({count} results)",
+  "@applyWithCount": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "sarAmountFormatted": "SAR {amount}",
+  "@sarAmountFormatted": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "ageYear": "{count} yr",
+  "@ageYear": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "ageYears": "{count} yrs",
+  "@ageYears": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "male": "Male",
+  "female": "Female",
+  "gender": "Gender",
+  "paymentMethods": "Payment Methods",
+  "messages": "Messages",
+  "profile": "Profile",
+  "editProfile": "Edit Profile",
+  "memberSince": "Member since {year}",
+  "@memberSince": {
+    "placeholders": {
+      "year": {"type": "int"}
+    }
+  },
+  "labelPhone": "PHONE",
+  "labelCity": "CITY",
+  "labelEmail": "EMAIL",
+  "saveChanges": "Save Changes",
+  "photoUpdateSoon": "Photo update coming soon",
+  "tapChangePhoto": "Tap to change photo",
+  "signInToSavePet": "Please sign in to save a pet",
+  "petSaved": "Pet saved",
+  "petUpdated": "Pet updated",
+  "petDeleted": "Pet deleted",
+  "addNewPet": "Add New Pet",
+  "editPet": "Edit Pet",
+  "savePet": "Save Pet",
+  "myPets": "My Pets",
+  "nameHintBuddy": "e.g. Buddy",
+  "breedHintGoldenRetriever": "e.g. Golden Retriever",
+  "speciesDog": "Dog",
+  "speciesCat": "Cat",
+  "speciesBird": "Bird",
+  "speciesOther": "Other",
+  "photoUploadSoon": "Photo upload coming soon",
+  "addPhoto": "Add Photo",
+  "deletePet": "Delete Pet",
+  "deletePetConfirm": "Remove {name}?",
+  "@deletePetConfirm": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "petNotFound": "Pet not found",
+  "editPetName": "Edit {name}",
+  "@editPetName": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "buyAPet": "Buy a Pet",
+  "searchBreedCity": "Search breed, city...",
+  "loadingMore": "Loading more...",
+  "providerDetails": "Provider Details",
+  "flagInterestReport": "Flag Interest / Report",
+  "askAboutPet": "Ask About Pet",
+  "buyNow": "Buy Now",
+  "askAbout": "Ask about {name}",
+  "@askAbout": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "yourMessage": "YOUR MESSAGE",
+  "sendMessage": "Send Message",
+  "askDefaultMessage": "Hi, I'm interested in {name} — is {name} still available?",
+  "@askDefaultMessage": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "breedPriceLine": "{breed} · {price}",
+  "@breedPriceLine": {
+    "placeholders": {
+      "breed": {"type": "String"},
+      "price": {"type": "String"}
+    }
+  },
+  "categoryDogs": "Dogs",
+  "categoryCats": "Cats",
+  "categoryBirds": "Birds",
+  "categoryHorses": "Horses",
+  "categoryCamels": "Camels",
+  "categoryAdoption": "Adoption",
+  "chatTitle": "Chat",
+  "activeNow": "Active now",
+  "chatSafetyBanner": "This chat is monitored for safety",
+  "typeMessage": "Type a message...",
+  "contactInfoWarning": "Message contains contact info",
+  "demoMsgKittenAvailable": "Hi! Is the Persian kitten still available?",
+  "demoMsgKittenReply": "Yes she is! Vaccinated and ready to go 🐱",
+  "demoMsgKittenConfirm": "Perfect, thank you! Chat locked once we confirm 🔒",
+  "previewPersianAvailable": "Is the Persian still avai…",
+  "previewDeliverSaturday": "We can deliver it Satur…",
+  "previewThankYouSaturday": "Thank you! See you S…",
+  "previewNewArrivalsFriday": "New arrivals this Frid…",
+  "timeYesterday": "Yesterday",
+  "timeMonday": "Mon",
+  "currentLocation": "Current location",
+  "selectedDestination": "Selected destination",
+  "selectPickupDestPet": "Select pickup, destination, and a pet.",
+  "pickupShort": "Pickup",
+  "destinationShort": "Destination",
+  "setPickup": "Set pickup",
+  "setDestination": "Set destination",
+  "choosePet": "Choose pet",
+  "couldNotLoadPets": "Could not load pets",
+  "anyCar": "Any car",
+  "specificCar": "Specific",
+  "routeAndFare": "Route & fare",
+  "fromLabel": "From: {location}",
+  "@fromLabel": {
+    "placeholders": {
+      "location": {"type": "String"}
+    }
+  },
+  "toLabel": "To: {location}",
+  "@toLabel": {
+    "placeholders": {
+      "location": {"type": "String"}
+    }
+  },
+  "distanceKm": "Distance: {km} km",
+  "@distanceKm": {
+    "placeholders": {
+      "km": {"type": "String"}
+    }
+  },
+  "estimatedFare": "Estimated fare: {fare}",
+  "@estimatedFare": {
+    "placeholders": {
+      "fare": {"type": "String"}
+    }
+  },
+  "fareFromServer": "Fare from calculateFare Cloud Function (server authoritative).",
+  "madaCard": "Mada / Card",
+  "defaultPaymentMethod": "Default payment method",
+  "rideStatus": "Ride status",
+  "rideNotFound": "Ride not found",
+  "simulateDriverAllocated": "Simulate driver allocated",
+  "trackRide": "Track ride",
+  "confirmDelivery": "Confirm delivery",
+  "deliveryAddress": "Delivery address",
+  "mada": "Mada",
+  "petServiceCheckout": "Pet service checkout",
+  "serviceHistory": "Service History",
+  "filterAll": "All",
+  "filterRides": "Rides",
+  "filterServices": "Services",
+  "filterHousing": "Housing",
+  "filterSupplies": "Supplies",
+  "noHistoryYet": "No history yet",
+  "statusCompleted": "Completed",
+  "statusPending": "Pending",
+  "statusCancelled": "Cancelled",
+  "historyHomeGrooming": "Home Grooming",
+  "historyVetVisit": "Vet Home Visit",
+  "historyBoarding": "Pet Boarding 3 nights",
+  "historySupplies": "Grooming Kit Supplies",
+  "adminDashboard": "Admin Dashboard",
+  "pendingRides": "Pending rides",
+  "pendingVerifications": "Pending verifications",
+  "pendingDriverRequests": "Pending driver requests",
+  "noPendingRideRequests": "No pending ride requests.",
+  "petLabel": "Pet: {petId}",
+  "@petLabel": {
+    "placeholders": {
+      "petId": {"type": "String"}
+    }
+  },
+  "rideFareLabel": "Fare: {fare}",
+  "@rideFareLabel": {
+    "placeholders": {
+      "fare": {"type": "String"}
+    }
+  },
+  "allocateDemoDriver": "Allocate demo driver",
+  "mapsApiKeyMissing": "Add GOOGLE_MAPS_API_KEY to run the map.\nSee README → Google Maps setup.",
+  "phonePlaceholder": "5X XXX XXXX",
+  "devOtp": "Dev OTP: {code}",
+  "@devOtp": {
+    "placeholders": {
+      "code": {"type": "String"}
+    }
+  },
+  "cityRiyadh": "Riyadh",
+  "cityJeddah": "Jeddah",
+  "cityMecca": "Mecca",
+  "cityMedina": "Medina",
+  "cityDammam": "Dammam",
+  "cityKhobar": "Khobar",
+  "cityTabuk": "Tabuk",
+  "cityAbha": "Abha",
+  "cityDubai": "Dubai, UAE",
+  "cityLahore": "Lahore, Pakistan",
+  "userFallback": "User",
+  "listingNotFound": "Listing not found",
+  "thisPet": "this pet",
+  "petFallback": "Pet",
+  "uploadLicenseHint": "Upload license / ID documents",
+  "rolePetOwner": "Pet Owner",
+  "roleSeller": "Seller",
+  "roleProvider": "Service Provider",
+  "roleHouser": "Boarding Provider",
+  "roleClinic": "Clinic",
+  "phoneRequired": "Phone number is required",
+  "phoneInvalid": "Enter a valid phone number (E.164)",
+  "passwordRequired": "Password is required",
+  "passwordMinLength": "Password must be at least {count} characters",
+  "@passwordMinLength": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "usernameRequired": "Username is required",
+  "usernameLength": "Username must be {min}-{max} characters",
+  "@usernameLength": {
+    "placeholders": {
+      "min": {"type": "int"},
+      "max": {"type": "int"}
+    }
+  },
+  "fieldRequired": "{field} is required",
+  "@fieldRequired": {
+    "placeholders": {
+      "field": {"type": "String"}
+    }
+  },
+  "passwordsDoNotMatch": "Passwords do not match"
 }
