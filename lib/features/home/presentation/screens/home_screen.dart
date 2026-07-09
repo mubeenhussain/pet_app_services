@@ -94,7 +94,7 @@ class _HomeTab extends StatelessWidget {
   static const _screenHorizontalPadding = 16.0;
   static const _sectionTitleGap = 16.0;
   static const _sectionGap = 32.0;
-  static const _serviceGridSpacing = 12.0;
+  static const _serviceGridSpacing = 20.0;
   static const _serviceCardBorder = Color(0xFFDDEFE2);
   static const _serviceCardBorderWidth = 0.8;
   static const _serviceCardHeight = 111.0; // Figma outer card height
@@ -619,24 +619,29 @@ class _BuySellCard extends StatelessWidget {
   final _BuySellItem item;
 
   static final _priceFormat = NumberFormat('#,###');
+  // Figma: white card, light stroke, no shadow.
+  static const _cardBorder = Color(0xFFDDEFE2);
+  static const _cardBorderWidth = 0.8;
+  static const _cardRadius = 24.0;
+  static const _imageRadius = 20.0;
+  static const _cardPadding = 12.0;
+  static const _imageTextGap = 8.0;
+  static const _titlePriceGap = 4.0;
+  static const _priceColor = Color(0xFF0F8A42);
 
   @override
   Widget build(BuildContext context) {
-    // Figma: white card · large gradient media · name + green price below.
     return Container(
       width: 148,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        borderRadius: BorderRadius.circular(_cardRadius),
+        border: Border.all(
+          color: _cardBorder,
+          width: _cardBorderWidth,
+        ),
       ),
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(_cardPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -644,7 +649,7 @@ class _BuySellCard extends StatelessWidget {
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(_imageRadius),
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
@@ -660,7 +665,7 @@ class _BuySellCard extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: _imageTextGap),
           Text(
             item.title,
             maxLines: 1,
@@ -671,13 +676,13 @@ class _BuySellCard extends StatelessWidget {
               color: AppColors.textPrimary,
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: _titlePriceGap),
           Text(
             'SAR ${_priceFormat.format(item.priceSar)}',
             style: const TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w700,
-              color: Color(0xFF17A855),
+              color: _priceColor,
             ),
           ),
         ],
