@@ -93,7 +93,7 @@ class _HomeTab extends StatelessWidget {
 
   static const _screenHorizontalPadding = 16.0;
   static const _sectionTitleGap = 16.0;
-  static const _sectionGap = 32.0;
+  static const _sectionGap = 20.0;
   static const _serviceGridSpacing = 20.0;
   static const _serviceCardBorder = Color(0xFFDDEFE2);
   static const _serviceCardBorderWidth = 0.8;
@@ -277,7 +277,7 @@ class _HomeTab extends StatelessWidget {
           ),
           const SliverToBoxAdapter(child: SizedBox(height: _sectionGap)),
           // Clearance for the home speed-dial FAB.
-          const SliverToBoxAdapter(child: SizedBox(height: 80)),
+          const SliverToBoxAdapter(child: SizedBox(height: 50)),
         ],
       ),
     );
