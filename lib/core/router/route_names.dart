@@ -12,6 +12,7 @@ class RouteNames {
   static const home = '/home';
   static const profile = '/profile';
   static const editProfile = '/profile/edit';
+  static const buyPet = '/buy-pet';
   static const pets = '/pets';
   static const addPet = '/pets/add';
   static const editPet = '/pets/:id/edit';

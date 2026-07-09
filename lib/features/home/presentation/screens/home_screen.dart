@@ -236,7 +236,7 @@ class _HomeTab extends StatelessWidget {
                         ),
                       ),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () => context.push(RouteNames.buyPet),
                         style: TextButton.styleFrom(
                           foregroundColor: _green,
                           padding: const EdgeInsets.only(left: 8),

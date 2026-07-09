@@ -16,6 +16,7 @@ import 'package:pet_app/features/checkout/presentation/screens/checkout_screen.d
 import 'package:pet_app/features/checkout/presentation/screens/payment_failure_screen.dart';
 import 'package:pet_app/features/checkout/presentation/screens/payment_success_screen.dart';
 import 'package:pet_app/features/home/presentation/screens/home_screen.dart';
+import 'package:pet_app/features/pets/presentation/screens/buy_pet_screen.dart';
 import 'package:pet_app/features/pets/presentation/screens/add_pet_screen.dart';
 import 'package:pet_app/features/pets/presentation/screens/edit_pet_screen.dart';
 import 'package:pet_app/features/pets/presentation/screens/pets_list_screen.dart';
@@ -121,6 +122,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: RouteNames.editProfile,
         builder: (_, __) => const EditProfileScreen(),
+      ),
+      GoRoute(
+        path: RouteNames.buyPet,
+        builder: (_, __) => const BuyPetScreen(),
       ),
       GoRoute(
         path: RouteNames.pets,
