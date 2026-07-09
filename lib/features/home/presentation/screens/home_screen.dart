@@ -418,6 +418,8 @@ class _RoundIconButton extends StatelessWidget {
 class _RescueBanner extends StatelessWidget {
   const _RescueBanner();
 
+  static const _accent = Color(0xFFB23A3E);
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -435,19 +437,32 @@ class _RescueBanner extends StatelessWidget {
           ),
           child: Row(
             children: [
-              const Text('🚨', style: TextStyle(fontSize: 20, height: 1)),
-              const SizedBox(width: 10),
+              Image.asset(
+                'assets/icons/system/rescue-alert.png',
+                width: 20,
+                height: 20,
+                fit: BoxFit.contain,
+              ),
+              const SizedBox(width: 20),
               const Expanded(
-                child: Text(
-                  'Active rescue nearby — tap to help',
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xFF8B1E1E),
+                child: Padding(
+                  padding: EdgeInsets.only(left: 10),
+                  child: Text(
+                    'Active rescue nearby — tap to help',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      height: 1.33,
+                      color: _accent,
+                    ),
                   ),
                 ),
               ),
-              const Icon(Icons.chevron_right, color: Color(0xFF9CA3AF), size: 20),
+              const Icon(
+                Icons.chevron_right,
+                color: _accent,
+                size: 18,
+              ),
             ],
           ),
         ),
