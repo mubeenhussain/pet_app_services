@@ -91,31 +91,36 @@ class _HomeTab extends StatelessWidget {
 
   static const _green = Color(0xFF17A855);
 
-  static const _screenHorizontalPadding = 20.0;
+  static const _screenHorizontalPadding = 16.0;
   static const _sectionTitleGap = 16.0;
   static const _sectionGap = 32.0;
   static const _serviceGridSpacing = 12.0;
+  static const _serviceCardBorder = Color(0xFFDDEFE2);
+  static const _serviceCardBorderWidth = 0.8;
+  static const _serviceCardHeight = 111.0; // Figma outer card height
+  static const _serviceCardHorizontalPadding = 16.0;
   static const _serviceCardVerticalPadding = 20.0;
-  static const _serviceCardHeight =
-      _serviceCardVerticalPadding * 2 + 50 + 8 + 18; // icon + label + gaps
+  static const _serviceIconTileWidth = 52.0;
+  static const _serviceIconTileHeight = 46.0;
+  static const _serviceIconLabelGap = 7.0;
 
   static final _listings = [
     const _BuySellItem(
       title: 'Labrador Pup',
       priceSar: 25000,
-      emoji: '🐶',
+      iconAsset: 'assets/icons/pets/🐶.png',
       gradient: [Color(0xFFEDF9F1), Color(0xFFD8F0E2)],
     ),
     const _BuySellItem(
       title: 'Cockatiel',
       priceSar: 4500,
-      emoji: '🐦',
+      iconAsset: 'assets/icons/pets/🐦.png',
       gradient: [Color(0xFFEFF6FF), Color(0xFFD9ECFF)],
     ),
     const _BuySellItem(
       title: 'Arabian Horse',
       priceSar: 180000,
-      emoji: '🐴',
+      iconAsset: 'assets/icons/pets/🐴.png',
       gradient: [Color(0xFFFFF4EC), Color(0xFFFFE4D4)],
     ),
   ];
@@ -155,43 +160,71 @@ class _HomeTab extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: _sectionTitleGap),
-                  GridView.count(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    crossAxisCount: 2,
-                    crossAxisSpacing: _serviceGridSpacing,
-                    mainAxisSpacing: _serviceGridSpacing,
-                    mainAxisExtent: _serviceCardHeight,
-                    children: [
-                      _ServiceCard(
-                        label: 'Grooming',
-                        icon: Icons.content_cut_rounded,
-                        tint: const Color(0xFFE8F7EE),
-                        iconColor: const Color(0xFFE25555),
-                        onTap: () {},
-                      ),
-                      _ServiceCard(
-                        label: 'Delivery',
-                        icon: Icons.local_shipping_outlined,
-                        tint: const Color(0xFFFFF0E6),
-                        iconColor: const Color(0xFFE67E22),
-                        onTap: () => context.push(RouteNames.rideRequest),
-                      ),
-                      _ServiceCard(
-                        label: 'Boarding',
-                        icon: Icons.other_houses_outlined,
-                        tint: const Color(0xFFF3E8FF),
-                        iconColor: const Color(0xFF8B5CF6),
-                        onTap: () {},
-                      ),
-                      _ServiceCard(
-                        label: 'Shower',
-                        icon: Icons.bathtub_outlined,
-                        tint: const Color(0xFFE8F4FF),
-                        iconColor: const Color(0xFF3B82F6),
-                        onTap: () {},
-                      ),
-                    ],
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      final cardWidth =
+                          (constraints.maxWidth - _serviceGridSpacing) / 2;
+                      return Column(
+                        children: [
+                          Row(
+                            children: [
+                              _ServiceCard(
+                                width: cardWidth,
+                                label: 'Grooming',
+                                iconAsset:
+                                    'assets/icons/services/grooming.png',
+                                gradient: const [
+                                  Color(0xFFF4FCF6),
+                                  Color(0xFF6ED99A),
+                                ],
+                                onTap: () {},
+                              ),
+                              const SizedBox(width: _serviceGridSpacing),
+                              _ServiceCard(
+                                width: cardWidth,
+                                label: 'Delivery',
+                                iconAsset:
+                                    'assets/icons/services/delivery.png',
+                                gradient: const [
+                                  Color(0xFFFFF6EE),
+                                  Color(0xFFFFB366),
+                                ],
+                                onTap: () =>
+                                    context.push(RouteNames.rideRequest),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: _serviceGridSpacing),
+                          Row(
+                            children: [
+                              _ServiceCard(
+                                width: cardWidth,
+                                label: 'Boarding',
+                                iconAsset:
+                                    'assets/icons/services/boarding.png',
+                                gradient: const [
+                                  Color(0xFFFAF4FF),
+                                  Color(0xFFD4A8F8),
+                                ],
+                                onTap: () {},
+                              ),
+                              const SizedBox(width: _serviceGridSpacing),
+                              _ServiceCard(
+                                width: cardWidth,
+                                label: 'Shower',
+                                iconAsset:
+                                    'assets/icons/services/shower.png',
+                                gradient: const [
+                                  Color(0xFFF0F8FF),
+                                  Color(0xFF7FC4FF),
+                                ],
+                                onTap: () {},
+                              ),
+                            ],
+                          ),
+                        ],
+                      );
+                    },
                   ),
                   const SizedBox(height: _sectionGap),
                   Row(
@@ -473,81 +506,92 @@ class _RescueBanner extends StatelessWidget {
 
 class _ServiceCard extends StatelessWidget {
   const _ServiceCard({
+    required this.width,
     required this.label,
-    required this.icon,
-    required this.tint,
-    required this.iconColor,
+    required this.iconAsset,
+    required this.gradient,
     required this.onTap,
   });
 
+  final double width;
   final String label;
-  final IconData icon;
-  final Color tint;
-  final Color iconColor;
+  final String iconAsset;
+  final List<Color> gradient;
   final VoidCallback onTap;
+
+  static const _iconTileWidth = _HomeTab._serviceIconTileWidth;
+  static const _iconTileHeight = _HomeTab._serviceIconTileHeight;
+  // Figma: 52×46 tile, 20×24 icon → 16px H / 11px V inset.
+  static const _iconWidth = 20.0;
+  static const _iconHeight = 24.0;
+  static const _iconTilePadding =
+      EdgeInsets.symmetric(horizontal: 16, vertical: 11);
 
   @override
   Widget build(BuildContext context) {
-    // Figma: icon tile + label centered in the white card.
-    return Material(
-      color: Colors.white,
-      elevation: 0,
-      borderRadius: BorderRadius.circular(16),
-      shadowColor: Colors.black.withValues(alpha: 0.08),
-      child: InkWell(
-        onTap: onTap,
+    return SizedBox(
+      width: width,
+      height: _HomeTab._serviceCardHeight,
+      child: Material(
+        color: Colors.white,
+        elevation: 0,
         borderRadius: BorderRadius.circular(16),
-        child: Container(
-          height: _HomeTab._serviceCardHeight,
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: _HomeTab._serviceCardVerticalPadding,
-          ),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
-                blurRadius: 10,
-                offset: const Offset(0, 2),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(16),
+          child: Ink(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: _HomeTab._serviceCardBorder,
+                width: _HomeTab._serviceCardBorderWidth,
               ),
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 50,
-                height: 50,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      tint,
-                      Color.lerp(tint, Colors.white, 0.35)!,
-                    ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: _HomeTab._serviceCardHorizontalPadding,
+                vertical: _HomeTab._serviceCardVerticalPadding,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: _iconTileWidth,
+                    height: _iconTileHeight,
+                    padding: _iconTilePadding,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: gradient,
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    alignment: Alignment.center,
+                    child: Image.asset(
+                      iconAsset,
+                      width: _iconWidth,
+                      height: _iconHeight,
+                      fit: BoxFit.contain,
+                    ),
                   ),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                alignment: Alignment.center,
-                child: Icon(icon, color: iconColor, size: 24),
+                  const SizedBox(height: _HomeTab._serviceIconLabelGap),
+                  Text(
+                    label,
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.textPrimary,
+                      height: 1.0,
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 8),
-              Text(
-                label,
-                textAlign: TextAlign.center,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.textPrimary,
-                  height: 1.2,
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),
@@ -559,13 +603,13 @@ class _BuySellItem {
   const _BuySellItem({
     required this.title,
     required this.priceSar,
-    required this.emoji,
+    required this.iconAsset,
     required this.gradient,
   });
 
   final String title;
   final int priceSar;
-  final String emoji;
+  final String iconAsset;
   final List<Color> gradient;
 }
 
@@ -608,7 +652,12 @@ class _BuySellCard extends StatelessWidget {
                 ),
               ),
               alignment: Alignment.center,
-              child: Text(item.emoji, style: const TextStyle(fontSize: 44)),
+              child: Image.asset(
+                item.iconAsset,
+                width: 48,
+                height: 48,
+                fit: BoxFit.contain,
+              ),
             ),
           ),
           const SizedBox(height: 12),

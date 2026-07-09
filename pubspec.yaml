@@ -57,3 +57,5 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/icons/system/
+    - assets/icons/pets/
+    - assets/icons/services/
