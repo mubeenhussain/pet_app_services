@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pet_app/core/extensions/context_extensions.dart';
+import 'package:pet_app/l10n/app_localizations.dart';
 
 /// Primary bottom tabs from Figma home navigation.
 enum AppBottomTab { home, services, rescue, profile }
@@ -21,6 +23,8 @@ class AppBottomNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return DecoratedBox(
       decoration: const BoxDecoration(
         color: Colors.white,
@@ -37,6 +41,7 @@ class AppBottomNav extends StatelessWidget {
                   child: _NavItem(
                     tab: tab,
                     selected: tab == current,
+                    label: _labelFor(tab, l10n),
                     onTap: () => onChanged(tab),
                   ),
                 ),
@@ -46,17 +51,27 @@ class AppBottomNav extends StatelessWidget {
       ),
     );
   }
+
+  static String _labelFor(AppBottomTab tab, AppLocalizations l10n) =>
+      switch (tab) {
+        AppBottomTab.home => l10n.navHome,
+        AppBottomTab.services => l10n.navServices,
+        AppBottomTab.rescue => l10n.navRescue,
+        AppBottomTab.profile => l10n.navProfile,
+      };
 }
 
 class _NavItem extends StatelessWidget {
   const _NavItem({
     required this.tab,
     required this.selected,
+    required this.label,
     required this.onTap,
   });
 
   final AppBottomTab tab;
   final bool selected;
+  final String label;
   final VoidCallback onTap;
 
   static const _iconSize = 24.0;
@@ -77,7 +92,7 @@ class _NavItem extends StatelessWidget {
           _buildIcon(color),
           const SizedBox(height: 4),
           Text(
-            _labelFor(tab),
+            label,
             style: TextStyle(
               fontSize: 11,
               fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
@@ -116,13 +131,6 @@ class _NavItem extends StatelessWidget {
         AppBottomTab.services => 'assets/icons/system/bottombar_menu.png',
         AppBottomTab.rescue => 'assets/icons/system/bottombar_rescu.png',
         AppBottomTab.profile => 'assets/icons/system/bottombar_profile.png',
-      };
-
-  static String _labelFor(AppBottomTab tab) => switch (tab) {
-        AppBottomTab.home => 'Home',
-        AppBottomTab.services => 'Services',
-        AppBottomTab.rescue => 'Rescue',
-        AppBottomTab.profile => 'Profile',
       };
 
   static IconData _materialIconFor(AppBottomTab tab, bool selected) =>

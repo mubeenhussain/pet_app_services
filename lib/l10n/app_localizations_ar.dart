@@ -283,4 +283,79 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get guestProfileMessage =>
       'أنت تتصفح كزائر. سجّل الدخول لحفظ ملفك وحيواناتك.';
+
+  @override
+  String get homeWelcome => 'مرحباً،';
+
+  @override
+  String get homeServices => 'الخدمات';
+
+  @override
+  String get homeBuySell => 'شراء وبيع';
+
+  @override
+  String get homeSeeAll => 'عرض الكل';
+
+  @override
+  String get homeRescueBanner => 'إنقاذ نشط بالقرب منك — اضغط للمساعدة';
+
+  @override
+  String get homeGrooming => 'العناية';
+
+  @override
+  String get homeDelivery => 'التوصيل';
+
+  @override
+  String get homeBoarding => 'الإيواء';
+
+  @override
+  String get homeShower => 'الاستحمام';
+
+  @override
+  String get homeSupplies => 'المستلزمات';
+
+  @override
+  String get homeRescue => 'الإنقاذ';
+
+  @override
+  String get homeRide => 'التوصيل';
+
+  @override
+  String get navHome => 'الرئيسية';
+
+  @override
+  String get navServices => 'الخدمات';
+
+  @override
+  String get navRescue => 'الإنقاذ';
+
+  @override
+  String get navProfile => 'الملف';
+
+  @override
+  String get switchToArabic => 'التبديل إلى العربية';
+
+  @override
+  String get switchToEnglish => 'التبديل إلى الإنجليزية';
+
+  @override
+  String get listingLabradorPup => 'جرو لابرادور';
+
+  @override
+  String get listingCockatiel => 'كوكاتيل';
+
+  @override
+  String get listingArabianHorse => 'حصان عربي';
+
+  @override
+  String get tabServicesTitle => 'الخدمات';
+
+  @override
+  String get tabServicesSubtitle => 'تصفح خدمات الحيوانات';
+
+  @override
+  String get tabRescueTitle => 'الإنقاذ';
+
+  @override
+  String get tabRescueSubtitle => 'إنقاذ طارئ — قريباً';
 }

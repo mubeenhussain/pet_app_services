@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:pet_app/core/extensions/context_extensions.dart';
+import 'package:pet_app/l10n/app_localizations.dart';
 import 'package:pet_app/core/router/route_names.dart';
 import 'package:pet_app/core/theme/app_colors.dart';
 import 'package:pet_app/features/profile/presentation/screens/profile_screen.dart';
 import 'package:pet_app/shared/providers/app_providers.dart';
+import 'package:pet_app/shared/providers/locale_provider.dart';
 import 'package:pet_app/shared/widgets/app_bottom_nav.dart';
 import 'package:pet_app/shared/widgets/app_drawer.dart';
 
@@ -23,13 +26,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final user = ref.watch(currentUserProvider);
     final cached = ref.watch(cachedUserProfileProvider).valueOrNull;
     final name = (user?.username.isNotEmpty == true
             ? user!.username
             : null) ??
         (cached?.username.isNotEmpty == true ? cached!.username : null) ??
-        'Guest';
+        l10n.guestUser;
     final firstName = name.trim().split(RegExp(r'\s+')).first;
 
     return Scaffold(
@@ -47,14 +51,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 onOpenDrawer: () => _scaffoldKey.currentState?.openDrawer(),
                 onOpenProfile: () => setState(() => _tab = AppBottomTab.profile),
               ),
-              const _PlaceholderTab(
-                title: 'Services',
-                subtitle: 'Browse pet services',
+              _PlaceholderTab(
+                title: l10n.tabServicesTitle,
+                subtitle: l10n.tabServicesSubtitle,
                 icon: Icons.menu_rounded,
               ),
-              const _PlaceholderTab(
-                title: 'Rescue',
-                subtitle: 'Emergency rescue — coming soon',
+              _PlaceholderTab(
+                title: l10n.tabRescueTitle,
+                subtitle: l10n.tabRescueSubtitle,
                 icon: Icons.health_and_safety_outlined,
               ),
               const ProfileScreen(showBack: false),
@@ -113,20 +117,20 @@ class _HomeTab extends StatelessWidget {
   static const _buySellGradientStops = [0.0, 0.52];
 
   static final _listings = [
-    const _BuySellItem(
-      title: 'Labrador Pup',
+    _BuySellItem(
+      titleKey: _ListingTitleKey.labrador,
       priceSar: 25000,
       iconAsset: 'assets/icons/pets/🐶.png',
       gradient: _groomingGradient,
     ),
-    const _BuySellItem(
-      title: 'Cockatiel',
+    _BuySellItem(
+      titleKey: _ListingTitleKey.cockatiel,
       priceSar: 4500,
       iconAsset: 'assets/icons/pets/🐦.png',
       gradient: _showerGradient,
     ),
-    const _BuySellItem(
-      title: 'Arabian Horse',
+    _BuySellItem(
+      titleKey: _ListingTitleKey.arabianHorse,
       priceSar: 180000,
       iconAsset: 'assets/icons/pets/🐴.png',
       gradient: _deliveryGradient,
@@ -135,6 +139,7 @@ class _HomeTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return SafeArea(
       bottom: false,
       child: CustomScrollView(
@@ -159,9 +164,9 @@ class _HomeTab extends StatelessWidget {
                   const SizedBox(height: 18),
                   const _RescueBanner(),
                   const SizedBox(height: _sectionGap),
-                  const Text(
-                    'Services',
-                    style: TextStyle(
+                  Text(
+                    l10n.homeServices,
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
                       color: AppColors.textPrimary,
@@ -178,7 +183,7 @@ class _HomeTab extends StatelessWidget {
                             children: [
                               _ServiceCard(
                                 width: cardWidth,
-                                label: 'Grooming',
+                                label: l10n.homeGrooming,
                                 iconAsset:
                                     'assets/icons/services/grooming.png',
                                 gradient: _HomeTab._groomingGradient,
@@ -187,7 +192,7 @@ class _HomeTab extends StatelessWidget {
                               const SizedBox(width: _serviceGridSpacing),
                               _ServiceCard(
                                 width: cardWidth,
-                                label: 'Delivery',
+                                label: l10n.homeDelivery,
                                 iconAsset:
                                     'assets/icons/services/delivery.png',
                                 gradient: _HomeTab._deliveryGradient,
@@ -201,7 +206,7 @@ class _HomeTab extends StatelessWidget {
                             children: [
                               _ServiceCard(
                                 width: cardWidth,
-                                label: 'Boarding',
+                                label: l10n.homeBoarding,
                                 iconAsset:
                                     'assets/icons/services/boarding.png',
                                 gradient: _HomeTab._boardingGradient,
@@ -210,7 +215,7 @@ class _HomeTab extends StatelessWidget {
                               const SizedBox(width: _serviceGridSpacing),
                               _ServiceCard(
                                 width: cardWidth,
-                                label: 'Shower',
+                                label: l10n.homeShower,
                                 iconAsset:
                                     'assets/icons/services/shower.png',
                                 gradient: _HomeTab._showerGradient,
@@ -225,10 +230,10 @@ class _HomeTab extends StatelessWidget {
                   const SizedBox(height: _sectionGap),
                   Row(
                     children: [
-                      const Expanded(
+                      Expanded(
                         child: Text(
-                          'Buy & Sell',
-                          style: TextStyle(
+                          l10n.homeBuySell,
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w700,
                             color: AppColors.textPrimary,
@@ -239,13 +244,13 @@ class _HomeTab extends StatelessWidget {
                         onPressed: () => context.push(RouteNames.buyPet),
                         style: TextButton.styleFrom(
                           foregroundColor: _green,
-                          padding: const EdgeInsets.only(left: 8),
+                          padding: const EdgeInsetsDirectional.only(start: 8),
                           minimumSize: Size.zero,
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         ),
-                        child: const Text(
-                          'See all',
-                          style: TextStyle(
+                        child: Text(
+                          l10n.homeSeeAll,
+                          style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
                           ),
@@ -284,7 +289,7 @@ class _HomeTab extends StatelessWidget {
   }
 }
 
-class _HomeTopBar extends StatelessWidget {
+class _HomeTopBar extends ConsumerWidget {
   const _HomeTopBar({
     required this.firstName,
     required this.fullName,
@@ -314,7 +319,10 @@ class _HomeTopBar extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
+    final isArabic = ref.watch(localeProvider).languageCode == 'ar';
+
     // Figma: menu + avatar on the edges, welcome block centered between them.
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -337,10 +345,10 @@ class _HomeTopBar extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Text(
-                  'Welcome,',
+                Text(
+                  l10n.homeWelcome,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w400,
                     color: AppColors.textSecondary,
@@ -363,6 +371,22 @@ class _HomeTopBar extends StatelessWidget {
             ),
           ),
         ),
+        Semantics(
+          button: true,
+          label: isArabic ? l10n.switchToEnglish : l10n.switchToArabic,
+          child: _RoundIconButton(
+            outlined: true,
+            background: _menuFill,
+            borderColor: _menuStroke.withValues(alpha: 0.55),
+            icon: Icons.language_rounded,
+            iconColor: _menuStroke,
+            size: _sideButtonSize,
+            iconSize: 18,
+            borderWidth: 1,
+            onTap: () => ref.read(localeProvider.notifier).toggleLocale(),
+          ),
+        ),
+        const SizedBox(width: 8),
         Material(
           color: _green,
           shape: const CircleBorder(),
@@ -451,6 +475,8 @@ class _RescueBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return Material(
       color: const Color(0xFFFFF1F1),
       borderRadius: BorderRadius.circular(14),
@@ -473,12 +499,12 @@ class _RescueBanner extends StatelessWidget {
                 fit: BoxFit.contain,
               ),
               const SizedBox(width: 20),
-              const Expanded(
+              Expanded(
                 child: Padding(
-                  padding: EdgeInsets.only(left: 10),
+                  padding: const EdgeInsetsDirectional.only(start: 10),
                   child: Text(
-                    'Active rescue nearby — tap to help',
-                    style: TextStyle(
+                    l10n.homeRescueBanner,
+                    style: const TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
                       height: 1.33,
@@ -595,15 +621,25 @@ class _ServiceCard extends StatelessWidget {
   }
 }
 
+enum _ListingTitleKey { labrador, cockatiel, arabianHorse }
+
+extension on _ListingTitleKey {
+  String label(AppLocalizations l10n) => switch (this) {
+        _ListingTitleKey.labrador => l10n.listingLabradorPup,
+        _ListingTitleKey.cockatiel => l10n.listingCockatiel,
+        _ListingTitleKey.arabianHorse => l10n.listingArabianHorse,
+      };
+}
+
 class _BuySellItem {
   const _BuySellItem({
-    required this.title,
+    required this.titleKey,
     required this.priceSar,
     required this.iconAsset,
     required this.gradient,
   });
 
-  final String title;
+  final _ListingTitleKey titleKey;
   final int priceSar;
   final String iconAsset;
   final List<Color> gradient;
@@ -627,6 +663,8 @@ class _BuySellCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final title = item.titleKey.label(context.l10n);
+
     return Container(
       width: 148,
       decoration: BoxDecoration(
@@ -664,7 +702,7 @@ class _BuySellCard extends StatelessWidget {
           ),
           const SizedBox(height: _imageTextGap),
           Text(
-            item.title,
+            title,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
@@ -747,6 +785,8 @@ class _HomeSpeedDialState extends State<_HomeSpeedDial>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return Positioned.fill(
       child: Stack(
         children: [
@@ -758,8 +798,9 @@ class _HomeSpeedDialState extends State<_HomeSpeedDial>
                 child: const SizedBox.expand(),
               ),
             ),
-          Positioned(
-            right: 20,
+          Positioned.directional(
+            textDirection: Directionality.of(context),
+            end: 20,
             bottom: 16,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -774,7 +815,7 @@ class _HomeSpeedDialState extends State<_HomeSpeedDial>
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         _SpeedDialAction(
-                          label: 'Supplies',
+                          label: l10n.homeSupplies,
                           onTap: () => _handle(widget.onSupplies),
                           child: const Icon(
                             Icons.shopping_cart_outlined,
@@ -784,7 +825,7 @@ class _HomeSpeedDialState extends State<_HomeSpeedDial>
                         ),
                         const SizedBox(height: 12),
                         _SpeedDialAction(
-                          label: 'Rescue',
+                          label: l10n.homeRescue,
                           onTap: () => _handle(widget.onRescue),
                           iconShape: BoxShape.rectangle,
                           iconBorderRadius: BorderRadius.circular(12),
@@ -795,7 +836,7 @@ class _HomeSpeedDialState extends State<_HomeSpeedDial>
                         ),
                         const SizedBox(height: 12),
                         _SpeedDialAction(
-                          label: 'Ride',
+                          label: l10n.homeRide,
                           onTap: () => _handle(widget.onRide),
                           child: const Text(
                             '🚗',

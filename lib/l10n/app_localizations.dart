@@ -625,6 +625,156 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You are browsing as a guest. Sign in to save your profile and pets.'**
   String get guestProfileMessage;
+
+  /// No description provided for @homeWelcome.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome,'**
+  String get homeWelcome;
+
+  /// No description provided for @homeServices.
+  ///
+  /// In en, this message translates to:
+  /// **'Services'**
+  String get homeServices;
+
+  /// No description provided for @homeBuySell.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy & Sell'**
+  String get homeBuySell;
+
+  /// No description provided for @homeSeeAll.
+  ///
+  /// In en, this message translates to:
+  /// **'See all'**
+  String get homeSeeAll;
+
+  /// No description provided for @homeRescueBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'Active rescue nearby — tap to help'**
+  String get homeRescueBanner;
+
+  /// No description provided for @homeGrooming.
+  ///
+  /// In en, this message translates to:
+  /// **'Grooming'**
+  String get homeGrooming;
+
+  /// No description provided for @homeDelivery.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery'**
+  String get homeDelivery;
+
+  /// No description provided for @homeBoarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Boarding'**
+  String get homeBoarding;
+
+  /// No description provided for @homeShower.
+  ///
+  /// In en, this message translates to:
+  /// **'Shower'**
+  String get homeShower;
+
+  /// No description provided for @homeSupplies.
+  ///
+  /// In en, this message translates to:
+  /// **'Supplies'**
+  String get homeSupplies;
+
+  /// No description provided for @homeRescue.
+  ///
+  /// In en, this message translates to:
+  /// **'Rescue'**
+  String get homeRescue;
+
+  /// No description provided for @homeRide.
+  ///
+  /// In en, this message translates to:
+  /// **'Ride'**
+  String get homeRide;
+
+  /// No description provided for @navHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get navHome;
+
+  /// No description provided for @navServices.
+  ///
+  /// In en, this message translates to:
+  /// **'Services'**
+  String get navServices;
+
+  /// No description provided for @navRescue.
+  ///
+  /// In en, this message translates to:
+  /// **'Rescue'**
+  String get navRescue;
+
+  /// No description provided for @navProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get navProfile;
+
+  /// No description provided for @switchToArabic.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch to Arabic'**
+  String get switchToArabic;
+
+  /// No description provided for @switchToEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch to English'**
+  String get switchToEnglish;
+
+  /// No description provided for @listingLabradorPup.
+  ///
+  /// In en, this message translates to:
+  /// **'Labrador Pup'**
+  String get listingLabradorPup;
+
+  /// No description provided for @listingCockatiel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cockatiel'**
+  String get listingCockatiel;
+
+  /// No description provided for @listingArabianHorse.
+  ///
+  /// In en, this message translates to:
+  /// **'Arabian Horse'**
+  String get listingArabianHorse;
+
+  /// No description provided for @tabServicesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Services'**
+  String get tabServicesTitle;
+
+  /// No description provided for @tabServicesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse pet services'**
+  String get tabServicesSubtitle;
+
+  /// No description provided for @tabRescueTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Rescue'**
+  String get tabRescueTitle;
+
+  /// No description provided for @tabRescueSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency rescue — coming soon'**
+  String get tabRescueSubtitle;
 }
 
 class _AppLocalizationsDelegate

@@ -284,4 +284,79 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get guestProfileMessage =>
       'You are browsing as a guest. Sign in to save your profile and pets.';
+
+  @override
+  String get homeWelcome => 'Welcome,';
+
+  @override
+  String get homeServices => 'Services';
+
+  @override
+  String get homeBuySell => 'Buy & Sell';
+
+  @override
+  String get homeSeeAll => 'See all';
+
+  @override
+  String get homeRescueBanner => 'Active rescue nearby — tap to help';
+
+  @override
+  String get homeGrooming => 'Grooming';
+
+  @override
+  String get homeDelivery => 'Delivery';
+
+  @override
+  String get homeBoarding => 'Boarding';
+
+  @override
+  String get homeShower => 'Shower';
+
+  @override
+  String get homeSupplies => 'Supplies';
+
+  @override
+  String get homeRescue => 'Rescue';
+
+  @override
+  String get homeRide => 'Ride';
+
+  @override
+  String get navHome => 'Home';
+
+  @override
+  String get navServices => 'Services';
+
+  @override
+  String get navRescue => 'Rescue';
+
+  @override
+  String get navProfile => 'Profile';
+
+  @override
+  String get switchToArabic => 'Switch to Arabic';
+
+  @override
+  String get switchToEnglish => 'Switch to English';
+
+  @override
+  String get listingLabradorPup => 'Labrador Pup';
+
+  @override
+  String get listingCockatiel => 'Cockatiel';
+
+  @override
+  String get listingArabianHorse => 'Arabian Horse';
+
+  @override
+  String get tabServicesTitle => 'Services';
+
+  @override
+  String get tabServicesSubtitle => 'Browse pet services';
+
+  @override
+  String get tabRescueTitle => 'Rescue';
+
+  @override
+  String get tabRescueSubtitle => 'Emergency rescue — coming soon';
 }
