@@ -6,6 +6,9 @@ final buyPetDemoListings = <BuyPetListing>[
   BuyPetListing(
     id: 'labrador-pup',
     title: 'Labrador Pup',
+    petName: 'Buddy',
+    breed: 'Golden Retriever',
+    ageYears: 3,
     city: 'Riyadh',
     priceSar: 25000,
     category: 'dogs',
@@ -16,6 +19,9 @@ final buyPetDemoListings = <BuyPetListing>[
   BuyPetListing(
     id: 'cockatiel-pair',
     title: 'Cockatiel Pair',
+    petName: 'Sunny & Sky',
+    breed: 'Cockatiel',
+    ageYears: 2,
     city: 'Makkah',
     priceSar: 4500,
     category: 'birds',
@@ -25,6 +31,9 @@ final buyPetDemoListings = <BuyPetListing>[
   BuyPetListing(
     id: 'arabian-horse',
     title: 'Arabian Horse',
+    petName: 'Majesty',
+    breed: 'Arabian Horse',
+    ageYears: 5,
     city: 'Riyadh',
     priceSar: 180000,
     category: 'horses',
@@ -34,6 +43,9 @@ final buyPetDemoListings = <BuyPetListing>[
   BuyPetListing(
     id: 'persian-kitten',
     title: 'Persian Kitten',
+    petName: 'Luna',
+    breed: 'Persian Cat',
+    ageYears: 1,
     city: 'Riyadh',
     priceSar: 25000,
     category: 'cats',
@@ -42,3 +54,10 @@ final buyPetDemoListings = <BuyPetListing>[
     verified: true,
   ),
 ];
+
+BuyPetListing? buyPetListingById(String id) {
+  for (final listing in buyPetDemoListings) {
+    if (listing.id == id) return listing;
+  }
+  return null;
+}

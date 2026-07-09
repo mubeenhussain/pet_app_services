@@ -16,8 +16,10 @@ import 'package:pet_app/features/checkout/presentation/screens/checkout_screen.d
 import 'package:pet_app/features/checkout/presentation/screens/payment_failure_screen.dart';
 import 'package:pet_app/features/checkout/presentation/screens/payment_success_screen.dart';
 import 'package:pet_app/features/home/presentation/screens/home_screen.dart';
+import 'package:pet_app/features/pets/presentation/screens/buy_pet_detail_screen.dart';
 import 'package:pet_app/features/pets/presentation/screens/buy_pet_filters_screen.dart';
 import 'package:pet_app/features/pets/presentation/screens/buy_pet_screen.dart';
+import 'package:pet_app/features/pets/presentation/providers/buy_pet_demo_listings.dart';
 import 'package:pet_app/features/pets/presentation/utils/buy_pet_filters.dart';
 import 'package:pet_app/features/pets/presentation/screens/add_pet_screen.dart';
 import 'package:pet_app/features/pets/presentation/screens/edit_pet_screen.dart';
@@ -134,6 +136,19 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (_, state) => BuyPetFiltersScreen(
               args: state.extra! as BuyPetFiltersArgs,
             ),
+          ),
+          GoRoute(
+            path: ':id',
+            builder: (_, state) {
+              final listing =
+                  buyPetListingById(state.pathParameters['id']!);
+              if (listing == null) {
+                return const Scaffold(
+                  body: Center(child: Text('Listing not found')),
+                );
+              }
+              return BuyPetDetailScreen(listing: listing);
+            },
           ),
         ],
       ),

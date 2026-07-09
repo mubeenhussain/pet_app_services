@@ -235,7 +235,7 @@ class _BuyPetCard extends StatelessWidget {
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
-        onTap: () {},
+        onTap: () => context.push(RouteNames.buyPetDetailPath(listing.id)),
         child: Padding(
           padding: const EdgeInsets.all(10),
           child: Column(
@@ -336,8 +336,15 @@ class _VerifiedBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: const Color(0xFFE8F7EE),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.06),
+            blurRadius: 6,
+            offset: const Offset(0, 1),
+          ),
+        ],
       ),
       child: const Padding(
         padding: EdgeInsets.symmetric(horizontal: 6, vertical: 3),

@@ -5,6 +5,9 @@ class BuyPetListing {
   BuyPetListing({
     required this.id,
     required this.title,
+    required this.petName,
+    required this.breed,
+    required this.ageYears,
     required this.city,
     required this.priceSar,
     required this.category,
@@ -16,6 +19,9 @@ class BuyPetListing {
 
   final String id;
   final String title;
+  final String petName;
+  final String breed;
+  final int ageYears;
   final String city;
   final int priceSar;
   final String category;
@@ -23,4 +29,6 @@ class BuyPetListing {
   final String? iconAsset;
   final String? emoji;
   final bool verified;
+
+  String get breedAgeLabel => '$breed · $ageYears yrs';
 }

@@ -14,6 +14,8 @@ class RouteNames {
   static const editProfile = '/profile/edit';
   static const buyPet = '/buy-pet';
   static const buyPetFilters = '/buy-pet/filters';
+  static const buyPetDetail = '/buy-pet/:id';
+  static String buyPetDetailPath(String id) => '/buy-pet/$id';
   static const pets = '/pets';
   static const addPet = '/pets/add';
   static const editPet = '/pets/:id/edit';
