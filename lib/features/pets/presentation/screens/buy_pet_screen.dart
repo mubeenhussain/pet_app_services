@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:pet_app/core/router/route_names.dart';
 import 'package:pet_app/core/theme/app_colors.dart';
 import 'package:pet_app/features/pets/presentation/models/buy_pet_listing.dart';
-import 'package:pet_app/features/pets/presentation/providers/buy_pet_demo_listings.dart';
+import 'package:pet_app/features/pets/presentation/utils/buy_pet_filters.dart';
 import 'package:pet_app/shared/widgets/auth_circle_back_button.dart';
 
 /// Figma — Buy a Pet marketplace (home → Buy & Sell → See all).
@@ -19,6 +21,8 @@ class _BuyPetScreenState extends State<BuyPetScreen> {
 
   final _searchController = TextEditingController();
   String _query = '';
+  Set<String> _categories = {};
+  RangeValues _priceRange = defaultBuyPetPriceRange;
 
   @override
   void dispose() {
@@ -26,13 +30,26 @@ class _BuyPetScreenState extends State<BuyPetScreen> {
     super.dispose();
   }
 
-  List<BuyPetListing> get _filtered {
-    final q = _query.trim().toLowerCase();
-    if (q.isEmpty) return buyPetDemoListings;
-    return buyPetDemoListings.where((item) {
-      return item.title.toLowerCase().contains(q) ||
-          item.city.toLowerCase().contains(q);
-    }).toList(growable: false);
+  List<BuyPetListing> get _filtered => filterBuyPetListings(
+        query: _query,
+        categories: _categories,
+        priceRange: _priceRange,
+      );
+
+  Future<void> _openFilters() async {
+    final result = await context.push<BuyPetFilterResult>(
+      RouteNames.buyPetFilters,
+      extra: BuyPetFiltersArgs(
+        categories: _categories,
+        priceRange: _priceRange,
+        searchQuery: _query,
+      ),
+    );
+    if (result == null || !mounted) return;
+    setState(() {
+      _categories = Set<String>.from(result.categories);
+      _priceRange = result.priceRange;
+    });
   }
 
   @override
@@ -81,7 +98,7 @@ class _BuyPetScreenState extends State<BuyPetScreen> {
                     borderRadius: BorderRadius.circular(12),
                     child: InkWell(
                       borderRadius: BorderRadius.circular(12),
-                      onTap: () {},
+                      onTap: _openFilters,
                       child: const SizedBox(
                         width: 48,
                         height: 48,
