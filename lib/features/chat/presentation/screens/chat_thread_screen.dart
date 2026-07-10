@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:pet_app/core/extensions/context_extensions.dart';
 import 'package:pet_app/core/theme/app_colors.dart';
+import 'package:pet_app/shared/widgets/app_chat_input_bar.dart';
 import 'package:pet_app/shared/widgets/app_feedback_banner.dart';
 import 'package:pet_app/shared/widgets/auth_circle_back_button.dart';
 
+// Figma chat screen tokens.
 const _green = Color(0xFF17A855);
-const _inputBorder = Color(0xFFDDEFE2);
+const _bubbleRadius = 12.0;
 
 class _ConversationInfo {
   const _ConversationInfo({
@@ -98,10 +100,10 @@ class ChatThreadScreen extends StatelessWidget {
                         if (info.activeNow)
                           Text(
                             l10n.activeNow,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
-                              color: _green,
+                              color: AppColors.link,
                             ),
                           ),
                       ],
@@ -111,34 +113,18 @@ class ChatThreadScreen extends StatelessWidget {
               ),
             ),
           ),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            color: const Color(0xFFE8F7EE),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(
-                  Icons.shield_outlined,
-                  size: 14,
-                  color: Color(0xFF0F8A42),
-                ),
-                const SizedBox(width: 6),
-                Text(
-                  l10n.chatSafetyBanner,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xFF0F8A42),
-                  ),
-                ),
-              ],
-            ),
-          ),
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
               children: [
+                Center(
+                  child: AppFeedbackBanner(
+                    message: l10n.chatSafetyBanner,
+                    variant: AppFeedbackVariant.chatSafety,
+                    layout: AppFeedbackLayout.compact,
+                  ),
+                ),
+                const SizedBox(height: 16),
                 _Bubble(
                   text: l10n.demoMsgKittenAvailable,
                   isMine: false,
@@ -154,136 +140,18 @@ class ChatThreadScreen extends StatelessWidget {
                   isMine: false,
                 ),
                 const SizedBox(height: 16),
-                AppFeedbackBanner(
-                  message: context.l10n.contactInfoWarning,
-                  icon: Icons.warning_amber_rounded,
+                Center(
+                  child: AppFeedbackBanner(
+                    message: l10n.contactInfoWarning,
+                    variant: AppFeedbackVariant.chatWarning,
+                    layout: AppFeedbackLayout.compact,
+                  ),
                 ),
               ],
             ),
           ),
-          ColoredBox(
-            color: const Color(0xFFF8F9FB),
-            child: SafeArea(
-              top: false,
-              child: DecoratedBox(
-                decoration: const BoxDecoration(
-                  border: Border(
-                    top: BorderSide(color: Color(0xFFE8EAEF), width: 1),
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Expanded(
-                        child: Material(
-                          color: Colors.white,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(24),
-                            side: const BorderSide(
-                              color: _inputBorder,
-                              width: 0.8,
-                            ),
-                          ),
-                          child: Theme(
-                            data: Theme.of(context).copyWith(
-                              inputDecorationTheme:
-                                  const InputDecorationTheme(
-                                filled: false,
-                                fillColor: Colors.transparent,
-                                border: InputBorder.none,
-                                enabledBorder: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                disabledBorder: InputBorder.none,
-                                errorBorder: InputBorder.none,
-                                focusedErrorBorder: InputBorder.none,
-                              ),
-                            ),
-                            child: TextField(
-                              minLines: 1,
-                              maxLines: 4,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                color: AppColors.textPrimary,
-                              ),
-                              decoration: InputDecoration(
-                                hintText: l10n.typeMessage,
-                                hintStyle: const TextStyle(
-                                  fontSize: 14,
-                                  color: AppColors.textSecondary,
-                                ),
-                                filled: false,
-                                fillColor: Colors.transparent,
-                                isDense: true,
-                                contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                  vertical: 12,
-                                ),
-                                border: InputBorder.none,
-                                enabledBorder: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                disabledBorder: InputBorder.none,
-                                errorBorder: InputBorder.none,
-                                focusedErrorBorder: InputBorder.none,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      const _ChatSendButton(),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
+          AppChatInputBar(hintText: l10n.typeMessage),
         ],
-      ),
-    );
-  }
-}
-
-class _ChatSendButton extends StatelessWidget {
-  const _ChatSendButton();
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: _green,
-      shape: const CircleBorder(),
-      child: InkWell(
-        customBorder: const CircleBorder(),
-        onTap: () {},
-        child: const SizedBox(
-          width: 40,
-          height: 40,
-          child: Center(child: _SendPlaneIcon()),
-        ),
-      ),
-    );
-  }
-}
-
-class _SendPlaneIcon extends StatelessWidget {
-  const _SendPlaneIcon();
-
-  // Material send glyph ~30°; Figma plane nose ≈ 45° up-right.
-  static const _figmaTiltCorrection = -0.60;
-
-  @override
-  Widget build(BuildContext context) {
-    return Transform.translate(
-      offset: const Offset(1.5, -0.5),
-      child: Transform.rotate(
-        angle: _figmaTiltCorrection,
-        child: const Icon(
-          Icons.send_rounded,
-          color: Colors.white,
-          size: 18,
-        ),
       ),
     );
   }
@@ -324,29 +192,21 @@ class _Bubble extends StatelessWidget {
   final String text;
   final bool isMine;
 
-  // Figma Dev Mode: 16 / 16 / 16 / 1 corner radii + 8H / 16V padding.
-  static const _tailRadius = Radius.circular(1);
-
   @override
   Widget build(BuildContext context) {
     return Align(
       alignment: isMine ? Alignment.centerRight : Alignment.centerLeft,
       child: ConstrainedBox(
         constraints: BoxConstraints(
-          maxWidth: MediaQuery.sizeOf(context).width * 0.78,
+          maxWidth: MediaQuery.sizeOf(context).width * 0.82,
         ),
         child: DecoratedBox(
           decoration: BoxDecoration(
-            color: isMine ? _green : const Color(0xFFF0F2F5),
-            borderRadius: BorderRadius.only(
-              topLeft: const Radius.circular(16),
-              topRight: const Radius.circular(16),
-              bottomLeft: isMine ? const Radius.circular(16) : _tailRadius,
-              bottomRight: isMine ? _tailRadius : const Radius.circular(16),
-            ),
+            color: isMine ? _green : AppColors.chatIncomingBubble,
+            borderRadius: BorderRadius.circular(_bubbleRadius),
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: Text(
               text,
               style: TextStyle(

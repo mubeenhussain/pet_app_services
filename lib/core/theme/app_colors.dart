@@ -28,6 +28,11 @@ abstract final class AppColors {
   static const feedbackSuccessBg = Color(0xFFE8F7EE);
   static const feedbackSuccessBorder = Color(0xFFC9E9D4);
   static const feedbackSuccessText = Color(0xFF0F8A42);
+  static const chatWarningBg = Color(0xFFFDEDEE);
+  static const chatIncomingBubble = Color(0xFFF4FCF6);
+  static const chatSafetyBg = Color(0xFFE8F7EE);
+  static const chatBarBg = Color(0xFFF8F9FB);
+  static const inputBorder = Color(0xFFDDEFE2);
   static const skeleton = Color(0xFFE4EDE7);
   static const skeletonHighlight = Color(0xFFF0F5F2);
 }
