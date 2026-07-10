@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pet_app/core/theme/app_colors.dart';
+import 'package:pet_app/shared/widgets/app_chat_metrics.dart';
 
 /// Reusable chat composer bar (Figma: 388×81, top border 0.8px #DDEFE2).
 class AppChatInputBar extends StatelessWidget {
@@ -15,44 +16,40 @@ class AppChatInputBar extends StatelessWidget {
   final TextEditingController? controller;
 
   static const _designScreenWidth = 390.0;
-  static const _designBarHeight = 81.0;
   static const _inputHeight = 44.0;
   static const _inputRadius = 10.0;
   static const _sendSize = 44.0;
-  static const _horizontalPadding = 16.0;
+  static const _designSendGap = 10.0;
   static const _sendGreen = Color(0xFF17A855);
 
-  static double barHeightFor(double screenWidth) =>
-      (screenWidth * _designBarHeight / _designScreenWidth).clamp(72.0, 81.0);
+  static double _sendGap(BuildContext context) {
+    final width = MediaQuery.sizeOf(context).width;
+    return (width * _designSendGap / _designScreenWidth).clamp(8.0, 12.0);
+  }
 
   @override
   Widget build(BuildContext context) {
-    final barHeight = barHeightFor(MediaQuery.sizeOf(context).width);
-    final verticalPadding =
-        ((barHeight - _inputHeight) / 2).clamp(14.0, 20.0);
+    final sectionPadding = AppChatMetrics.composerSectionPadding(context);
+    final sendGap = _sendGap(context);
 
     return ColoredBox(
       color: AppColors.chatBarBg,
       child: SafeArea(
         top: false,
-        child: DecoratedBox(
-          decoration: const BoxDecoration(
-            border: Border(
-              top: BorderSide(
-                color: AppColors.inputBorder,
-                width: 1,
+        minimum: const EdgeInsets.only(bottom: 16),
+        child: SizedBox(
+          width: double.infinity,
+          child: DecoratedBox(
+            decoration: const BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  color: AppColors.inputBorder,
+                  width: 1,
+                ),
               ),
             ),
-          ),
-          child: SizedBox(
-            height: barHeight,
             child: Padding(
-              padding: EdgeInsets.fromLTRB(
-                _horizontalPadding,
-                verticalPadding,
-                _horizontalPadding,
-                verticalPadding,
-              ),
+              padding: sectionPadding,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -65,7 +62,7 @@ class AppChatInputBar extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 10),
+                  SizedBox(width: sendGap),
                   _ChatSendButton(onSend: onSend),
                 ],
               ),

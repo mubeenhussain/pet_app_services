@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pet_app/core/extensions/context_extensions.dart';
 import 'package:pet_app/core/theme/app_colors.dart';
+import 'package:pet_app/shared/widgets/app_chat_metrics.dart';
 import 'package:pet_app/shared/widgets/app_chat_bubble.dart';
 import 'package:pet_app/shared/widgets/app_chat_input_bar.dart';
 import 'package:pet_app/shared/widgets/app_feedback_banner.dart';
@@ -75,7 +76,7 @@ class ChatThreadScreen extends StatelessWidget {
           SafeArea(
             bottom: false,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
+              padding: AppChatMetrics.threadHeaderPadding(context),
               child: Row(
                 children: [
                   const AuthCircleBackButton(),
@@ -111,43 +112,51 @@ class ChatThreadScreen extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: ListView(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-              children: [
-                Center(
-                  child: AppFeedbackBanner(
-                    message: l10n.chatSafetyBanner,
-                    variant: AppFeedbackVariant.chatSafety,
-                    layout: AppFeedbackLayout.compact,
+            child: Padding(
+              padding: AppChatMetrics.screenHorizontalPadding(context),
+              child: ListView(
+                padding: AppChatMetrics.messageListVerticalPadding(context),
+                children: [
+                  Center(
+                    child: AppFeedbackBanner(
+                      message: l10n.chatSafetyBanner,
+                      variant: AppFeedbackVariant.chatSafety,
+                      layout: AppFeedbackLayout.compact,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 16),
-                AppChatBubble(
-                  text: l10n.demoMsgKittenAvailable,
-                  isMine: false,
-                ),
-                const SizedBox(height: 10),
-                AppChatBubble(
-                  text: l10n.demoMsgKittenReply,
-                  isMine: true,
-                ),
-                const SizedBox(height: 10),
-                AppChatBubble(
-                  text: l10n.demoMsgKittenConfirm,
-                  isMine: false,
-                ),
-                const SizedBox(height: 16),
-                Center(
-                  child: AppFeedbackBanner(
-                    message: l10n.contactInfoWarning,
-                    variant: AppFeedbackVariant.chatWarning,
-                    layout: AppFeedbackLayout.compact,
+                  const SizedBox(height: 16),
+                  AppChatBubble(
+                    text: l10n.demoMsgKittenAvailable,
+                    isMine: false,
                   ),
-                ),
-              ],
+                  const SizedBox(height: 10),
+                  AppChatBubble(
+                    text: l10n.demoMsgKittenReply,
+                    isMine: true,
+                  ),
+                  const SizedBox(height: 10),
+                  AppChatBubble(
+                    text: l10n.demoMsgKittenConfirm,
+                    isMine: false,
+                  ),
+                  const SizedBox(height: 16),
+                  Center(
+                    child: AppFeedbackBanner(
+                      message: l10n.contactInfoWarning,
+                      variant: AppFeedbackVariant.chatWarning,
+                      layout: AppFeedbackLayout.compact,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-          AppChatInputBar(hintText: l10n.typeMessage),
+          Padding(
+            padding: EdgeInsets.only(
+              top: AppChatMetrics.composerContainerTopMargin(context),
+            ),
+            child: AppChatInputBar(hintText: l10n.typeMessage),
+          ),
         ],
       ),
     );

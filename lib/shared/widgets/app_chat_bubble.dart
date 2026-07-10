@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pet_app/core/theme/app_colors.dart';
+import 'package:pet_app/shared/widgets/app_chat_metrics.dart';
 
 /// Chat message bubble (Figma msg-in / msg-out).
 class AppChatBubble extends StatelessWidget {
@@ -20,12 +21,12 @@ class AppChatBubble extends StatelessWidget {
   static const _lineHeight = 18.75;
   static const _designScreenWidth = 390.0;
   static const _designMaxWidth = 230.0;
-  static const _listHorizontalPadding = 16.0;
   static const _padding = EdgeInsets.fromLTRB(14, 10, 14, 10);
 
   static double maxWidthFor(BuildContext context) {
     final screenWidth = MediaQuery.sizeOf(context).width;
-    final maxAvailable = screenWidth - (_listHorizontalPadding * 2);
+    final horizontal = AppChatMetrics.horizontalPadding(context);
+    final maxAvailable = screenWidth - (horizontal * 2);
     return (screenWidth * _designMaxWidth / _designScreenWidth)
         .clamp(0, maxAvailable);
   }
