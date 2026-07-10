@@ -257,6 +257,7 @@ class _BuyPetCard extends StatelessWidget {
   static const _designScreenWidth = 390.0;
   static const _designImageInset = 20.0;
   static const _designTextStartPadding = 35.0;
+  static const _designPetIconSize = 36.0;
   static const _cardBorder = Color(0xFFDDEFE2);
   static const _titleColor = Color(0xFF12201A);
   static const _cityColor = Color(0xFF95A29A);
@@ -314,7 +315,7 @@ class _BuyPetCard extends StatelessWidget {
                             child: Center(
                               child: _PetVisual(
                                 listing: listing,
-                                size: s(48),
+                                size: s(_designPetIconSize),
                               ),
                             ),
                           ),
@@ -391,7 +392,7 @@ class _BuyPetCard extends StatelessWidget {
 class _PetVisual extends StatelessWidget {
   const _PetVisual({
     required this.listing,
-    this.size = 48,
+    this.size = 36,
   });
 
   final BuyPetListing listing;
