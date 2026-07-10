@@ -257,7 +257,10 @@ class _BuyPetCard extends StatelessWidget {
   static const _designScreenWidth = 390.0;
   static const _designImageInset = 20.0;
   static const _designTextStartPadding = 35.0;
-  static const _designPetIconSize = 36.0;
+  static const _designPetIconHeight = 39.0;
+  static const _designVerifiedIconSize = 12.0;
+  static const _designVerifiedFontSize = 10.5;
+  static const _designVerifiedBadgeRadius = 20.0;
   static const _cardBorder = Color(0xFFDDEFE2);
   static const _titleColor = Color(0xFF12201A);
   static const _cityColor = Color(0xFF95A29A);
@@ -315,17 +318,20 @@ class _BuyPetCard extends StatelessWidget {
                             child: Center(
                               child: _PetVisual(
                                 listing: listing,
-                                size: s(_designPetIconSize),
+                                height: s(_designPetIconHeight),
                               ),
                             ),
                           ),
                         ),
                       ),
                       if (listing.verified)
-                        PositionedDirectional(
+                        Positioned(
                           top: s(6),
-                          end: s(6),
-                          child: _VerifiedBadge(scale: s(1)),
+                          left: 0,
+                          right: 0,
+                          child: Center(
+                            child: _VerifiedBadge(scale: s(1)),
+                          ),
                         ),
                     ],
                   ),
@@ -392,25 +398,51 @@ class _BuyPetCard extends StatelessWidget {
 class _PetVisual extends StatelessWidget {
   const _PetVisual({
     required this.listing,
-    this.size = 36,
+    this.height = 39,
   });
 
   final BuyPetListing listing;
-  final double size;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
     if (listing.iconAsset != null) {
       return Image.asset(
         listing.iconAsset!,
-        width: size,
-        height: size,
+        height: height,
         fit: BoxFit.contain,
       );
     }
     return Text(
       listing.emoji ?? '🐾',
-      style: TextStyle(fontSize: size, height: 1),
+      style: TextStyle(fontSize: height * 0.85, height: 1),
+    );
+  }
+}
+
+class _VerifiedCheckmark extends StatelessWidget {
+  const _VerifiedCheckmark({required this.size});
+
+  final double size;
+
+  static const _green = Color(0xFF0F8A42);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: const BoxDecoration(
+        color: _green,
+        shape: BoxShape.circle,
+      ),
+      alignment: Alignment.center,
+      child: Icon(
+        Icons.check_rounded,
+        size: size * 0.72,
+        color: Colors.white,
+        weight: 700,
+      ),
     );
   }
 }
@@ -424,10 +456,15 @@ class _VerifiedBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final iconSize = _BuyPetCard._designVerifiedIconSize * scale;
+    final fontSize = _BuyPetCard._designVerifiedFontSize * scale;
+
     return DecoratedBox(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20 * scale),
+        borderRadius: BorderRadius.circular(
+          _BuyPetCard._designVerifiedBadgeRadius * scale,
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.06),
@@ -444,13 +481,15 @@ class _VerifiedBadge extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.verified_rounded, size: 14 * scale, color: _green),
+            _VerifiedCheckmark(size: iconSize),
             SizedBox(width: 3 * scale),
             Text(
               context.l10n.verified,
               style: TextStyle(
-                fontSize: 10.5 * scale,
+                fontSize: fontSize,
                 fontWeight: FontWeight.w600,
+                height: 1.5,
+                letterSpacing: 0,
                 color: _green,
               ),
             ),
