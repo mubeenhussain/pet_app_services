@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pet_app/core/theme/app_colors.dart';
 import 'package:pet_app/core/theme/app_semantic_colors.dart';
 import 'package:pet_app/l10n/app_localizations.dart';
 
@@ -16,11 +17,19 @@ extension ContextExtensions on BuildContext {
 
   Size get screenSize => MediaQuery.sizeOf(this);
 
-  void showAppSnackBar(String message, {bool isError = false}) {
+  void showAppSnackBar(
+    String message, {
+    bool isError = false,
+    bool isSuccess = false,
+  }) {
     ScaffoldMessenger.of(this).showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: isError ? colorScheme.error : null,
+        backgroundColor: isError
+            ? AppColors.feedbackErrorText
+            : isSuccess
+                ? AppColors.feedbackSuccessText
+                : null,
       ),
     );
   }

@@ -1735,6 +1735,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Passwords do not match'**
   String get passwordsDoNotMatch;
+
+  /// No description provided for @signingIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Signing in...'**
+  String get signingIn;
+
+  /// No description provided for @savingChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Saving changes..'**
+  String get savingChanges;
+
+  /// No description provided for @welcomeBackUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome back, {name}!'**
+  String welcomeBackUser(String name);
+
+  /// No description provided for @noPetsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No pets yet'**
+  String get noPetsTitle;
+
+  /// No description provided for @noPetsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add one to get started'**
+  String get noPetsSubtitle;
+
+  /// No description provided for @noActiveChats.
+  ///
+  /// In en, this message translates to:
+  /// **'No active chats'**
+  String get noActiveChats;
+
+  /// No description provided for @noListingsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No listings found'**
+  String get noListingsFound;
+
+  /// No description provided for @tryAdjustingFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Try adjusting your filters'**
+  String get tryAdjustingFilters;
+
+  /// No description provided for @deleteCannotUndo.
+  ///
+  /// In en, this message translates to:
+  /// **'This can\'t be undone.'**
+  String get deleteCannotUndo;
+
+  /// No description provided for @invalidCredentials.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid phone number or password'**
+  String get invalidCredentials;
+
+  /// No description provided for @noAccountFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No account found with this number'**
+  String get noAccountFound;
 }
 
 class _AppLocalizationsDelegate

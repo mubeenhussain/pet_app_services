@@ -20,4 +20,14 @@ abstract final class AppColors {
   static const link = Color(0xFF0F8A42);
   static const emergency = Color(0xFFC62828);
   static const onPrimary = Color(0xFFFFFFFF);
+
+  // States & feedback (Figma)
+  static const feedbackErrorBg = Color(0xFFFFF1F1);
+  static const feedbackErrorBorder = Color(0xFFF5C2C2);
+  static const feedbackErrorText = Color(0xFFB23A3E);
+  static const feedbackSuccessBg = Color(0xFFE8F7EE);
+  static const feedbackSuccessBorder = Color(0xFFC9E9D4);
+  static const feedbackSuccessText = Color(0xFF0F8A42);
+  static const skeleton = Color(0xFFE4EDE7);
+  static const skeletonHighlight = Color(0xFFF0F5F2);
 }

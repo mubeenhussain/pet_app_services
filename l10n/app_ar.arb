@@ -272,5 +272,16 @@
   "usernameRequired": "اسم المستخدم مطلوب",
   "usernameLength": "يجب أن يكون اسم المستخدم بين {min} و{max} حرفاً",
   "fieldRequired": "{field} مطلوب",
-  "passwordsDoNotMatch": "كلمتا المرور غير متطابقتين"
+  "passwordsDoNotMatch": "كلمتا المرور غير متطابقتين",
+  "signingIn": "جارٍ تسجيل الدخول...",
+  "savingChanges": "جارٍ حفظ التغييرات..",
+  "welcomeBackUser": "مرحباً بعودتك، {name}!",
+  "noPetsTitle": "لا توجد حيوانات بعد",
+  "noPetsSubtitle": "أضف حيواناً للبدء",
+  "noActiveChats": "لا توجد محادثات نشطة",
+  "noListingsFound": "لم يتم العثور على إعلانات",
+  "tryAdjustingFilters": "جرّب تعديل عوامل التصفية",
+  "deleteCannotUndo": "لا يمكن التراجع عن هذا الإجراء.",
+  "invalidCredentials": "رقم الهاتف أو كلمة المرور غير صحيحة",
+  "noAccountFound": "لا يوجد حساب بهذا الرقم"
 }

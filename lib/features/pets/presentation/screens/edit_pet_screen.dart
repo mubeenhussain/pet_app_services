@@ -10,7 +10,9 @@ import 'package:pet_app/features/pets/presentation/providers/demo_pets.dart';
 import 'package:pet_app/features/pets/presentation/providers/pets_controller.dart';
 import 'package:pet_app/shared/models/pet_model.dart';
 import 'package:pet_app/shared/providers/app_providers.dart';
+import 'package:pet_app/shared/widgets/app_confirm_dialog.dart';
 import 'package:pet_app/shared/widgets/app_loading.dart';
+import 'package:pet_app/shared/widgets/app_button.dart';
 import 'package:pet_app/shared/widgets/app_text_field.dart';
 import 'package:pet_app/shared/widgets/auth_circle_back_button.dart';
 import 'package:pet_app/shared/widgets/field_label.dart';
@@ -167,28 +169,15 @@ class _EditPetScreenState extends ConsumerState<EditPetScreen> {
   }
 
   Future<void> _confirmDelete() async {
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(context.l10n.deletePet),
-        content: Text(
-          context.l10n.deletePetConfirm(_pet?.name ?? context.l10n.thisPet),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text(context.l10n.cancel),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            style: TextButton.styleFrom(foregroundColor: _deleteRed),
-            child: Text(context.l10n.delete),
-          ),
-        ],
-      ),
+    final confirmed = await showAppConfirmDialog(
+      context,
+      title: context.l10n.deletePetConfirm(_pet?.name ?? context.l10n.thisPet),
+      message: context.l10n.deleteCannotUndo,
+      confirmLabel: context.l10n.delete,
+      destructive: true,
     );
 
-    if (confirmed == true) await _delete();
+    if (confirmed) await _delete();
   }
 
   Future<void> _delete() async {
@@ -374,7 +363,9 @@ class _EditPetScreenState extends ConsumerState<EditPetScreen> {
                         ],
                       ),
                       const SizedBox(height: 28),
-                      _SavePetButton(
+                      AppPrimaryLoadingButton(
+                        label: context.l10n.savePet,
+                        loadingLabel: context.l10n.savingChanges,
                         isLoading: _saving,
                         onPressed: _saving ? null : _save,
                       ),
@@ -556,54 +547,6 @@ class _GenderSegment extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _SavePetButton extends StatelessWidget {
-  const _SavePetButton({
-    required this.onPressed,
-    required this.isLoading,
-  });
-
-  final VoidCallback? onPressed;
-  final bool isLoading;
-
-  static const _green = Color(0xFF17A855);
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: 46,
-      child: ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: _green,
-          foregroundColor: Colors.white,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-        ),
-        child: isLoading
-            ? const SizedBox(
-                width: 22,
-                height: 22,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  color: Colors.white,
-                ),
-              )
-            : Text(
-                context.l10n.savePet,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white,
-                ),
-              ),
       ),
     );
   }

@@ -399,5 +399,21 @@
       "field": {"type": "String"}
     }
   },
-  "passwordsDoNotMatch": "Passwords do not match"
+  "passwordsDoNotMatch": "Passwords do not match",
+  "signingIn": "Signing in...",
+  "savingChanges": "Saving changes..",
+  "welcomeBackUser": "Welcome back, {name}!",
+  "@welcomeBackUser": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "noPetsTitle": "No pets yet",
+  "noPetsSubtitle": "Add one to get started",
+  "noActiveChats": "No active chats",
+  "noListingsFound": "No listings found",
+  "tryAdjustingFilters": "Try adjusting your filters",
+  "deleteCannotUndo": "This can't be undone.",
+  "invalidCredentials": "Invalid phone number or password",
+  "noAccountFound": "No account found with this number"
 }

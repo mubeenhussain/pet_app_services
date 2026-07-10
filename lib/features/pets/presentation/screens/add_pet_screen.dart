@@ -9,6 +9,7 @@ import 'package:pet_app/core/utils/validators.dart';
 import 'package:pet_app/features/pets/presentation/providers/pets_controller.dart';
 import 'package:pet_app/shared/models/pet_model.dart';
 import 'package:pet_app/shared/providers/app_providers.dart';
+import 'package:pet_app/shared/widgets/app_button.dart';
 import 'package:pet_app/shared/widgets/app_text_field.dart';
 import 'package:pet_app/shared/widgets/auth_circle_back_button.dart';
 import 'package:pet_app/shared/widgets/field_label.dart';
@@ -171,7 +172,9 @@ class _AddPetScreenState extends ConsumerState<AddPetScreen> {
                         ],
                       ),
                       const SizedBox(height: 28),
-                      _SavePetButton(
+                      AppPrimaryLoadingButton(
+                        label: context.l10n.savePet,
+                        loadingLabel: context.l10n.savingChanges,
                         isLoading: isLoading,
                         onPressed: isLoading ? null : _save,
                       ),
@@ -380,55 +383,6 @@ class _GenderSegment extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _SavePetButton extends StatelessWidget {
-  const _SavePetButton({
-    required this.onPressed,
-    required this.isLoading,
-  });
-
-  final VoidCallback? onPressed;
-  final bool isLoading;
-
-  // Figma-aligned with Save Changes: radius 10, height 46, #17A855
-  static const _green = Color(0xFF17A855);
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: 46,
-      child: ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: _green,
-          foregroundColor: Colors.white,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-        ),
-        child: isLoading
-            ? const SizedBox(
-                width: 22,
-                height: 22,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  color: Colors.white,
-                ),
-              )
-            : Text(
-                context.l10n.savePet,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white,
-                ),
-              ),
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pet_app/core/extensions/context_extensions.dart';
 import 'package:pet_app/core/theme/app_colors.dart';
+import 'package:pet_app/shared/widgets/app_feedback_banner.dart';
 import 'package:pet_app/shared/widgets/auth_circle_back_button.dart';
 
 const _green = Color(0xFF17A855);
@@ -153,7 +154,10 @@ class ChatThreadScreen extends StatelessWidget {
                   isMine: false,
                 ),
                 const SizedBox(height: 16),
-                const _WarningBanner(),
+                AppFeedbackBanner(
+                  message: context.l10n.contactInfoWarning,
+                  icon: Icons.warning_amber_rounded,
+                ),
               ],
             ),
           ),
@@ -353,42 +357,6 @@ class _Bubble extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _WarningBanner extends StatelessWidget {
-  const _WarningBanner();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-      decoration: BoxDecoration(
-        color: const Color(0xFFFFF1F1),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: const Color(0xFFF5C2C2)),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(
-            Icons.warning_amber_rounded,
-            size: 16,
-            color: Color(0xFFC62828),
-          ),
-          const SizedBox(width: 6),
-          Text(
-            context.l10n.contactInfoWarning,
-            style: const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              color: Color(0xFFC62828),
-            ),
-          ),
-        ],
       ),
     );
   }

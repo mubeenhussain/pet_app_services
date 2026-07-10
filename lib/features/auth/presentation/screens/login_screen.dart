@@ -6,6 +6,7 @@ import 'package:pet_app/core/router/route_names.dart';
 import 'package:pet_app/core/utils/validators.dart';
 import 'package:pet_app/features/auth/presentation/providers/auth_controller.dart';
 import 'package:pet_app/shared/widgets/app_button.dart';
+import 'package:pet_app/shared/widgets/app_feedback_banner.dart';
 import 'package:pet_app/shared/widgets/app_text_field.dart';
 import 'package:pet_app/shared/widgets/auth_redirect_prompt.dart';
 import 'package:pet_app/shared/widgets/auth_shell.dart';
@@ -26,6 +27,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
+  String? _errorMessage;
 
   @override
   void dispose() {
@@ -36,14 +38,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   /// Runs an auth action then routes home on success or surfaces the error.
   Future<void> _runAuthAction(Future<void> Function() action) async {
+    setState(() => _errorMessage = null);
     final controller = ref.read(authControllerProvider.notifier);
     await action();
 
     if (!mounted) return;
     ref.read(authControllerProvider).whenOrNull(
-          error: (error, _) => context.showAppSnackBar(
-            controller.mapError(error) ?? context.l10n.errorGeneric,
-            isError: true,
+          error: (error, _) => setState(
+            () => _errorMessage =
+                controller.mapError(error) ?? context.l10n.invalidCredentials,
           ),
           data: (_) => context.go(RouteNames.home),
         );
@@ -83,6 +86,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            if (_errorMessage != null) ...[
+              AppFeedbackBanner(message: _errorMessage!),
+              const SizedBox(height: 16),
+            ],
             PhoneField(
               controller: _phoneController,
               label: l10n.phoneHint,
@@ -121,6 +128,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             const SizedBox(height: 28),
             AppButton(
               label: l10n.signIn,
+              loadingLabel: l10n.signingIn,
               isLoading: isLoading,
               onPressed: _submit,
             ),

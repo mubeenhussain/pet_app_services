@@ -883,4 +883,39 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get passwordsDoNotMatch => 'Passwords do not match';
+
+  @override
+  String get signingIn => 'Signing in...';
+
+  @override
+  String get savingChanges => 'Saving changes..';
+
+  @override
+  String welcomeBackUser(String name) {
+    return 'Welcome back, $name!';
+  }
+
+  @override
+  String get noPetsTitle => 'No pets yet';
+
+  @override
+  String get noPetsSubtitle => 'Add one to get started';
+
+  @override
+  String get noActiveChats => 'No active chats';
+
+  @override
+  String get noListingsFound => 'No listings found';
+
+  @override
+  String get tryAdjustingFilters => 'Try adjusting your filters';
+
+  @override
+  String get deleteCannotUndo => 'This can\'t be undone.';
+
+  @override
+  String get invalidCredentials => 'Invalid phone number or password';
+
+  @override
+  String get noAccountFound => 'No account found with this number';
 }

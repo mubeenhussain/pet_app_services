@@ -171,6 +171,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
             const SizedBox(height: 20),
             AppButton(
               label: l10n.createAccount,
+              loadingLabel: l10n.signingIn,
               isLoading: isLoading,
               onPressed: _submit,
             ),

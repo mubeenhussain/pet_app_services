@@ -6,6 +6,7 @@ import 'package:pet_app/core/router/route_names.dart';
 import 'package:pet_app/core/theme/app_colors.dart';
 import 'package:pet_app/features/pets/presentation/models/buy_pet_listing.dart';
 import 'package:pet_app/features/pets/presentation/utils/buy_pet_filters.dart';
+import 'package:pet_app/shared/widgets/app_empty_state.dart';
 import 'package:pet_app/shared/widgets/auth_circle_back_button.dart';
 
 /// Figma — Buy a Pet marketplace (home → Buy & Sell → See all).
@@ -114,7 +115,13 @@ class _BuyPetScreenState extends State<BuyPetScreen> {
               ),
             ),
             Expanded(
-              child: CustomScrollView(
+              child: listings.isEmpty
+                  ? AppEmptyState(
+                      title: context.l10n.noListingsFound,
+                      subtitle: context.l10n.tryAdjustingFilters,
+                      icon: Icons.search_rounded,
+                    )
+                  : CustomScrollView(
                 slivers: [
                   SliverPadding(
                     padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),

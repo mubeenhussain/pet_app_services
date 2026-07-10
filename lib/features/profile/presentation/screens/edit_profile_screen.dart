@@ -6,6 +6,7 @@ import 'package:pet_app/core/theme/app_colors.dart';
 import 'package:pet_app/shared/providers/app_providers.dart';
 import 'package:pet_app/shared/services/local_storage_service.dart';
 import 'package:pet_app/shared/services/phone_auth_service.dart';
+import 'package:pet_app/shared/widgets/app_button.dart';
 import 'package:pet_app/shared/widgets/app_select_field.dart';
 import 'package:pet_app/shared/widgets/app_text_field.dart';
 import 'package:pet_app/shared/widgets/auth_circle_back_button.dart';
@@ -292,7 +293,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                       textInputAction: TextInputAction.done,
                     ),
                     const SizedBox(height: 32),
-                    _SaveChangesButton(
+                    AppPrimaryLoadingButton(
+                      label: l10n.saveChanges,
+                      loadingLabel: l10n.savingChanges,
                       isLoading: _saving,
                       onPressed: _saving ? null : _save,
                     ),
@@ -302,71 +305,6 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _SaveChangesButton extends StatelessWidget {
-  const _SaveChangesButton({
-    required this.onPressed,
-    required this.isLoading,
-  });
-
-  final VoidCallback? onPressed;
-  final bool isLoading;
-
-  // Figma: fill width | H 46 | R 10 | fill #17A855
-  // Drop shadow: X0 Y1 Blur 4.1 Spread -8 #0F8A42 @ 55%
-  static const _green = Color(0xFF17A855);
-  static const _shadow = Color(0xFF0F8A42);
-  static const _height = 46.0;
-  static const _radius = 10.0;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: _height,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(_radius),
-        boxShadow: [
-          BoxShadow(
-            color: _shadow.withValues(alpha: 0.55),
-            offset: const Offset(0, 1),
-            blurRadius: 4.1,
-            spreadRadius: -8,
-          ),
-        ],
-      ),
-      child: ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: _green,
-          foregroundColor: Colors.white,
-          elevation: 0,
-          shadowColor: Colors.transparent,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(_radius),
-          ),
-        ),
-        child: isLoading
-            ? const SizedBox(
-                width: 22,
-                height: 22,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  color: Colors.white,
-                ),
-              )
-            : Text(
-                context.l10n.saveChanges,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white,
-                ),
-              ),
       ),
     );
   }

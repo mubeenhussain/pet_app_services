@@ -5,10 +5,12 @@ import 'package:pet_app/core/extensions/context_extensions.dart';
 import 'package:pet_app/core/l10n/l10n_helpers.dart';
 import 'package:pet_app/core/router/route_names.dart';
 import 'package:pet_app/core/theme/app_colors.dart';
-import 'package:pet_app/features/pets/presentation/providers/demo_pets.dart';
 import 'package:pet_app/features/pets/presentation/providers/pets_controller.dart';
 import 'package:pet_app/shared/models/pet_model.dart';
+import 'package:pet_app/shared/widgets/app_empty_state.dart';
+import 'package:pet_app/shared/widgets/app_error_view.dart';
 import 'package:pet_app/shared/widgets/app_loading.dart';
+import 'package:pet_app/shared/widgets/app_skeleton.dart';
 import 'package:pet_app/shared/widgets/auth_circle_back_button.dart';
 
 /// BRD 6.9 — My Pets List (Figma)
@@ -18,7 +20,6 @@ class PetsListScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final petsAsync = ref.watch(petsListProvider);
-    final demoPets = ref.watch(demoPetsProvider);
 
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FB),
@@ -28,11 +29,24 @@ class PetsListScreen extends ConsumerWidget {
             const _MyPetsHeader(),
             Expanded(
               child: petsAsync.when(
-                loading: () => AppLoadingView(message: context.l10n.loading),
-                error: (_, __) => _PetsGrid(pets: demoPets),
-                data: (pets) => _PetsGrid(
-                  pets: pets.isEmpty ? demoPets : pets,
+                loading: () => const AppListSkeleton(),
+                error: (_, __) => AppErrorView(
+                  message: context.l10n.errorGeneric,
+                  onRetry: () => ref.invalidate(petsListProvider),
                 ),
+                data: (pets) {
+                  if (pets.isEmpty) {
+                    return AppEmptyState(
+                      title: context.l10n.noPetsTitle,
+                      subtitle: context.l10n.noPetsSubtitle,
+                      actionLabel: context.l10n.addPet,
+                      icon: Icons.pets_outlined,
+                      showActionIcon: true,
+                      onAction: () => context.push(RouteNames.addPet),
+                    );
+                  }
+                  return _PetsGrid(pets: pets);
+                },
               ),
             ),
           ],

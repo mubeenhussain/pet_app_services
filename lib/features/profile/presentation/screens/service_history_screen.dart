@@ -4,6 +4,7 @@ import 'package:pet_app/core/extensions/context_extensions.dart';
 import 'package:pet_app/core/l10n/l10n_helpers.dart';
 import 'package:intl/intl.dart';
 import 'package:pet_app/core/theme/app_colors.dart';
+import 'package:pet_app/shared/widgets/app_empty_state.dart';
 import 'package:pet_app/shared/widgets/auth_circle_back_button.dart';
 
 enum _HistoryFilter { all, rides, services, housing, supplies }
@@ -183,11 +184,9 @@ class _ServiceHistoryScreenState extends ConsumerState<ServiceHistoryScreen> {
             const SizedBox(height: 16),
             Expanded(
               child: items.isEmpty
-                  ? Center(
-                      child: Text(
-                        context.l10n.noHistoryYet,
-                        style: const TextStyle(color: AppColors.textSecondary),
-                      ),
+                  ? AppEmptyState(
+                      title: context.l10n.noHistoryYet,
+                      icon: Icons.history_rounded,
                     )
                   : ListView.separated(
                       padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),

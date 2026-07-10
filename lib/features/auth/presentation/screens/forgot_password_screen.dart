@@ -7,6 +7,7 @@ import 'package:pet_app/core/utils/validators.dart';
 import 'package:pet_app/features/auth/presentation/providers/auth_controller.dart';
 import 'package:pet_app/shared/services/phone_auth_service.dart';
 import 'package:pet_app/shared/widgets/app_button.dart';
+import 'package:pet_app/shared/widgets/app_feedback_banner.dart';
 import 'package:pet_app/shared/widgets/app_icon_badge.dart';
 import 'package:pet_app/shared/widgets/auth_shell.dart';
 import 'package:pet_app/shared/widgets/auth_text_link.dart';
@@ -24,6 +25,7 @@ class ForgotPasswordScreen extends ConsumerStatefulWidget {
 class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   final _formKey = GlobalKey<FormState>();
   final _phoneController = TextEditingController();
+  String? _errorMessage;
 
   @override
   void dispose() {
@@ -41,6 +43,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
 
+    setState(() => _errorMessage = null);
     final phone = _phoneController.text.trim();
     final controller = ref.read(authControllerProvider.notifier);
 
@@ -49,14 +52,14 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
     if (!mounted) return;
     ref.read(authControllerProvider).whenOrNull(
           error: (error, _) {
-            context.showAppSnackBar(
-              controller.mapError(error) ?? context.l10n.errorGeneric,
-              isError: true,
+            setState(
+              () => _errorMessage =
+                  controller.mapError(error) ?? context.l10n.noAccountFound,
             );
             _goToOtp(phone);
           },
           data: (_) {
-            context.showAppSnackBar(context.l10n.resetCodeSent);
+            context.showAppSnackBar(context.l10n.resetCodeSent, isSuccess: true);
             _goToOtp(phone);
           },
         );
@@ -82,6 +85,10 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            if (_errorMessage != null) ...[
+              AppFeedbackBanner(message: _errorMessage!),
+              const SizedBox(height: 16),
+            ],
             PhoneField(
               controller: _phoneController,
               label: l10n.phoneHint,
@@ -92,6 +99,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
             const SizedBox(height: 28),
             AppButton(
               label: l10n.sendOtp,
+              loadingLabel: l10n.signingIn,
               isLoading: isLoading,
               onPressed: _submit,
             ),

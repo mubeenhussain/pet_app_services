@@ -65,6 +65,7 @@ class _AppTextFieldState extends State<AppTextField> {
     final field = TextFormField(
       controller: widget.controller,
       validator: widget.validator,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       obscureText: _obscured,
       keyboardType: widget.keyboardType,
       textInputAction: widget.textInputAction,

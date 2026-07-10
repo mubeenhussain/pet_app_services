@@ -882,4 +882,39 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get passwordsDoNotMatch => 'كلمتا المرور غير متطابقتين';
+
+  @override
+  String get signingIn => 'جارٍ تسجيل الدخول...';
+
+  @override
+  String get savingChanges => 'جارٍ حفظ التغييرات..';
+
+  @override
+  String welcomeBackUser(String name) {
+    return 'مرحباً بعودتك، $name!';
+  }
+
+  @override
+  String get noPetsTitle => 'لا توجد حيوانات بعد';
+
+  @override
+  String get noPetsSubtitle => 'أضف حيواناً للبدء';
+
+  @override
+  String get noActiveChats => 'لا توجد محادثات نشطة';
+
+  @override
+  String get noListingsFound => 'لم يتم العثور على إعلانات';
+
+  @override
+  String get tryAdjustingFilters => 'جرّب تعديل عوامل التصفية';
+
+  @override
+  String get deleteCannotUndo => 'لا يمكن التراجع عن هذا الإجراء.';
+
+  @override
+  String get invalidCredentials => 'رقم الهاتف أو كلمة المرور غير صحيحة';
+
+  @override
+  String get noAccountFound => 'لا يوجد حساب بهذا الرقم';
 }

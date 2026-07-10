@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pet_app/core/theme/app_colors.dart';
 
 class AppButton extends StatelessWidget {
   const AppButton({
@@ -6,12 +7,14 @@ class AppButton extends StatelessWidget {
     required this.label,
     required this.onPressed,
     this.isLoading = false,
+    this.loadingLabel,
     this.variant = AppButtonVariant.primary,
   });
 
   final String label;
   final VoidCallback? onPressed;
   final bool isLoading;
+  final String? loadingLabel;
   final AppButtonVariant variant;
 
   @override
@@ -20,16 +23,27 @@ class AppButton extends StatelessWidget {
     final loaderColor =
         variant == AppButtonVariant.outlined ? scheme.primary : scheme.onPrimary;
 
-    final child = isLoading
-        ? SizedBox(
-            height: 22,
-            width: 22,
+    final Widget child;
+    if (isLoading) {
+      child = Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            height: 20,
+            width: 20,
             child: CircularProgressIndicator(
               strokeWidth: 2,
               color: loaderColor,
             ),
-          )
-        : Text(label);
+          ),
+          const SizedBox(width: 10),
+          Text(loadingLabel ?? label),
+        ],
+      );
+    } else {
+      child = Text(label);
+    }
 
     if (variant == AppButtonVariant.outlined) {
       return OutlinedButton(
@@ -41,6 +55,72 @@ class AppButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: isLoading ? null : onPressed,
       child: child,
+    );
+  }
+}
+
+/// Primary green action button with Figma loading style (SAVING — EDIT PET).
+class AppPrimaryLoadingButton extends StatelessWidget {
+  const AppPrimaryLoadingButton({
+    super.key,
+    required this.label,
+    required this.loadingLabel,
+    required this.onPressed,
+    this.isLoading = false,
+    this.height = 46,
+  });
+
+  final String label;
+  final String loadingLabel;
+  final VoidCallback? onPressed;
+  final bool isLoading;
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      height: height,
+      child: ElevatedButton(
+        onPressed: isLoading ? null : onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.primary,
+          foregroundColor: Colors.white,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        child: isLoading
+            ? Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    loadingLabel,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              )
+            : Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+      ),
     );
   }
 }

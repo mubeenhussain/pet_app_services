@@ -9,6 +9,8 @@ import 'package:pet_app/shared/models/user_model.dart';
 import 'package:pet_app/shared/providers/app_providers.dart';
 import 'package:pet_app/shared/services/local_storage_service.dart';
 import 'package:pet_app/shared/widgets/app_button.dart';
+import 'package:pet_app/shared/widgets/app_error_view.dart';
+import 'package:pet_app/shared/widgets/app_skeleton.dart';
 import 'package:pet_app/shared/widgets/app_top_bar.dart';
 
 /// BRD 6.7 — Display User Info (Figma: Profile)
@@ -71,12 +73,21 @@ class ProfileScreen extends ConsumerWidget {
       );
     }
 
+    final profileAsync = ref.watch(cachedUserProfileProvider);
+
+    if (!isGuest && profileAsync.isLoading) {
+      return Scaffold(
+        backgroundColor: AppColors.background,
+        body: SafeArea(child: AppProfileSkeleton()),
+      );
+    }
+
     final profile = _ProfileViewData.fromSources(user: user, cached: cached);
 
     return Scaffold(
       backgroundColor: AppColors.background,
       body: profile == null
-          ? Center(child: Text(context.l10n.errorGeneric))
+          ? AppErrorView(message: context.l10n.errorGeneric)
           : SafeArea(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),

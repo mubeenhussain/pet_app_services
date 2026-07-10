@@ -10,11 +10,12 @@ import 'package:pet_app/features/auth/presentation/providers/auth_controller.dar
 import 'package:pet_app/shared/providers/app_providers.dart';
 import 'package:pet_app/shared/services/phone_auth_service.dart';
 import 'package:pet_app/shared/widgets/app_button.dart';
+import 'package:pet_app/shared/widgets/app_countdown_banner.dart';
+import 'package:pet_app/shared/widgets/app_feedback_banner.dart';
 import 'package:pet_app/shared/widgets/app_icon_badge.dart';
 import 'package:pet_app/shared/widgets/auth_shell.dart';
 import 'package:pet_app/shared/widgets/mailbox_glyph.dart';
 import 'package:pet_app/shared/widgets/otp_input_field.dart';
-import 'package:pet_app/shared/widgets/resend_countdown.dart';
 
 /// BRD 6.2 — OTP Confirmation (Firebase Phone Auth)
 class OtpScreen extends ConsumerStatefulWidget {
@@ -33,6 +34,8 @@ class OtpScreen extends ConsumerStatefulWidget {
 
 class _OtpScreenState extends ConsumerState<OtpScreen> {
   String _otp = '';
+  String? _successMessage;
+  String? _errorMessage;
 
   @override
   void initState() {
@@ -69,12 +72,14 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
 
   Future<void> _confirm() async {
     if (_otp.length != AppConstants.otpLength) {
-      context.showAppSnackBar(
-        context.l10n.otpInvalid(AppConstants.otpLength),
-        isError: true,
-      );
+      setState(() => _errorMessage = context.l10n.otpInvalid(AppConstants.otpLength));
       return;
     }
+
+    setState(() {
+      _errorMessage = null;
+      _successMessage = null;
+    });
 
     final controller = ref.read(authControllerProvider.notifier);
 
@@ -87,17 +92,35 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
 
     if (!mounted) return;
     ref.read(authControllerProvider).whenOrNull(
-          error: (error, _) => context.showAppSnackBar(
-            controller.mapError(error) ?? context.l10n.errorGeneric,
-            isError: true,
+          error: (error, _) => setState(
+            () => _errorMessage =
+                controller.mapError(error) ?? context.l10n.errorGeneric,
           ),
-          data: (_) => context.go(RouteNames.home),
+          data: (_) {
+            final name = ref.read(currentUserProvider)?.username ?? '';
+            final displayName = name.trim().isEmpty
+                ? context.l10n.guestUser
+                : name.trim().split(RegExp(r'\s+')).first;
+            setState(
+              () => _successMessage =
+                  context.l10n.welcomeBackUser(displayName),
+            );
+            Future.delayed(const Duration(milliseconds: 1200), () {
+              if (mounted) context.go(RouteNames.home);
+            });
+          },
         );
   }
 
   Future<void> _resend() async {
+    setState(() {
+      _errorMessage = null;
+      _successMessage = null;
+    });
     await ref.read(authControllerProvider.notifier).sendRegisterOtp(widget.phone);
-    if (mounted) context.showAppSnackBar(context.l10n.otpResent);
+    if (mounted) {
+      context.showAppSnackBar(context.l10n.otpResent, isSuccess: true);
+    }
   }
 
   @override
@@ -145,13 +168,24 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          if (_successMessage != null) ...[
+            AppFeedbackBanner(
+              message: _successMessage!,
+              variant: AppFeedbackVariant.success,
+            ),
+            const SizedBox(height: 16),
+          ],
+          if (_errorMessage != null) ...[
+            AppFeedbackBanner(message: _errorMessage!),
+            const SizedBox(height: 16),
+          ],
           OtpInputField(
             length: AppConstants.otpLength,
             onChanged: (value) => setState(() => _otp = value),
             onCompleted: (_) => _confirm(),
           ),
           const SizedBox(height: 20),
-          ResendCountdown(
+          AppCountdownBanner(
             duration: const Duration(seconds: 47),
             enabled: !isLoading,
             onResend: _resend,
@@ -159,6 +193,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
           const SizedBox(height: 28),
           AppButton(
             label: l10n.confirm,
+            loadingLabel: l10n.signingIn,
             isLoading: isLoading,
             onPressed: _confirm,
           ),
