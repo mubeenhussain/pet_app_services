@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pet_app/core/theme/app_colors.dart';
+import 'package:pet_app/shared/widgets/app_loading.dart';
 
 class AppButton extends StatelessWidget {
   const AppButton({
@@ -30,14 +31,15 @@ class AppButton extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(
-            height: 20,
-            width: 20,
-            child: CircularProgressIndicator(
-              strokeWidth: 2,
+            height: AppLoadingMetrics.spinnerSizeMedium,
+            width: AppLoadingMetrics.spinnerSizeMedium,
+            child: AppLoadingSpinner(
+              size: AppLoadingMetrics.spinnerSizeMedium,
               color: loaderColor,
+              backgroundColor: loaderColor.withValues(alpha: 0.25),
             ),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: AppLoadingMetrics.inlineGap),
           Text(loadingLabel ?? label),
         ],
       );
@@ -92,26 +94,16 @@ class AppPrimaryLoadingButton extends StatelessWidget {
           ),
         ),
         child: isLoading
-            ? Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Text(
-                    loadingLabel,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ],
+            ? AppInlineLoadingRow(
+                label: loadingLabel,
+                spinnerSize: AppLoadingMetrics.spinnerSizeMedium,
+                textStyle: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
+                ),
+                spinnerColor: Colors.white,
+                spinnerTrackColor: Colors.white.withValues(alpha: 0.25),
               )
             : Text(
                 label,

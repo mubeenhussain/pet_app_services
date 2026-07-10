@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pet_app/core/extensions/context_extensions.dart';
+import 'package:pet_app/shared/widgets/app_loading.dart';
 
 /// Outlined button for third-party sign-in (Google, Apple, etc.).
 ///
@@ -42,13 +43,10 @@ class SocialAuthButton extends StatelessWidget {
         ),
       ),
       child: isLoading
-          ? SizedBox(
-              height: 22,
-              width: 22,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                color: scheme.primary,
-              ),
+          ? AppLoadingSpinner(
+              size: AppLoadingMetrics.spinnerSizeMedium,
+              color: scheme.primary,
+              backgroundColor: scheme.primary.withValues(alpha: 0.15),
             )
           : Row(
               mainAxisAlignment: MainAxisAlignment.center,

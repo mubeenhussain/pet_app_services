@@ -7,6 +7,7 @@ import 'package:pet_app/core/theme/app_colors.dart';
 import 'package:pet_app/features/pets/presentation/models/buy_pet_listing.dart';
 import 'package:pet_app/features/pets/presentation/utils/buy_pet_filters.dart';
 import 'package:pet_app/shared/widgets/app_empty_state.dart';
+import 'package:pet_app/shared/widgets/app_loading.dart';
 
 /// Figma — Buy a Pet marketplace (home → Buy & Sell → See all).
 class BuyPetScreen extends StatefulWidget {
@@ -164,8 +165,8 @@ class _BuyPetScreenState extends State<BuyPetScreen> {
                           ),
                           const SliverToBoxAdapter(
                             child: Padding(
-                              padding: EdgeInsets.only(bottom: 24),
-                              child: _LoadingMoreFooter(),
+                              padding: EdgeInsets.only(top: 16, bottom: 24),
+                              child: AppLoadingMore(),
                             ),
                           ),
                         ],
@@ -257,12 +258,15 @@ class _BuyPetCard extends StatelessWidget {
   static const _designScreenWidth = 390.0;
   static const _designImageInset = 20.0;
   static const _designTextStartPadding = 35.0;
-  static const _designPetIconHeight = 39.0;
-  static const _designPetIconTopMargin = 8.0;
+  static const _designPetIconHeight = 32.0;
+  static const _designPetIconUpOffset = 12.0;
   static const _designVerifiedIconSize = 12.0;
   static const _designVerifiedFontSize = 10.5;
   static const _designVerifiedBadgeHeight = 21.0;
-  static const _designVerifiedBadgeTop = 19.0;
+  static const _designVerifiedBadgeTop = 10.0;
+  static const _designVerifiedBadgeToIconGap = 8.0;
+  static const _designVerifiedBadgeHorizontalPadding = 8.0;
+  static const _designVerifiedIconTextGap = 4.0;
   static const _designVerifiedBadgeBg = Color(0xFFE7F8EC);
   static const _cardBorder = Color(0xFFDDEFE2);
   static const _titleColor = Color(0xFF12201A);
@@ -301,48 +305,53 @@ class _BuyPetCard extends StatelessWidget {
                   padding: EdgeInsetsDirectional.symmetric(
                     horizontal: s(_designImageInset),
                   ),
-                  child: Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(s(12)),
-                        child: SizedBox(
-                          width: double.infinity,
-                          height: double.infinity,
-                          child: DecoratedBox(
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: listing.gradient,
-                                stops: _gradientStops,
-                              ),
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                top: s(_designPetIconTopMargin),
-                              ),
-                              child: Center(
-                                child: _PetVisual(
-                                  listing: listing,
-                                  height: s(_designPetIconHeight),
-                                ),
-                              ),
-                            ),
-                          ),
+                  child: ClipRRect(
+                  borderRadius: BorderRadius.circular(s(12)),
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: double.infinity,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: listing.gradient,
+                          stops: _gradientStops,
                         ),
                       ),
-                      if (listing.verified)
-                        Positioned(
-                          top: s(_designVerifiedBadgeTop),
-                          left: 0,
-                          right: 0,
-                          child: Center(
-                            child: _VerifiedBadge(scale: s(1)),
-                          ),
-                        ),
-                    ],
+                      child: listing.verified
+                          ? Column(
+                              children: [
+                                SizedBox(height: s(_designVerifiedBadgeTop)),
+                                const Center(child: _VerifiedBadge()),
+                                SizedBox(
+                                  height: s(_designVerifiedBadgeToIconGap),
+                                ),
+                                Expanded(
+                                  child: Center(
+                                    child: Transform.translate(
+                                      offset: Offset(
+                                        0,
+                                        -s(_designPetIconUpOffset),
+                                      ),
+                                      child: _PetVisual(
+                                        listing: listing,
+                                        height: s(_designPetIconHeight),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Center(
+                              child: _PetVisual(
+                                listing: listing,
+                                height: s(_designPetIconHeight),
+                              ),
+                            ),
+                    ),
                   ),
+                ),
                 ),
               ),
             ),
@@ -429,17 +438,19 @@ class _PetVisual extends StatelessWidget {
 }
 
 class _VerifiedBadge extends StatelessWidget {
-  const _VerifiedBadge({this.scale = 1});
-
-  final double scale;
+  const _VerifiedBadge();
 
   static const _green = Color(0xFF0F8A42);
 
   @override
   Widget build(BuildContext context) {
+    final scale = _BuyPetCard._scaled(context, 1);
     final iconSize = _BuyPetCard._designVerifiedIconSize * scale;
     final fontSize = _BuyPetCard._designVerifiedFontSize * scale;
     final badgeHeight = _BuyPetCard._designVerifiedBadgeHeight * scale;
+    final horizontalPadding =
+        _BuyPetCard._designVerifiedBadgeHorizontalPadding * scale;
+    final iconTextGap = _BuyPetCard._designVerifiedIconTextGap * scale;
 
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -449,7 +460,7 @@ class _VerifiedBadge extends StatelessWidget {
       child: SizedBox(
         height: badgeHeight,
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 6 * scale),
+          padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -459,13 +470,13 @@ class _VerifiedBadge extends StatelessWidget {
                 color: _green,
                 weight: 700,
               ),
-              SizedBox(width: 3 * scale),
+              SizedBox(width: iconTextGap),
               Text(
                 context.l10n.verified,
                 style: TextStyle(
                   fontSize: fontSize,
                   fontWeight: FontWeight.w600,
-                  height: 1.5,
+                  height: 1,
                   letterSpacing: 0,
                   color: _green,
                 ),
@@ -474,36 +485,6 @@ class _VerifiedBadge extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _LoadingMoreFooter extends StatelessWidget {
-  const _LoadingMoreFooter();
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const SizedBox(
-          width: 18,
-          height: 18,
-          child: CircularProgressIndicator(
-            strokeWidth: 2,
-            color: AppColors.textSecondary,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          context.l10n.loadingMore,
-          style: const TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-            color: AppColors.textSecondary,
-          ),
-        ),
-      ],
     );
   }
 }
