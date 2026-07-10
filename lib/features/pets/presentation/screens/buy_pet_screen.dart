@@ -258,9 +258,12 @@ class _BuyPetCard extends StatelessWidget {
   static const _designImageInset = 20.0;
   static const _designTextStartPadding = 35.0;
   static const _designPetIconHeight = 39.0;
+  static const _designPetIconTopMargin = 8.0;
   static const _designVerifiedIconSize = 12.0;
   static const _designVerifiedFontSize = 10.5;
-  static const _designVerifiedBadgeRadius = 20.0;
+  static const _designVerifiedBadgeHeight = 21.0;
+  static const _designVerifiedBadgeTop = 19.0;
+  static const _designVerifiedBadgeBg = Color(0xFFE7F8EC);
   static const _cardBorder = Color(0xFFDDEFE2);
   static const _titleColor = Color(0xFF12201A);
   static const _cityColor = Color(0xFF95A29A);
@@ -315,10 +318,15 @@ class _BuyPetCard extends StatelessWidget {
                                 stops: _gradientStops,
                               ),
                             ),
-                            child: Center(
-                              child: _PetVisual(
-                                listing: listing,
-                                height: s(_designPetIconHeight),
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                top: s(_designPetIconTopMargin),
+                              ),
+                              child: Center(
+                                child: _PetVisual(
+                                  listing: listing,
+                                  height: s(_designPetIconHeight),
+                                ),
                               ),
                             ),
                           ),
@@ -326,7 +334,7 @@ class _BuyPetCard extends StatelessWidget {
                       ),
                       if (listing.verified)
                         Positioned(
-                          top: s(6),
+                          top: s(_designVerifiedBadgeTop),
                           left: 0,
                           right: 0,
                           child: Center(
@@ -420,33 +428,6 @@ class _PetVisual extends StatelessWidget {
   }
 }
 
-class _VerifiedCheckmark extends StatelessWidget {
-  const _VerifiedCheckmark({required this.size});
-
-  final double size;
-
-  static const _green = Color(0xFF0F8A42);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: size,
-      height: size,
-      decoration: const BoxDecoration(
-        color: _green,
-        shape: BoxShape.circle,
-      ),
-      alignment: Alignment.center,
-      child: Icon(
-        Icons.check_rounded,
-        size: size * 0.72,
-        color: Colors.white,
-        weight: 700,
-      ),
-    );
-  }
-}
-
 class _VerifiedBadge extends StatelessWidget {
   const _VerifiedBadge({this.scale = 1});
 
@@ -458,42 +439,39 @@ class _VerifiedBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     final iconSize = _BuyPetCard._designVerifiedIconSize * scale;
     final fontSize = _BuyPetCard._designVerifiedFontSize * scale;
+    final badgeHeight = _BuyPetCard._designVerifiedBadgeHeight * scale;
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(
-          _BuyPetCard._designVerifiedBadgeRadius * scale,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.06),
-            blurRadius: 6 * scale,
-            offset: Offset(0, 1 * scale),
-          ),
-        ],
+        color: _BuyPetCard._designVerifiedBadgeBg,
+        borderRadius: BorderRadius.circular(999 * scale),
       ),
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: 6 * scale,
-          vertical: 3 * scale,
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _VerifiedCheckmark(size: iconSize),
-            SizedBox(width: 3 * scale),
-            Text(
-              context.l10n.verified,
-              style: TextStyle(
-                fontSize: fontSize,
-                fontWeight: FontWeight.w600,
-                height: 1.5,
-                letterSpacing: 0,
+      child: SizedBox(
+        height: badgeHeight,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 6 * scale),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.check_rounded,
+                size: iconSize,
                 color: _green,
+                weight: 700,
               ),
-            ),
-          ],
+              SizedBox(width: 3 * scale),
+              Text(
+                context.l10n.verified,
+                style: TextStyle(
+                  fontSize: fontSize,
+                  fontWeight: FontWeight.w600,
+                  height: 1.5,
+                  letterSpacing: 0,
+                  color: _green,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
