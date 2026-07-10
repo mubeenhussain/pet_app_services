@@ -38,10 +38,13 @@ class _BuyPetScreenState extends State<BuyPetScreen> {
       );
 
   static const _designScreenWidth = 390.0;
-  static const _designSearchWidth = 295.0;
+  static const _designSearchWidth = 300.0;
   static const _horizontalPadding = 16.0;
   static const _designHeaderTop = 63.0;
   static const _headerColor = Color(0xFF12201A);
+  static const _gridSpacing = 12.0;
+  static const _designCardWidth = 156.0;
+  static const _designCardHeight = 193.0;
 
   double _scaled(BuildContext context, double designValue) {
     return MediaQuery.sizeOf(context).width * designValue / _designScreenWidth;
@@ -145,11 +148,11 @@ class _BuyPetScreenState extends State<BuyPetScreen> {
                             padding: const EdgeInsets.only(top: 4, bottom: 8),
                             sliver: SliverGrid(
                               gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                  SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 2,
-                                crossAxisSpacing: 12,
-                                mainAxisSpacing: 12,
-                                childAspectRatio: 0.72,
+                                crossAxisSpacing: _gridSpacing,
+                                mainAxisSpacing: _gridSpacing,
+                                mainAxisExtent: _scaled(context, _designCardHeight),
                               ),
                               delegate: SliverChildBuilderDelegate(
                                 (context, index) => _BuyPetCard(
@@ -251,12 +254,25 @@ class _BuyPetCard extends StatelessWidget {
 
   final BuyPetListing listing;
 
+  static const _designScreenWidth = 390.0;
+  static const _designImageInset = 20.0;
+  static const _designTextStartPadding = 35.0;
   static const _cardBorder = Color(0xFFDDEFE2);
+  static const _titleColor = Color(0xFF12201A);
+  static const _cityColor = Color(0xFF95A29A);
   static const _priceColor = Color(0xFF0F8A42);
   static const _gradientStops = [0.0, 0.52];
 
+  static double _scaled(BuildContext context, double designValue) {
+    return MediaQuery.sizeOf(context).width *
+        designValue /
+        _designScreenWidth;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final s = (double value) => _scaled(context, value);
+
     return Material(
       color: Colors.white,
       elevation: 0,
@@ -267,69 +283,105 @@ class _BuyPetCard extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
         onTap: () => context.push(RouteNames.buyPetDetailPath(listing.id)),
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Stack(
-                  children: [
-                    Positioned.fill(
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: listing.gradient,
-                            stops: _gradientStops,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Padding(
+              padding: EdgeInsetsDirectional.only(top: s(11)),
+              child: SizedBox(
+                height: s(93),
+                child: Padding(
+                  padding: EdgeInsetsDirectional.symmetric(
+                    horizontal: s(_designImageInset),
+                  ),
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(s(12)),
+                        child: SizedBox(
+                          width: double.infinity,
+                          height: double.infinity,
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: listing.gradient,
+                                stops: _gradientStops,
+                              ),
+                            ),
+                            child: Center(
+                              child: _PetVisual(
+                                listing: listing,
+                                size: s(48),
+                              ),
+                            ),
                           ),
                         ),
-                        child: Center(child: _PetVisual(listing: listing)),
                       ),
+                      if (listing.verified)
+                        PositionedDirectional(
+                          top: s(6),
+                          end: s(6),
+                          child: _VerifiedBadge(scale: s(1)),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsetsDirectional.only(
+                start: s(_designTextStartPadding),
+                top: s(6),
+                bottom: s(10),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    listing.title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 12.5,
+                      fontWeight: FontWeight.w700,
+                      height: 1.5,
+                      letterSpacing: 0,
+                      color: _titleColor,
                     ),
-                    if (listing.verified)
-                      const Positioned(
-                        top: 6,
-                        right: 6,
-                        child: _VerifiedBadge(),
-                      ),
-                  ],
-                ),
+                  ),
+                  SizedBox(height: s(2)),
+                  Text(
+                    listing.city,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 10.5,
+                      fontWeight: FontWeight.w400,
+                      height: 1.5,
+                      letterSpacing: 0,
+                      color: _cityColor,
+                    ),
+                  ),
+                  SizedBox(height: s(2)),
+                  Text(
+                    context.l10n.sarAmount(listing.priceSar),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      height: 1.5,
+                      letterSpacing: 0,
+                      color: _priceColor,
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 8),
-              Text(
-                listing.title,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.textPrimary,
-                ),
-              ),
-              const SizedBox(height: 2),
-              Text(
-                listing.city,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: AppColors.textSecondary,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                context.l10n.sarAmount(listing.priceSar),
-                style: const TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
-                  color: _priceColor,
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -337,29 +389,35 @@ class _BuyPetCard extends StatelessWidget {
 }
 
 class _PetVisual extends StatelessWidget {
-  const _PetVisual({required this.listing});
+  const _PetVisual({
+    required this.listing,
+    this.size = 48,
+  });
 
   final BuyPetListing listing;
+  final double size;
 
   @override
   Widget build(BuildContext context) {
     if (listing.iconAsset != null) {
       return Image.asset(
         listing.iconAsset!,
-        width: 48,
-        height: 48,
+        width: size,
+        height: size,
         fit: BoxFit.contain,
       );
     }
     return Text(
       listing.emoji ?? '🐾',
-      style: const TextStyle(fontSize: 40, height: 1),
+      style: TextStyle(fontSize: size, height: 1),
     );
   }
 }
 
 class _VerifiedBadge extends StatelessWidget {
-  const _VerifiedBadge();
+  const _VerifiedBadge({this.scale = 1});
+
+  final double scale;
 
   static const _green = Color(0xFF0F8A42);
 
@@ -368,26 +426,29 @@ class _VerifiedBadge extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(20 * scale),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.06),
-            blurRadius: 6,
-            offset: const Offset(0, 1),
+            blurRadius: 6 * scale,
+            offset: Offset(0, 1 * scale),
           ),
         ],
       ),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+        padding: EdgeInsets.symmetric(
+          horizontal: 6 * scale,
+          vertical: 3 * scale,
+        ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.verified_rounded, size: 12, color: _green),
-            SizedBox(width: 3),
+            Icon(Icons.verified_rounded, size: 14 * scale, color: _green),
+            SizedBox(width: 3 * scale),
             Text(
               context.l10n.verified,
-              style: const TextStyle(
-                fontSize: 10,
+              style: TextStyle(
+                fontSize: 10.5 * scale,
                 fontWeight: FontWeight.w600,
                 color: _green,
               ),
