@@ -99,6 +99,23 @@ class _HomeTab extends StatelessWidget {
   static const _sectionTitleGap = 16.0;
   static const _sectionGap = 20.0;
   static const _serviceGridSpacing = 20.0;
+  static const _buySellGridSpacing = 11.0;
+  static const _buySellDesignWidth = 390.0;
+  static const _buySellDesignCardRadius = 16.0;
+  static const _buySellCardAspectRatio = 1.42;
+
+  static double _buySellCardRadiusFor(double width) =>
+      (width * _buySellDesignCardRadius / _buySellDesignWidth)
+          .clamp(12.0, 18.0);
+
+  static double _buySellGridSpacingFor(double width) =>
+      (width * _buySellGridSpacing / _buySellDesignWidth).clamp(8.0, 12.0);
+
+  static double _buySellScaled(double designValue, double width) =>
+      (width * designValue / _buySellDesignWidth).clamp(
+        designValue * 0.88,
+        designValue,
+      );
   static const _serviceCardBorder = Color(0xFFDDEFE2);
   static const _serviceCardBorderWidth = 0.8;
   static const _serviceCardHeight = 111.0; // Figma outer card height
@@ -140,6 +157,9 @@ class _HomeTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final screenWidth = context.screenSize.width;
+    final buySellCardRadius = _buySellCardRadiusFor(screenWidth);
+    final buySellGridSpacing = _buySellGridSpacingFor(screenWidth);
     return SafeArea(
       bottom: false,
       child: CustomScrollView(
@@ -259,28 +279,37 @@ class _HomeTab extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: _sectionTitleGap),
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      final cardWidth =
+                          (constraints.maxWidth - buySellGridSpacing * 2) / 3;
+                      final cardHeight = cardWidth * _buySellCardAspectRatio;
+
+                      return SizedBox(
+                        height: cardHeight,
+                        child: Row(
+                          children: [
+                            for (var i = 0; i < _listings.length; i++) ...[
+                              if (i > 0)
+                                SizedBox(width: buySellGridSpacing),
+                              Expanded(
+                                child: _BuySellCard(
+                                  item: _listings[i],
+                                  cardRadius: buySellCardRadius,
+                                  screenWidth: screenWidth,
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: _sectionGap),
                 ],
               ),
             ),
           ),
-          SliverToBoxAdapter(
-            child: SizedBox(
-              height: 214,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: _HomeTab._screenHorizontalPadding,
-                ),
-                itemCount: _listings.length,
-                separatorBuilder: (_, __) =>
-                    const SizedBox(width: _HomeTab._serviceGridSpacing),
-                itemBuilder: (context, index) {
-                  return _BuySellCard(item: _listings[index]);
-                },
-              ),
-            ),
-          ),
-          const SliverToBoxAdapter(child: SizedBox(height: _sectionGap)),
           // Clearance for the home speed-dial FAB.
           const SliverToBoxAdapter(child: SizedBox(height: 50)),
         ],
@@ -646,41 +675,48 @@ class _BuySellItem {
 }
 
 class _BuySellCard extends StatelessWidget {
-  const _BuySellCard({required this.item});
+  const _BuySellCard({
+    required this.item,
+    required this.cardRadius,
+    required this.screenWidth,
+  });
 
   final _BuySellItem item;
+  final double cardRadius;
+  final double screenWidth;
   // Figma: white card, light stroke, no shadow.
   static const _cardBorder = Color(0xFFDDEFE2);
   static const _cardBorderWidth = 0.8;
-  static const _cardRadius = 24.0;
-  static const _imageRadius = 20.0;
-  static const _cardPadding = 12.0;
-  static const _imageTextGap = 8.0;
-  static const _titlePriceGap = 4.0;
   static const _priceColor = Color(0xFF0F8A42);
 
   @override
   Widget build(BuildContext context) {
     final title = item.titleKey.label(context.l10n);
+    final imageRadius = cardRadius * 12 / 16;
+    final cardPadding = _HomeTab._buySellScaled(12, screenWidth);
+    final imageTextGap = _HomeTab._buySellScaled(8, screenWidth);
+    final titlePriceGap = _HomeTab._buySellScaled(4, screenWidth);
+    final iconHeight = _HomeTab._buySellScaled(30, screenWidth);
+    final titleSize = _HomeTab._buySellScaled(14, screenWidth);
+    final priceSize = _HomeTab._buySellScaled(13, screenWidth);
 
     return Container(
-      width: 148,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(_cardRadius),
+        borderRadius: BorderRadius.circular(cardRadius),
         border: Border.all(
           color: _cardBorder,
           width: _cardBorderWidth,
         ),
       ),
-      padding: const EdgeInsets.all(_cardPadding),
+      padding: EdgeInsets.all(cardPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             child: DecoratedBox(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(_imageRadius),
+                borderRadius: BorderRadius.circular(imageRadius),
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
@@ -691,29 +727,30 @@ class _BuySellCard extends StatelessWidget {
               child: Center(
                 child: Image.asset(
                   item.iconAsset,
-                  width: 48,
-                  height: 48,
+                  height: iconHeight,
                   fit: BoxFit.contain,
                 ),
               ),
             ),
           ),
-          const SizedBox(height: _imageTextGap),
+          SizedBox(height: imageTextGap),
           Text(
             title,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-              fontSize: 14,
+            style: TextStyle(
+              fontSize: titleSize,
               fontWeight: FontWeight.w700,
               color: AppColors.textPrimary,
             ),
           ),
-          const SizedBox(height: _titlePriceGap),
+          SizedBox(height: titlePriceGap),
           Text(
             context.l10n.sarAmount(item.priceSar),
-            style: const TextStyle(
-              fontSize: 13,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: priceSize,
               fontWeight: FontWeight.w700,
               color: _priceColor,
             ),
