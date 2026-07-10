@@ -7,7 +7,6 @@ import 'package:pet_app/core/theme/app_colors.dart';
 import 'package:pet_app/features/pets/presentation/models/buy_pet_listing.dart';
 import 'package:pet_app/features/pets/presentation/utils/buy_pet_filters.dart';
 import 'package:pet_app/shared/widgets/app_empty_state.dart';
-import 'package:pet_app/shared/widgets/auth_circle_back_button.dart';
 
 /// Figma — Buy a Pet marketplace (home → Buy & Sell → See all).
 class BuyPetScreen extends StatefulWidget {
@@ -38,6 +37,27 @@ class _BuyPetScreenState extends State<BuyPetScreen> {
         priceRange: _priceRange,
       );
 
+  static const _designScreenWidth = 390.0;
+  static const _designSearchWidth = 295.0;
+  static const _horizontalPadding = 16.0;
+  static const _designHeaderTop = 63.0;
+  static const _headerColor = Color(0xFF12201A);
+
+  double _scaled(BuildContext context, double designValue) {
+    return MediaQuery.sizeOf(context).width * designValue / _designScreenWidth;
+  }
+
+  double _headerTopPadding(BuildContext context) {
+    final topBelowSafe =
+        _scaled(context, _designHeaderTop) - MediaQuery.paddingOf(context).top;
+    return topBelowSafe.clamp(8.0, 32.0);
+  }
+
+  double _searchWidth(BuildContext context) {
+    final width = MediaQuery.sizeOf(context).width;
+    return width * _designSearchWidth / _designScreenWidth;
+  }
+
   Future<void> _openFilters() async {
     final result = await context.push<BuyPetFilterResult>(
       RouteNames.buyPetFilters,
@@ -61,96 +81,95 @@ class _BuyPetScreenState extends State<BuyPetScreen> {
     return Scaffold(
       backgroundColor: _screenBg,
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-              child: Row(
-                children: [
-                  const AuthCircleBackButton(),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      context.l10n.buyAPet,
-                      style: const TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.textPrimary,
-                      ),
-                    ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: _horizontalPadding),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(top: _headerTopPadding(context)),
+                child: Text(
+                  context.l10n.buyAPet,
+                  style: const TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w700,
+                    height: 25.5 / 17,
+                    letterSpacing: 0,
+                    color: _headerColor,
                   ),
-                ],
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
-              child: Row(
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(
+                  SizedBox(
+                    width: _searchWidth(context),
                     child: _SearchField(
                       controller: _searchController,
                       onChanged: (value) => setState(() => _query = value),
                     ),
                   ),
-                  const SizedBox(width: 10),
                   Material(
                     color: _green,
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(14),
                     child: InkWell(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(14),
                       onTap: _openFilters,
-                      child: const SizedBox(
-                        width: 48,
-                        height: 48,
-                        child: Icon(
-                          Icons.tune_rounded,
-                          color: Colors.white,
-                          size: 22,
+                      child: SizedBox(
+                        width: 44,
+                        height: 44,
+                        child: Center(
+                          child: Image.asset(
+                            'assets/icons/system/filter.png',
+                            height: 16,
+                            fit: BoxFit.contain,
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ],
               ),
-            ),
-            Expanded(
-              child: listings.isEmpty
-                  ? AppEmptyState(
-                      title: context.l10n.noListingsFound,
-                      subtitle: context.l10n.tryAdjustingFilters,
-                      icon: Icons.search_rounded,
-                    )
-                  : CustomScrollView(
-                slivers: [
-                  SliverPadding(
-                    padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
-                    sliver: SliverGrid(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 12,
-                        mainAxisSpacing: 12,
-                        childAspectRatio: 0.72,
+              const SizedBox(height: 12),
+              Expanded(
+                child: listings.isEmpty
+                    ? AppEmptyState(
+                        title: context.l10n.noListingsFound,
+                        subtitle: context.l10n.tryAdjustingFilters,
+                        icon: Icons.search_rounded,
+                      )
+                    : CustomScrollView(
+                        slivers: [
+                          SliverPadding(
+                            padding: const EdgeInsets.only(top: 4, bottom: 8),
+                            sliver: SliverGrid(
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 12,
+                                mainAxisSpacing: 12,
+                                childAspectRatio: 0.72,
+                              ),
+                              delegate: SliverChildBuilderDelegate(
+                                (context, index) => _BuyPetCard(
+                                  listing: listings[index],
+                                ),
+                                childCount: listings.length,
+                              ),
+                            ),
+                          ),
+                          const SliverToBoxAdapter(
+                            child: Padding(
+                              padding: EdgeInsets.only(bottom: 24),
+                              child: _LoadingMoreFooter(),
+                            ),
+                          ),
+                        ],
                       ),
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) => _BuyPetCard(
-                          listing: listings[index],
-                        ),
-                        childCount: listings.length,
-                      ),
-                    ),
-                  ),
-                  const SliverToBoxAdapter(
-                    child: Padding(
-                      padding: EdgeInsets.only(bottom: 24),
-                      child: _LoadingMoreFooter(),
-                    ),
-                  ),
-                ],
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -167,49 +186,59 @@ class _SearchField extends StatelessWidget {
   final ValueChanged<String> onChanged;
 
   static const _border = Color(0xFFDDEFE2);
+  static const _placeholder = Color(0xFF9CA3AF);
+  static const _height = 44.0;
+  static const _radius = 10.0;
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.white,
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: const BorderSide(color: _border, width: 0.8),
-      ),
-      child: Theme(
-        data: Theme.of(context).copyWith(
-          inputDecorationTheme: const InputDecorationTheme(
-            filled: false,
-            border: InputBorder.none,
-            enabledBorder: InputBorder.none,
-            focusedBorder: InputBorder.none,
-          ),
+    return SizedBox(
+      height: _height,
+      child: Material(
+        color: Colors.white,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(_radius),
+          side: const BorderSide(color: _border, width: 0.8),
         ),
-        child: TextField(
-          controller: controller,
-          onChanged: onChanged,
-          style: const TextStyle(
-            fontSize: 14,
-            color: AppColors.textPrimary,
+        child: Theme(
+          data: Theme.of(context).copyWith(
+            inputDecorationTheme: const InputDecorationTheme(
+              filled: false,
+              border: InputBorder.none,
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
+            ),
           ),
-          decoration: InputDecoration(
-            hintText: context.l10n.searchBreedCity,
-            hintStyle: const TextStyle(
-              fontSize: 14,
-              color: AppColors.textSecondary,
+          child: TextField(
+            controller: controller,
+            onChanged: onChanged,
+            style: const TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w400,
+              height: 19.5 / 13,
+              color: AppColors.textPrimary,
             ),
-            prefixIcon: const Icon(
-              Icons.search_rounded,
-              size: 22,
-              color: AppColors.textSecondary,
+            decoration: InputDecoration(
+              hintText: context.l10n.searchBreedCity,
+              hintStyle: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w400,
+                height: 19.5 / 13,
+                color: _placeholder,
+              ),
+              prefixIcon: const Icon(
+                Icons.search_rounded,
+                size: 20,
+                color: Colors.black,
+              ),
+              filled: false,
+              isDense: true,
+              contentPadding: const EdgeInsets.symmetric(vertical: 12),
+              border: InputBorder.none,
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
             ),
-            filled: false,
-            isDense: true,
-            contentPadding: EdgeInsets.symmetric(vertical: 12),
-            border: InputBorder.none,
-            enabledBorder: InputBorder.none,
-            focusedBorder: InputBorder.none,
           ),
         ),
       ),
