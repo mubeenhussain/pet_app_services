@@ -18,6 +18,7 @@ class BuyPetFiltersScreen extends StatefulWidget {
 class _BuyPetFiltersScreenState extends State<BuyPetFiltersScreen> {
   static const _designScreenWidth = 390.0;
   static const _designTagsContainerWidth = 321.0;
+  static const _designApplyButtonWidth = 280.0;
   static const _chipSpacing = 8.0;
   static const _green = Color(0xFF17A855);
   static const _screenBg = Color(0xFFF8F9FB);
@@ -191,22 +192,25 @@ class _BuyPetFiltersScreenState extends State<BuyPetFiltersScreen> {
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-              child: SizedBox(
-                width: double.infinity,
-                height: 52,
-                child: FilledButton(
-                  style: FilledButton.styleFrom(
-                    backgroundColor: _green,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
+              child: Align(
+                alignment: Alignment.center,
+                child: SizedBox(
+                  width: _scaled(context, _designApplyButtonWidth),
+                  height: 52,
+                  child: FilledButton(
+                    style: FilledButton.styleFrom(
+                      backgroundColor: _green,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
                     ),
-                  ),
-                  onPressed: _apply,
-                  child: Text(
-                    context.l10n.applyWithCount(_resultCount),
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
+                    onPressed: _apply,
+                    child: Text(
+                      context.l10n.applyWithCount(_resultCount),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ),
                 ),
