@@ -1,6 +1,7 @@
 /// Shared states & feedback widgets (Figma design system).
 library;
 
+export 'app_chat_bubble.dart';
 export 'app_chat_input_bar.dart';
 export 'app_button.dart';
 export 'app_confirm_dialog.dart';

@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pet_app/core/extensions/context_extensions.dart';
 import 'package:pet_app/core/theme/app_colors.dart';
+import 'package:pet_app/shared/widgets/app_chat_bubble.dart';
 import 'package:pet_app/shared/widgets/app_chat_input_bar.dart';
 import 'package:pet_app/shared/widgets/app_feedback_banner.dart';
 import 'package:pet_app/shared/widgets/auth_circle_back_button.dart';
-
-// Figma chat screen tokens.
-const _green = Color(0xFF17A855);
-const _bubbleRadius = 12.0;
 
 class _ConversationInfo {
   const _ConversationInfo({
@@ -125,17 +122,17 @@ class ChatThreadScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 16),
-                _Bubble(
+                AppChatBubble(
                   text: l10n.demoMsgKittenAvailable,
                   isMine: false,
                 ),
                 const SizedBox(height: 10),
-                _Bubble(
+                AppChatBubble(
                   text: l10n.demoMsgKittenReply,
                   isMine: true,
                 ),
                 const SizedBox(height: 10),
-                _Bubble(
+                AppChatBubble(
                   text: l10n.demoMsgKittenConfirm,
                   isMine: false,
                 ),
@@ -182,42 +179,6 @@ class _ThreadAvatar extends StatelessWidget {
               height: 24,
               fit: BoxFit.contain,
             ),
-    );
-  }
-}
-
-class _Bubble extends StatelessWidget {
-  const _Bubble({required this.text, required this.isMine});
-
-  final String text;
-  final bool isMine;
-
-  @override
-  Widget build(BuildContext context) {
-    return Align(
-      alignment: isMine ? Alignment.centerRight : Alignment.centerLeft,
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          maxWidth: MediaQuery.sizeOf(context).width * 0.82,
-        ),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: isMine ? _green : AppColors.chatIncomingBubble,
-            borderRadius: BorderRadius.circular(_bubbleRadius),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            child: Text(
-              text,
-              style: TextStyle(
-                fontSize: 14,
-                height: 1.35,
-                color: isMine ? Colors.white : AppColors.textPrimary,
-              ),
-            ),
-          ),
-        ),
-      ),
     );
   }
 }

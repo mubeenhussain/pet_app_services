@@ -40,7 +40,7 @@ class AppChatInputBar extends StatelessWidget {
             border: Border(
               top: BorderSide(
                 color: AppColors.inputBorder,
-                width: 0.8,
+                width: 1,
               ),
             ),
           ),
@@ -56,7 +56,15 @@ class AppChatInputBar extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Expanded(child: _ChatTextField(hintText: hintText, controller: controller)),
+                  Expanded(
+                    child: SizedBox(
+                      height: _inputHeight,
+                      child: _ChatTextField(
+                        hintText: hintText,
+                        controller: controller,
+                      ),
+                    ),
+                  ),
                   const SizedBox(width: 10),
                   _ChatSendButton(onSend: onSend),
                 ],
@@ -78,43 +86,42 @@ class _ChatTextField extends StatelessWidget {
   final String hintText;
   final TextEditingController? controller;
 
+  static const _borderSide = BorderSide(
+    color: AppColors.inputBorder,
+    width: 1,
+  );
+
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: AppChatInputBar._inputHeight,
-      child: Material(
-        color: Colors.white,
-        elevation: 0,
-        shape: RoundedRectangleBorder(
-          borderRadius:
-              BorderRadius.circular(AppChatInputBar._inputRadius),
-          side: const BorderSide(
-            color: AppColors.inputBorder,
-            width: 0.8,
-          ),
+    final border = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(AppChatInputBar._inputRadius),
+      borderSide: _borderSide,
+      gapPadding: 0,
+    );
+
+    return TextField(
+      controller: controller,
+      style: const TextStyle(
+        fontSize: 14,
+        color: AppColors.textPrimary,
+      ),
+      decoration: InputDecoration(
+        hintText: hintText,
+        hintStyle: const TextStyle(
+          fontSize: 14,
+          color: AppColors.textMuted,
         ),
-        child: TextField(
-          controller: controller,
-          style: const TextStyle(
-            fontSize: 14,
-            color: AppColors.textPrimary,
-          ),
-          decoration: InputDecoration(
-            hintText: hintText,
-            hintStyle: const TextStyle(
-              fontSize: 14,
-              color: AppColors.textMuted,
-            ),
-            border: InputBorder.none,
-            enabledBorder: InputBorder.none,
-            focusedBorder: InputBorder.none,
-            isDense: true,
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 14,
-              vertical: 12,
-            ),
-          ),
+        filled: true,
+        fillColor: Colors.white,
+        isDense: true,
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 14,
+          vertical: 12,
         ),
+        enabledBorder: border,
+        focusedBorder: border,
+        disabledBorder: border,
+        border: border,
       ),
     );
   }
