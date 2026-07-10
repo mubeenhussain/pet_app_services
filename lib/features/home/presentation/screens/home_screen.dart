@@ -93,8 +93,6 @@ class _HomeTab extends StatelessWidget {
   final VoidCallback onOpenDrawer;
   final VoidCallback onOpenProfile;
 
-  static const _green = Color(0xFF17A855);
-
   static const _screenHorizontalPadding = 16.0;
   static const _sectionTitleGap = 16.0;
   static const _sectionGap = 20.0;
@@ -263,7 +261,7 @@ class _HomeTab extends StatelessWidget {
                       TextButton(
                         onPressed: () => context.push(RouteNames.buyPet),
                         style: TextButton.styleFrom(
-                          foregroundColor: _green,
+                          foregroundColor: AppColors.link,
                           padding: const EdgeInsetsDirectional.only(start: 8),
                           minimumSize: Size.zero,
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -332,6 +330,13 @@ class _HomeTopBar extends ConsumerWidget {
   final VoidCallback onOpenProfile;
 
   static const _green = Color(0xFF17A855);
+  // Figma welcome block.
+  static const _welcomeColor = AppColors.textMuted; // #95A29A
+  static const _nameColor = Color(0xFF12201A);
+  static const _welcomeFontSize = 10.5;
+  static const _welcomeLineHeight = 15.75;
+  static const _nameFontSize = 15.0;
+  static const _nameLineHeight = 22.5;
   // Figma Dev Mode: 36×36, fill #F4FCF6, 1px #0F8A42 @ 55% border, #0F8A42 icon.
   static const _menuFill = Color(0xFFF4FCF6);
   static const _menuStroke = Color(0xFF0F8A42);
@@ -378,10 +383,11 @@ class _HomeTopBar extends ConsumerWidget {
                   l10n.homeWelcome,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                    fontSize: 13,
+                    fontSize: _welcomeFontSize,
                     fontWeight: FontWeight.w400,
-                    color: AppColors.textSecondary,
-                    height: 1.2,
+                    color: _welcomeColor,
+                    height: _welcomeLineHeight / _welcomeFontSize,
+                    letterSpacing: 0,
                   ),
                 ),
                 Text(
@@ -390,10 +396,11 @@ class _HomeTopBar extends ConsumerWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                    fontSize: 22,
+                    fontSize: _nameFontSize,
                     fontWeight: FontWeight.w700,
-                    color: AppColors.textPrimary,
-                    height: 1.15,
+                    color: _nameColor,
+                    height: _nameLineHeight / _nameFontSize,
+                    letterSpacing: 0,
                   ),
                 ),
               ],
@@ -687,7 +694,7 @@ class _BuySellCard extends StatelessWidget {
   // Figma: white card, light stroke, no shadow.
   static const _cardBorder = Color(0xFFDDEFE2);
   static const _cardBorderWidth = 0.8;
-  static const _priceColor = Color(0xFF0F8A42);
+  static const _priceColor = AppColors.link;
 
   @override
   Widget build(BuildContext context) {
