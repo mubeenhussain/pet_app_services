@@ -19,6 +19,16 @@ service cloud.firestore {
       allow update: if isOwner(uid)
         && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['verified', 'role']);
       allow delete: if isAdmin();
+
+      match /notifications/{notificationId} {
+        allow read: if isOwner(uid) || isAdmin();
+        allow create: if isOwner(uid)
+          && request.resource.data.type == 'welcome'
+          && request.resource.data.keys().hasAll(['type', 'title', 'body', 'read', 'createdAt']);
+        allow update: if isOwner(uid)
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['read']);
+        allow delete: if isAdmin();
+      }
     }
 
     match /pets/{petId} {

@@ -5,6 +5,7 @@ import 'package:pet_app/core/extensions/context_extensions.dart';
 import 'package:pet_app/core/l10n/l10n_helpers.dart';
 import 'package:pet_app/core/router/route_names.dart';
 import 'package:pet_app/shared/enums/user_role.dart';
+import 'package:pet_app/features/verification/data/verification_service.dart';
 import 'package:pet_app/shared/widgets/app_top_bar.dart';
 
 /// BRD 6.52 — Account Type Selection
@@ -31,6 +32,8 @@ class AccountTypeScreen extends ConsumerWidget {
                   : null,
               onTap: () {
                 if (role.needsVerification) {
+                  ref.read(selectedVerificationRoleProvider.notifier).state =
+                      role;
                   context.push(RouteNames.documentUpload);
                 }
               },

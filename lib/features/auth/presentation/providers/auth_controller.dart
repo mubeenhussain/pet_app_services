@@ -11,7 +11,9 @@ import 'package:pet_app/shared/providers/app_providers.dart';
 import 'package:pet_app/shared/providers/guest_mode_provider.dart';
 import 'package:pet_app/shared/services/google_auth_service.dart';
 import 'package:pet_app/shared/services/local_storage_service.dart';
+import 'package:pet_app/shared/services/otp_rate_limit_service.dart';
 import 'package:pet_app/shared/services/phone_auth_service.dart';
+import 'package:pet_app/shared/services/welcome_notification_service.dart';
 
 final authControllerProvider =
     StateNotifierProvider<AuthController, AsyncValue<void>>((ref) {
@@ -21,6 +23,8 @@ final authControllerProvider =
     ref.watch(localStorageProvider),
     ref.watch(phoneAuthServiceProvider),
     ref.watch(googleAuthServiceProvider),
+    ref.watch(otpRateLimitServiceProvider),
+    ref.watch(welcomeNotificationServiceProvider),
   );
 });
 
@@ -31,6 +35,8 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
     this._storage,
     this._phoneAuth,
     this._googleAuth,
+    this._otpRateLimit,
+    this._welcomeNotifications,
   ) : super(const AsyncData(null));
 
   final AuthRepository _repository;
@@ -38,6 +44,8 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
   final LocalStorageService _storage;
   final PhoneAuthService _phoneAuth;
   final GoogleAuthService _googleAuth;
+  final OtpRateLimitService _otpRateLimit;
+  final WelcomeNotificationService _welcomeNotifications;
 
   Future<void> _clearGuest() async {
     await _storage.clearGuestMode();
@@ -64,6 +72,17 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
     if (profile != null) {
       await _cacheProfile(profile);
     }
+  }
+
+  Future<void> _ensureWelcomeNotification({
+    required String uid,
+    required String username,
+  }) async {
+    await _welcomeNotifications.ensureWelcome(
+      uid: uid,
+      title: 'Welcome to Pet Services!',
+      body: 'Your account is ready. Explore services, buy pets, and book rides.',
+    );
   }
 
   Future<void> signInWithPhone({
@@ -106,7 +125,9 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
           password,
         );
         final uid = credential.user?.uid;
-        if (uid != null) await _persistAuthUser(uid);
+        if (uid != null) {
+          await _persistAuthUser(uid);
+        }
       } catch (e) {
         // Last resort for local fake sessions with mismatched firebase setup.
         final local = await _storage.readLocalAuthSession();
@@ -148,6 +169,11 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
     });
   }
 
+  Future<void> _completeAuthentication(UserModel user) async {
+    await _cacheProfile(user);
+    await _ensureWelcomeNotification(uid: user.uid, username: user.username);
+  }
+
   Future<void> sendRegisterOtp(String phone) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
@@ -167,7 +193,9 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
         return;
       }
 
+      await _otpRateLimit.assertCanRequest(normalized);
       final session = await _phoneAuth.sendOtp(phoneE164: normalized);
+      await _otpRateLimit.recordRequest(normalized);
       _ref.read(phoneAuthSessionProvider.notifier).state = session;
       await _storage.savePendingOtpSession(
         session: session,
@@ -280,7 +308,12 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
             city: draft.city,
           );
           final uid = credential.user?.uid;
-          if (uid != null) await _persistAuthUser(uid);
+          if (uid != null) {
+            final profile = await _repository.getUserProfile(uid);
+            if (profile != null) {
+              await _completeAuthentication(profile);
+            }
+          }
         } catch (_) {
           final localProfile = CachedUserProfile(
             uid: 'local_${draft.phone}',
@@ -294,7 +327,7 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
             localProfile,
             password: draft.password,
           );
-          await _cacheProfile(
+          await _completeAuthentication(
             UserModel(
               uid: localProfile.uid,
               username: localProfile.username,
@@ -359,7 +392,7 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
           createdAt: DateTime.now(),
         );
         await _repository.saveUserProfile(profile);
-        await _cacheProfile(profile);
+        await _completeAuthentication(profile);
         await _storage.clearPendingRegister();
       } else {
         final currentUser = auth.currentUser;
@@ -400,7 +433,28 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       await _clearGuest();
-      await _googleAuth.signIn();
+      final credential = await _googleAuth.signIn();
+      final user = credential.user;
+      if (user == null) {
+        throw StateError('Google sign-in failed. Try again.');
+      }
+
+      var profile = await _repository.getUserProfile(user.uid);
+      if (profile == null) {
+        profile = UserModel(
+          uid: user.uid,
+          username: user.displayName?.trim().isNotEmpty == true
+              ? user.displayName!.trim()
+              : 'user',
+          phone: user.phoneNumber ?? '',
+          email: user.email,
+          role: UserRole.petOwner,
+          createdAt: DateTime.now(),
+        );
+        await _repository.saveUserProfile(profile);
+      }
+
+      await _completeAuthentication(profile);
     });
   }
 
@@ -450,7 +504,9 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
         return;
       }
 
+      await _otpRateLimit.assertCanRequest(normalized);
       final session = await _phoneAuth.sendOtp(phoneE164: normalized);
+      await _otpRateLimit.recordRequest(normalized);
       _ref.read(phoneAuthSessionProvider.notifier).state = session;
       await _storage.savePendingOtpSession(
         session: session,
@@ -460,5 +516,10 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
     });
   }
 
-  String? mapError(Object error) => ErrorHandler.mapException(error).message;
+  String? mapError(Object error) {
+    if (error is OtpRateLimitException) {
+      return 'Too many OTP requests. Try again in ${error.retryAfterMinutes} minutes.';
+    }
+    return ErrorHandler.mapException(error).message;
+  }
 }

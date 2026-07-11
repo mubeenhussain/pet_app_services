@@ -17,14 +17,26 @@ class BuyPetDetailScreen extends StatefulWidget {
 }
 
 class _BuyPetDetailScreenState extends State<BuyPetDetailScreen> {
+  static const _designScreenWidth = 390.0;
+  static const _designHeaderTop = 4.0;
+  static const _designHeaderHorizontal = 16.0;
+  static const _designHeaderHeight = 36.0;
   static const _green = Color(0xFF17A855);
   static const _priceColor = Color(0xFF0F8A42);
 
   bool _favorited = false;
 
+  double _scaled(BuildContext context, double designValue) {
+    return MediaQuery.sizeOf(context).width *
+        designValue /
+        _designScreenWidth;
+  }
+
   @override
   Widget build(BuildContext context) {
     final listing = widget.listing;
+    final topInset = MediaQuery.paddingOf(context).top;
+    final s = (double value) => _scaled(context, value);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -45,21 +57,28 @@ class _BuyPetDetailScreenState extends State<BuyPetDetailScreen> {
                   ),
                   child: Center(child: _HeroVisual(listing: listing)),
                 ),
-                SafeArea(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                Positioned(
+                  top: topInset + s(_designHeaderTop),
+                  left: s(_designHeaderHorizontal),
+                  right: s(_designHeaderHorizontal),
+                  child: SizedBox(
+                    height: s(_designHeaderHeight),
                     child: Row(
                       children: [
                         _CircleIconButton(
+                          size: s(_designHeaderHeight),
                           icon: Icons.chevron_left,
                           onTap: () => context.pop(),
                         ),
                         const Spacer(),
                         _CircleIconButton(
+                          size: s(_designHeaderHeight),
                           icon: _favorited
                               ? Icons.favorite
                               : Icons.favorite_border,
-                          iconColor: _favorited ? const Color(0xFFE53935) : null,
+                          iconColor: _favorited
+                              ? const Color(0xFFE53935)
+                              : _green,
                           onTap: () =>
                               setState(() => _favorited = !_favorited),
                         ),
@@ -105,7 +124,7 @@ class _BuyPetDetailScreenState extends State<BuyPetDetailScreen> {
                                 ),
                               ),
                             ),
-                            if (listing.verified) const _VerifiedBadge(),
+                            if (listing.verified) const _DetailVerifiedBadge(),
                           ],
                         ),
                         const SizedBox(height: 6),
@@ -231,30 +250,34 @@ class _CircleIconButton extends StatelessWidget {
   const _CircleIconButton({
     required this.icon,
     required this.onTap,
+    this.size = 36,
     this.iconColor,
   });
 
   final IconData icon;
   final VoidCallback onTap;
+  final double size;
   final Color? iconColor;
+
+  static const _green = Color(0xFF17A855);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 40,
-      height: 40,
+      width: size,
+      height: size,
       child: Material(
         color: Colors.white,
-        shape: const CircleBorder(),
-        elevation: 0,
+        elevation: 2,
         shadowColor: Colors.black.withValues(alpha: 0.08),
+        shape: const CircleBorder(),
         child: InkWell(
           customBorder: const CircleBorder(),
           onTap: onTap,
           child: Icon(
             icon,
-            size: 22,
-            color: iconColor ?? AppColors.textSecondary,
+            size: size * 0.5,
+            color: iconColor ?? _green,
           ),
         ),
       ),
@@ -288,35 +311,55 @@ class _PageDots extends StatelessWidget {
   }
 }
 
-class _VerifiedBadge extends StatelessWidget {
-  const _VerifiedBadge();
+class _DetailVerifiedBadge extends StatelessWidget {
+  const _DetailVerifiedBadge();
 
   static const _green = Color(0xFF0F8A42);
+  static const _badgeBg = Color(0xFFE7F8EC);
 
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: const Color(0xFFE8F7EE),
-        borderRadius: BorderRadius.circular(20),
+        color: _badgeBg,
+        borderRadius: BorderRadius.circular(999),
       ),
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.verified_rounded, size: 14, color: _green),
-            SizedBox(width: 4),
-            Text(
-              context.l10n.verified,
-              style: const TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
+      child: const SizedBox(
+        height: 21,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 8),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.check_rounded,
+                size: 12,
                 color: _green,
+                weight: 700,
               ),
-            ),
-          ],
+              SizedBox(width: 4),
+              _DetailVerifiedLabel(),
+            ],
+          ),
         ),
+      ),
+    );
+  }
+}
+
+class _DetailVerifiedLabel extends StatelessWidget {
+  const _DetailVerifiedLabel();
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      context.l10n.verified,
+      style: const TextStyle(
+        fontSize: 10.5,
+        fontWeight: FontWeight.w600,
+        height: 1,
+        letterSpacing: 0,
+        color: _DetailVerifiedBadge._green,
       ),
     );
   }

@@ -415,5 +415,15 @@
   "tryAdjustingFilters": "Try adjusting your filters",
   "deleteCannotUndo": "This can't be undone.",
   "invalidCredentials": "Invalid phone number or password",
-  "noAccountFound": "No account found with this number"
+  "noAccountFound": "No account found with this number",
+  "otpRateLimitExceeded": "Too many OTP requests. Try again in {minutes} minutes.",
+  "@otpRateLimitExceeded": {
+    "placeholders": {
+      "minutes": {"type": "int"}
+    }
+  },
+  "welcomeNotificationTitle": "Welcome to Pet Services!",
+  "welcomeNotificationBody": "Your account is ready. Explore services, buy pets, and book rides.",
+  "verificationSubmitted": "Verification request submitted",
+  "dismiss": "Dismiss"
 }

@@ -917,4 +917,22 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get noAccountFound => 'لا يوجد حساب بهذا الرقم';
+
+  @override
+  String otpRateLimitExceeded(int minutes) {
+    return 'طلبات رمز التحقق كثيرة جداً. حاول مرة أخرى خلال $minutes دقائق.';
+  }
+
+  @override
+  String get welcomeNotificationTitle => 'مرحباً بك في خدمات الحيوانات!';
+
+  @override
+  String get welcomeNotificationBody =>
+      'حسابك جاهز. استكشف الخدمات واشترِ الحيوانات واحجز الرحلات.';
+
+  @override
+  String get verificationSubmitted => 'تم إرسال طلب التحقق';
+
+  @override
+  String get dismiss => 'إغلاق';
 }

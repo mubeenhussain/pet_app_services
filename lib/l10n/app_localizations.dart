@@ -1801,6 +1801,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No account found with this number'**
   String get noAccountFound;
+
+  /// No description provided for @otpRateLimitExceeded.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many OTP requests. Try again in {minutes} minutes.'**
+  String otpRateLimitExceeded(int minutes);
+
+  /// No description provided for @welcomeNotificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to Pet Services!'**
+  String get welcomeNotificationTitle;
+
+  /// No description provided for @welcomeNotificationBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account is ready. Explore services, buy pets, and book rides.'**
+  String get welcomeNotificationBody;
+
+  /// No description provided for @verificationSubmitted.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification request submitted'**
+  String get verificationSubmitted;
+
+  /// No description provided for @dismiss.
+  ///
+  /// In en, this message translates to:
+  /// **'Dismiss'**
+  String get dismiss;
 }
 
 class _AppLocalizationsDelegate

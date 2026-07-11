@@ -11,6 +11,7 @@ import 'package:pet_app/shared/providers/app_providers.dart';
 import 'package:pet_app/shared/providers/locale_provider.dart';
 import 'package:pet_app/shared/widgets/app_bottom_nav.dart';
 import 'package:pet_app/shared/widgets/app_drawer.dart';
+import 'package:pet_app/shared/widgets/welcome_notification_banner.dart';
 
 /// BRD 6.13 — Home shell with Figma home + bottom navigation.
 class HomeScreen extends ConsumerStatefulWidget {
@@ -179,6 +180,7 @@ class _HomeTab extends StatelessWidget {
                     onOpenDrawer: onOpenDrawer,
                     onOpenProfile: onOpenProfile,
                   ),
+                  const WelcomeNotificationBanner(),
                   const SizedBox(height: 18),
                   const _RescueBanner(),
                   const SizedBox(height: _sectionGap),

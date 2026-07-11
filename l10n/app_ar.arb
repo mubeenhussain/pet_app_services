@@ -283,5 +283,15 @@
   "tryAdjustingFilters": "جرّب تعديل عوامل التصفية",
   "deleteCannotUndo": "لا يمكن التراجع عن هذا الإجراء.",
   "invalidCredentials": "رقم الهاتف أو كلمة المرور غير صحيحة",
-  "noAccountFound": "لا يوجد حساب بهذا الرقم"
+  "noAccountFound": "لا يوجد حساب بهذا الرقم",
+  "otpRateLimitExceeded": "طلبات رمز التحقق كثيرة جداً. حاول مرة أخرى خلال {minutes} دقائق.",
+  "@otpRateLimitExceeded": {
+    "placeholders": {
+      "minutes": {"type": "int"}
+    }
+  },
+  "welcomeNotificationTitle": "مرحباً بك في خدمات الحيوانات!",
+  "welcomeNotificationBody": "حسابك جاهز. استكشف الخدمات واشترِ الحيوانات واحجز الرحلات.",
+  "verificationSubmitted": "تم إرسال طلب التحقق",
+  "dismiss": "إغلاق"
 }

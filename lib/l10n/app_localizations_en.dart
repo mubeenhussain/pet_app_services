@@ -918,4 +918,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noAccountFound => 'No account found with this number';
+
+  @override
+  String otpRateLimitExceeded(int minutes) {
+    return 'Too many OTP requests. Try again in $minutes minutes.';
+  }
+
+  @override
+  String get welcomeNotificationTitle => 'Welcome to Pet Services!';
+
+  @override
+  String get welcomeNotificationBody =>
+      'Your account is ready. Explore services, buy pets, and book rides.';
+
+  @override
+  String get verificationSubmitted => 'Verification request submitted';
+
+  @override
+  String get dismiss => 'Dismiss';
 }
